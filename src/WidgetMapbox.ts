@@ -22,7 +22,7 @@ declare global {
   }
 
 }
-export class ReMapboxMap extends LitElement {
+export class WidgetMapbox extends LitElement {
   static styles = css`
     :host {
       display: inline-block;

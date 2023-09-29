@@ -1,1 +1,1 @@
-export { ReMapboxMap } from './ReMapboxMap.js';
+export { WidgetMapbox } from './WidgetMapbox.js';
