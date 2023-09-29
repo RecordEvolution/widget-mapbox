@@ -12,7 +12,7 @@ npm i re-mapbox-map
 
 ```html
 <script type="module">
-  import 're-mapbox-map/re-mapbox-map.js';
+  import 're-mapbox-map/widget-mapbox.js';
 </script>
 
 <re-mapbox-map></re-mapbox-map>

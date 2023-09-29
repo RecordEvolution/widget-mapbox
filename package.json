@@ -9,7 +9,7 @@
   "module": "dist/src/index.js",
   "exports": {
     ".": "./dist/src/index.js",
-    "./re-mapbox-map.js": "./dist/src/re-mapbox-map.js"
+    "./widget-mapbox.js": "./dist/src/widget-mapbox.js"
   },
   "scripts": {
     "analyze": "cem analyze --litelement",
