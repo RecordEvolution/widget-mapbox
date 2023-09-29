@@ -1,8 +1,8 @@
 {
-  "name": "re-mapbox-map",
-  "description": "REWidget re-mapbox-map",
+  "name": "widget-mapbox",
+  "description": "REWidget widget-mapbox",
   "license": "MIT",
-  "author": "re-mapbox-map",
+  "author": "widget-mapbox",
   "version": "0.0.0",
   "type": "module",
   "main": "dist/src/index.js",

@@ -1,21 +1,21 @@
-# \<re-mapbox-map>
+# \<widget-mapbox>
 
 This webcomponent follows the [open-wc](https://github.com/open-wc/open-wc) recommendation.
 
 ## Installation
 
 ```bash
-npm i re-mapbox-map
+npm i widget-mapbox
 ```
 
 ## Usage
 
 ```html
 <script type="module">
-  import 're-mapbox-map/widget-mapbox.js';
+  import 'widget-mapbox/widget-mapbox.js';
 </script>
 
-<re-mapbox-map></re-mapbox-map>
+<widget-mapbox></widget-mapbox>
 ```
 
 ## Linting and formatting

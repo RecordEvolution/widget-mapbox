@@ -4,10 +4,10 @@ import commonjs from "@rollup/plugin-commonjs";
 import babel from "@rollup/plugin-babel";
 
 export default {
-    input: './src/re-mapbox-map.ts',
+    input: './src/widget-mapbox.ts',
     output: {
         dir: './dist',
-        name: 're-mapbox-map_bundle',
+        name: 'widget-mapbox_bundle',
         banner: `/* @license Copyright (c) 2020 Record Evolution GmbH. All rights reserved.*/`,
         format: 'esm'
     },
