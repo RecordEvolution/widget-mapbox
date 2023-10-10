@@ -1,0 +1,52 @@
+{
+    "title": "map-chart",
+    "description": "A map-chart",
+    "type": "object",
+    "properties": {
+        "settings": {
+            "description": "General widget settings",
+            "type": "object",
+            "properties": {
+                "title": {
+                    "description": "Main title",
+                    "type": "string"
+                },
+                "subTitle": {
+                    "type": "string"
+                }
+            },
+            "required": ["title", "subTitle"]
+        },
+        "data": {
+            "title": "Map data",
+            "description": "This is the map data",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "coordinates": {
+                        "titel": "Coordinates",
+                        "description": "The coordinates array",
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        }
+                    },
+                    "size": {
+                        "type": "number"
+                    },
+                    "color": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}
+ 
