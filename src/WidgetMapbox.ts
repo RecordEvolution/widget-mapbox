@@ -31,11 +31,6 @@ export class WidgetMapbox extends LitElement {
       font-family: sans-serif;
     }
     #wrapper {
-      background: var(--re-bar-background-color, #eaeaea);
-      padding: 16px;
-      box-sizing: border-box;
-      border-radius: 8px;
-      box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
       width: 800px;
       height: 600px;
     }
