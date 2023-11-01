@@ -120,8 +120,11 @@ export class WidgetMapbox extends LitElement {
   }
 
   getData() {
-    this.mapTitle = this.inputData.settings.title ? this.inputData.settings.title : this.mapTitle
-    this.mapDescription = this.inputData.settings.subTitle ? this.inputData.settings.subTitle : this.mapDescription
+    if(!this.inputData) return
+    if(this.inputData && !this.inputData?.settings && !this.inputData?.data.length) return
+
+    this.mapTitle = this.inputData?.settings?.title ? this.inputData.settings.title : this.mapTitle
+    this.mapDescription = this.inputData?.settings?.subTitle ? this.inputData.settings.subTitle : this.mapDescription
 
     const geojson = this.inputData.data.map((d:Data) => {
       return {
@@ -157,7 +160,7 @@ export class WidgetMapbox extends LitElement {
       // Add the vector tileset as a source.
       this.map.addSource('data', {
         type: 'geojson',
-        data: this.geojson
+        data: this.geojson || []
       });
       this.map.addLayer(
         {
