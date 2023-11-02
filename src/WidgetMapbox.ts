@@ -26,14 +26,14 @@ export class WidgetMapbox extends LitElement {
   static styles = css`
     :host {
       display: inline-block;
-      margin: 16px;
       color: var(--re-bar-text-color, #000);
       font-family: sans-serif;
+      padding: 16px;
+      box-sizing: border-box;
+      position: relative;
+      margin: auto;
     }
-    #wrapper {
-      width: 800px;
-      height: 600px;
-    }
+
     header {
       display: flex;
       flex-direction: column;
@@ -97,13 +97,11 @@ export class WidgetMapbox extends LitElement {
   render() {
     return html`
       <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
-      <div id="wrapper">
-        <header>
-            <h3>${this.mapTitle}</h3>
-            <p>${this.mapDescription}</p>
-        </header>
-        <div id="main"></div>
-      </div>
+      <header>
+          <h3>${this.mapTitle}</h3>
+          <p>${this.mapDescription}</p>
+      </header>
+      <div id="main"></div>
     `;
   }
 
