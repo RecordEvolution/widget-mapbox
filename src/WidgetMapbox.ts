@@ -26,14 +26,14 @@ export class WidgetMapbox extends LitElement {
   static styles = css`
     :host {
       display: inline-block;
-      margin: 16px;
       color: var(--re-bar-text-color, #000);
       font-family: sans-serif;
+      padding: 16px;
+      box-sizing: border-box;
+      position: relative;
+      margin: auto;
     }
-    #wrapper {
-      width: 800px;
-      height: 600px;
-    }
+
     header {
       display: flex;
       flex-direction: column;
@@ -97,13 +97,11 @@ export class WidgetMapbox extends LitElement {
   render() {
     return html`
       <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
-      <div id="wrapper">
-        <header>
-            <h3>${this.mapTitle}</h3>
-            <p>${this.mapDescription}</p>
-        </header>
-        <div id="main"></div>
-      </div>
+      <header>
+          <h3>${this.mapTitle}</h3>
+          <p>${this.mapDescription}</p>
+      </header>
+      <div id="main"></div>
     `;
   }
 
@@ -120,8 +118,11 @@ export class WidgetMapbox extends LitElement {
   }
 
   getData() {
-    this.mapTitle = this.inputData.settings.title ? this.inputData.settings.title : this.mapTitle
-    this.mapDescription = this.inputData.settings.subTitle ? this.inputData.settings.subTitle : this.mapDescription
+    if(!this.inputData) return
+    if(this.inputData && !this.inputData?.settings && !this.inputData?.data.length) return
+
+    this.mapTitle = this.inputData?.settings?.title ? this.inputData.settings.title : this.mapTitle
+    this.mapDescription = this.inputData?.settings?.subTitle ? this.inputData.settings.subTitle : this.mapDescription
 
     const geojson = this.inputData.data.map((d:Data) => {
       return {
@@ -157,7 +158,7 @@ export class WidgetMapbox extends LitElement {
       // Add the vector tileset as a source.
       this.map.addSource('data', {
         type: 'geojson',
-        data: this.geojson
+        data: this.geojson || []
       });
       this.map.addLayer(
         {
