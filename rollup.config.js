@@ -11,10 +11,15 @@ export default {
         banner: `/* @license Copyright (c) 2020 Record Evolution GmbH. All rights reserved.*/`,
         format: 'esm'
     },
+    preserveEntrySignatures: 'strict',
     plugins: [
-        typescript({ sourceMap: true }),
+        typescript(),
+        babel({ 
+            exclude: ['node_modules/mapbox-gl/**'],
+            plugins: ['@babel/plugin-syntax-import-assertions'],
+            babelHelpers: 'bundled',
+        }),
         nodeResolve(),
         commonjs({}),
-        babel({ babelHelpers: 'bundled' })
     ]
 };

@@ -1,7 +1,7 @@
 {
     "settings": {
       "title": "Map-chart",
-      "subTitle": "This is a Map-chart from the RE-Dahsboard",
+      "subTitle": "This is a Map-chart from the RE-Dashboard"
     },
     "data": [
       {
@@ -11,20 +11,20 @@
         "title": "Record Evolution HQ",
         "description": "undisclosed"
       }, {
-        "coordinates": [4.6841700, 36.1155200],
+        "coordinates": [8.1841700, 51.1155200],
         "size": 10,
         "color": "#d98612",
         "title": "Record Evolution HQ2",
         "description": "undisclosed"
       }, {
-        "coordinates": [31.680, 37.1155200],
-        "size": 6,
+        "coordinates": [9.680, 48.1155200],
+        "size": 16,
         "color": "teal",
         "title": "No name",
         "description": "undisclosed"
       },
       {
-        "coordinates": [46.680, 56.1155200],
+        "coordinates": [6.680, 50.1155200],
         "size": 30,
         "color": "darkred",
         "title": "No name",

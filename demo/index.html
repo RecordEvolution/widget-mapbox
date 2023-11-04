@@ -2,11 +2,23 @@
 <html lang="en-GB">
 <head>
   <meta charset="utf-8">
-  <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
-  <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
+
   <style>
-    body {
-      background: #fafafa;
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    widget-mapbox {
+      width: 100%;
+      height: 100%;
+    }
+
+    #demo {
+       height: 100%;
+       width: 100%;
     }
   </style>
 </head>
@@ -16,41 +28,7 @@
   <script type="module">
     import { html, render } from 'lit';
     import '../dist/src/widget-mapbox.js';
-
-    const data = {
-      settings: {
-        title: 'Map-chart',
-        subTitle: 'This is a Map-chart from the RE-Dahsboard',
-      },
-      data: [
-        {
-          coordinates: [8.6841700, 50.1155200],
-          size: 15,
-          color: 'darkblue',
-          title: 'Record Evolution HQ',
-          description: 'undisclosed'
-        }, {
-          coordinates: [4.6841700, 36.1155200],
-          size: 10,
-          color: '#d98612',
-          title: 'Record Evolution HQ2',
-          description: 'undisclosed'
-        }, {
-          coordinates: [31.680, 37.1155200],
-          size: 6,
-          color: 'teal',
-          title: 'No name',
-          description: 'undisclosed'
-        },
-        {
-          coordinates: [46.680, 56.1155200],
-          size: 30,
-          color: 'darkred',
-          title: 'No name',
-          description: 'undisclosed'
-        }
-      ]
-    }
+    import data from '../src/default-data.json' assert { type: 'json' };
 
     render(
       html`

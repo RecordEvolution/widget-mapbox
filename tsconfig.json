@@ -4,9 +4,9 @@
     "module": "esnext",
     "moduleResolution": "node",
     "noEmitOnError": true,
-    "lib": ["es2017", "dom"],
+    "lib": ["ESNext", "dom"],
     "strict": true,
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "importHelpers": true,
@@ -15,7 +15,10 @@
     "inlineSources": true,
     "rootDir": "./",
     "declaration": true,
-    "incremental": true
+    "incremental": true,
+    "noImplicitAny": false,
+    "skipLibCheck": true /* Skip type checking all .d.ts files. */,
+    "useDefineForClassFields": false,
   },
   "include": ["**/*.ts"]
 }
