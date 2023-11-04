@@ -104,6 +104,7 @@ export class WidgetMapbox extends LitElement {
 
   addDataLayer() {
     // Add the vector tileset as a source.
+    if (!this.geojson) return
     this.map?.addSource('data', {
       type: 'geojson',
       data: this.geojson || []
