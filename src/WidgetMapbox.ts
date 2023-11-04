@@ -21,7 +21,7 @@ export class WidgetMapbox extends LitElement {
   private mapTitle: string = 'Map-chart';
 
   @state()
-  private mapDescription: string = 'This is a Map-chart from the RE-Dahsboard';
+  private mapDescription: string = 'This is a Map-chart from the RE-Dashboard';
 
   resizeObserver: ResizeObserver
 
@@ -125,8 +125,7 @@ export class WidgetMapbox extends LitElement {
   }
 
   getData() {
-    if(!this.inputData) return
-    if(this.inputData && !this.inputData?.settings && !this.inputData?.data?.length) return
+    if(!this?.inputData?.settings || !this?.inputData?.data?.length) return
 
     this.mapTitle = this.inputData?.settings?.title ? this.inputData.settings.title : this.mapTitle
     this.mapDescription = this.inputData?.settings?.subTitle ? this.inputData.settings.subTitle : this.mapDescription
