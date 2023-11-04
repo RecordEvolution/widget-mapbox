@@ -55,6 +55,7 @@ export class WidgetMapbox extends LitElement {
     // @ts-ignore
     const coordinates: GeoJSON.Position[] = this.geojson?.features.map((f: GeoJSON.Feature) => f.geometry.coordinates )
     
+    if (!coordinates?.length) return
     for (const coord of coordinates) {
       bounds.extend(coord);
     }
