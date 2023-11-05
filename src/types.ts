@@ -3,6 +3,7 @@ export interface Settings {
     title: string
     subTitle: string
     style: string
+    latestValues: number
 }
 
 export interface Point {

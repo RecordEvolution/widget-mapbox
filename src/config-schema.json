@@ -19,6 +19,11 @@
                     "title": "Map Style",
                     "description": "The basic style of the map. Can be one of streets-v12, outdoors-v12, light-v11, dark-v11, satellite-v9, satellite-streets-v12, navigation-day-v1, navigation-night-v1.",
                     "type": "string"
+                }, 
+                "latestValues": {
+                    "title": "Latest Values",
+                    "description": "Restrict the number of rows per dataseries to the given number of newest values.",
+                    "type": "number"
                 }
             },
             "required": ["title", "subTitle"]

@@ -2,7 +2,8 @@
     "settings": {
       "title": "Map-chart",
       "subTitle": "This is a Map-chart",
-      "style": "light-v11"
+      "style": "light-v11",
+      "latestValues": 1
     },
     "dataseries": [{
       "label": "Demo Layer A",

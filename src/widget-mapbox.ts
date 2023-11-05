@@ -164,6 +164,14 @@ export class WidgetMapbox extends LitElement {
       }
     })
 
+    // Filter for latest Values
+    if (this.inputData?.settings?.latestValues) {
+      this.dataSets.forEach(ds => {
+        // @ts-ignore
+        ds.data.splice(this.inputData?.settings?.latestValues)
+      })
+    }
+
     console.log('datasets', this.dataSets)
 
     // Transform to geojson
