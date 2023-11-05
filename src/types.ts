@@ -18,6 +18,7 @@ export interface Dataseries {
     label: string
     type: string
     order: number
+    latestValues: number
     data: Point[]
 }
 

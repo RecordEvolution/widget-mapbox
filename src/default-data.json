@@ -2,13 +2,13 @@
     "settings": {
       "title": "Map-chart",
       "subTitle": "This is a Map-chart",
-      "style": "light-v11",
-      "latestValues": 1
+      "style": "light-v11"
     },
     "dataseries": [{
       "label": "Demo Layer A",
       "type": "circle",
       "order": 3,
+      "latestValues": 1,
       "data": [
         {
           "lon": 8.6841700,
@@ -41,6 +41,7 @@
       "label": "Demo Layer B",
       "type": "circle",
       "order": 1,
+      "latestValues": 1,
       "data": [
         {
           "lon": 8.1841700,

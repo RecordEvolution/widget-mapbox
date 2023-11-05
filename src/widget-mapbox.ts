@@ -150,6 +150,7 @@ export class WidgetMapbox extends LitElement {
             label: `${ds.label} ${piv}`,
             order: ds.order,
             type: ds.type,
+            latestValues: ds.latestValues,
             data: ds.data.filter(d => d.pivot === piv).map(d => ({
               lon: d.lon,
               lat: d.lat,
@@ -165,12 +166,9 @@ export class WidgetMapbox extends LitElement {
     })
 
     // Filter for latest Values
-    if (this.inputData?.settings?.latestValues) {
       this.dataSets.forEach(ds => {
-        // @ts-ignore
-        ds.data.splice(this.inputData?.settings?.latestValues)
+        if (ds.latestValues) ds.data.splice(ds.latestValues)
       })
-    }
 
     console.log('datasets', this.dataSets)
 

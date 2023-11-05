@@ -19,11 +19,6 @@
                     "title": "Map Style",
                     "description": "The basic style of the map. Can be one of streets-v12, outdoors-v12, light-v11, dark-v11, satellite-v9, satellite-streets-v12, navigation-day-v1, navigation-night-v1.",
                     "type": "string"
-                }, 
-                "latestValues": {
-                    "title": "Latest Values",
-                    "description": "Restrict the number of rows per dataseries to the given number of newest values.",
-                    "type": "number"
                 }
             },
             "required": ["title", "subTitle"]
@@ -47,6 +42,11 @@
                     "order": {
                         "title": "Draw Order",
                         "description": "Determines the draw order of the series. Dataseries with lower numbers are drawn on top of ones with higher numbers.",
+                        "type": "number"
+                    },
+                    "latestValues": {
+                        "title": "Latest Values",
+                        "description": "Restrict the number of rows for this dataseries to the given number of newest values. (If pivoted, then per each of the pivot dataseries.)",
                         "type": "number"
                     },
                     "data": {
