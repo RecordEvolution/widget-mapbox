@@ -2,15 +2,15 @@
 export interface Settings {
     title: string
     subTitle: string
+    style: string
 }
 
 export interface Point {
-    label: string
     lon: number
     lat: number
     size: number
     color: string
-    description: string
+    pivot: string
 }
 
 export interface Dataseries {

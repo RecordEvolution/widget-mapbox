@@ -1,10 +1,12 @@
 import { html, css, LitElement } from 'lit';
 import { property, state } from 'lit/decorators.js';
 // @ts-ignore
-import mapboxgl, { Map } from 'https://cdn.skypack.dev/pin/mapbox-gl@v2.15.0-iKfohePv9lgutCMNih0d/mode=imports,min/optimized/mapbox-gl.js'
+import mapboxgl from 'https://cdn.skypack.dev/pin/mapbox-gl@v2.15.0-iKfohePv9lgutCMNih0d/mode=imports,min/optimized/mapbox-gl.js'
 // import mapboxgl, { Map } from 'mapbox-gl';
 import * as GeoJSON from 'geojson';
-import { InputData } from './types.js'
+// @ts-ignore
+import tinycolor from "tinycolor2";
+import { InputData, Dataseries, Point } from './types.js'
 
 export class WidgetMapbox extends LitElement {
 
@@ -12,22 +14,21 @@ export class WidgetMapbox extends LitElement {
   inputData?: InputData = undefined
 
   @state()
-  private map: Map | undefined = undefined;
-
-  @state()
-  private geojson: GeoJSON.FeatureCollection | undefined = undefined;
+  private map: any | undefined = undefined;
 
   @state()
   private mapTitle: string = 'Map-chart';
 
   @state()
-  private mapDescription: string = 'This is a Map-chart from the RE-Dashboard';
+  private mapDescription: string = 'This is a Map-chart for the RE-Dashboard';
 
   @state()
-  private dataLayers: { [key: string]: GeoJSON.FeatureCollection } = {}
+  private dataSets: Dataseries[] = []
+
+  @state()
+  dataLayers: any = new Map()
 
   resizeObserver: ResizeObserver
-
   constructor() {
     super()
     this.resizeObserver = new ResizeObserver(() => {
@@ -55,7 +56,7 @@ export class WidgetMapbox extends LitElement {
 
   fitBounds() {
     const bounds = new mapboxgl.LngLatBounds()
-    Object.entries(this.dataLayers).forEach(([, col]) => {
+    this.dataLayers.forEach((col: GeoJSON.FeatureCollection) => {
       col.features.forEach(f => {
         // @ts-ignore
         bounds.extend(f.geometry.coordinates)
@@ -108,17 +109,17 @@ export class WidgetMapbox extends LitElement {
   addDataLayers() {
     // Add the vector tileset as a source.
 
-    this?.inputData?.dataseries.sort((a, b) => b.order - a.order).forEach(ds => {
-
-      this.map?.addSource(ds.label, {
+    this.dataLayers.forEach((ds: GeoJSON.FeatureCollection, label: string) => {
+      console.log('adding data layer', label, ds)
+      this.map?.addSource(label, {
         type: 'geojson',
-        data: this.dataLayers[ds.label] || []
+        data: ds || []
       });
       this.map?.addLayer(
         {
-          'id': ds.label,
-          'type': ds.type,
-          'source': ds.label,
+          'id': label,
+          'type': 'circle',
+          'source': label,
           'paint': {
             'circle-radius': ['get', 'size'],
             "circle-color": ['get', 'color'],
@@ -137,7 +138,36 @@ export class WidgetMapbox extends LitElement {
     this.mapTitle = this.inputData?.settings?.title
     this.mapDescription = this.inputData?.settings?.subTitle
 
+    // pivot data
     this.inputData.dataseries.forEach(ds => {
+      const distincts = [...new Set(ds.data.map((d: Point) => d.pivot))]
+      console.log('distincts', distincts)
+      if (distincts.length > 1) {
+        const darker = 100 / (distincts.length + 0)
+        distincts.forEach((piv, i) => {
+          console.log('new pivot layer', piv, i, darker)
+          const pds: any = {
+            label: `${ds.label} ${piv}`,
+            order: ds.order,
+            type: ds.type,
+            data: ds.data.filter(d => d.pivot === piv).map(d => ({
+              lon: d.lon,
+              lat: d.lat,
+              size: d.size, 
+              color: tinycolor(d.color).brighten(darker * i).toString()
+            }))
+          }
+          this.dataSets.push(pds)
+        })
+      } else {
+        this.dataSets.push(ds)
+      }
+    })
+
+    console.log('datasets', this.dataSets)
+
+    // Transform to geojson
+    this.dataSets.sort((a, b) => b.order - a.order).forEach(ds => {
 
       const features: GeoJSON.Feature[] = ds.data.map(p => {
         const point: GeoJSON.Feature = {
@@ -148,18 +178,16 @@ export class WidgetMapbox extends LitElement {
             },
             properties: {
               size: p.size,
-              color: p.color,
-              title: p.label,
-              description: p.description
+              color: p.color
             }
           }
         return point
       })
 
-      this.dataLayers[ds.label] = {
+      this.dataLayers.set(ds.label, {
         type: 'FeatureCollection',
         features
-      }
+      })
 
       console.log('DataLayers', this.dataLayers)
     })
@@ -168,7 +196,7 @@ export class WidgetMapbox extends LitElement {
   createMap() {
     this.map = new mapboxgl.Map({
       container: this.shadowRoot?.getElementById('main') as HTMLCanvasElement,
-      style: 'mapbox://styles/mapbox/light-v11',
+      style: `mapbox://styles/mapbox/${this.inputData?.settings?.style ?? 'light-v11'}`,
       center: [8.6841700, 50.1155200],
       zoom: 1.8,
     });

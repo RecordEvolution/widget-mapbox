@@ -14,6 +14,11 @@
                 "subTitle": {
                     "title": "Subtitle",
                     "type": "string"
+                }, 
+                "style": {
+                    "title": "Map Style",
+                    "description": "The basic style of the map. Can be one of streets-v12, outdoors-v12, light-v11, dark-v11, satellite-v9, satellite-streets-v12, navigation-day-v1, navigation-night-v1.",
+                    "type": "string"
                 }
             },
             "required": ["title", "subTitle"]
@@ -46,10 +51,6 @@
                         "items": {
                             "type": "object",
                             "properties": {
-                                "label": {
-                                    "title": "Point Label",
-                                    "type": "string"
-                                },
                                 "lon": {
                                     "title": "Longitude",
                                     "type": "number"
@@ -59,16 +60,17 @@
                                     "type": "number"
                                 },
                                 "radius": {
-                                    "title": "Point Radius",
+                                    "title": "Circle Radius",
                                     "type": "number"
                                 },
                                 "color": {
-                                    "title": "Point color",
+                                    "title": "Circle color",
                                     "description": "Give the color as a browser standard form. Either with names like 'red', 'green', etc. or as #de432b34 where two hex digits represent Red Green Blue Opacity in this order.",
                                     "type": "string"
                                 },
-                                "description": {
-                                    "title": "Extra Info for this point",
+                                "pivot": {
+                                    "title": "Pivot Column",
+                                    "description": "You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, lon, lat, temperature] and specify 'city' as pivot column, then you will get a layer for each city.",
                                     "type": "string"
                                 }
                             }

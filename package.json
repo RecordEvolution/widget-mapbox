@@ -3,7 +3,7 @@
   "description": "REWidget widget-mapbox",
   "license": "MIT",
   "author": "widget-mapbox",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "type": "module",
   "main": "dist/src/index.js",
   "module": "dist/src/index.js",
@@ -23,7 +23,8 @@
     "@types/geojson": "^7946.0.12",
     "@types/mapbox-gl": "^2.7.17",
     "lit": "^3.0.2",
-    "mapbox-gl": "^2.15.0"
+    "mapbox-gl": "^2.15.0",
+    "tinycolor2": "^1.6.0"
   },
   "devDependencies": {
     "@babel/plugin-syntax-import-assertions": "^7.22.5",
@@ -46,34 +47,5 @@
     "rollup": "^4.3.0",
     "tslib": "^2.6.2",
     "typescript": "^5.2.2"
-  },
-  "customElements": "custom-elements.json",
-  "eslintConfig": {
-    "parser": "@typescript-eslint/parser",
-    "extends": [
-      "@open-wc",
-      "prettier"
-    ],
-    "plugins": [
-      "@typescript-eslint"
-    ],
-    "rules": {
-      "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": [
-        "error"
-      ],
-      "import/no-unresolved": "off",
-      "import/extensions": [
-        "error",
-        "always",
-        {
-          "ignorePackages": true
-        }
-      ]
-    }
-  },
-  "prettier": {
-    "singleQuote": true,
-    "arrowParens": "avoid"
   }
 }
