@@ -5,14 +5,22 @@ export interface Settings {
 }
 
 export interface Point {
-    coordinates: number[]
+    label: string
+    lon: number
+    lat: number
     size: number
     color: string
-    title: string
     description: string
+}
+
+export interface Dataseries {
+    label: string
+    type: string
+    order: number
+    data: Point[]
 }
 
 export interface InputData {
     settings?: Settings
-    data?: Point[]
+    dataseries: Dataseries[]
 }

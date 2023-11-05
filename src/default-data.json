@@ -1,34 +1,80 @@
 {
     "settings": {
       "title": "Map-chart",
-      "subTitle": "This is a Map-chart from the RE-Dashboard"
+      "subTitle": "This is a Map-chart"
     },
-    "data": [
-      {
-        "coordinates": [8.6841700, 50.1155200],
-        "size": 15,
-        "color": "darkblue",
-        "title": "Record Evolution HQ",
-        "description": "undisclosed"
-      }, {
-        "coordinates": [8.1841700, 51.1155200],
-        "size": 10,
-        "color": "#d98612",
-        "title": "Record Evolution HQ2",
-        "description": "undisclosed"
-      }, {
-        "coordinates": [9.680, 48.1155200],
-        "size": 16,
-        "color": "teal",
-        "title": "No name",
-        "description": "undisclosed"
-      },
-      {
-        "coordinates": [6.680, 50.1155200],
-        "size": 30,
-        "color": "darkred",
-        "title": "No name",
-        "description": "undisclosed"
-      }
-    ]
+    "dataseries": [{
+      "label": "Demo Layer A",
+      "type": "circle",
+      "order": 3,
+      "data": [
+        {
+          "lon": 8.6841700,
+          "lat": 50.1155200,
+          "size": 15,
+          "color": "#dd0000",
+          "title": "Record Evolution HQ",
+          "description": "undisclosed"
+        }, {
+          "lon": 8.1841700,
+          "lat": 51.1155200,
+          "size": 10,
+          "color": "#aa0000",
+          "title": "Record Evolution HQ2",
+          "description": "undisclosed"
+        }, {
+          "lon": 9.680,
+          "lat": 48.1155200,
+          "size": 16,
+          "color": "#880000",
+          "title": "No name",
+          "description": "undisclosed"
+        },
+        {
+          "lon": 6.680,
+          "lat": 50.1155200,
+          "size": 30,
+          "color": "#440000",
+          "title": "No name",
+          "description": "undisclosed"
+        }
+      ]
+    }, 
+    {
+      "label": "Demo Layer B",
+      "type": "circle",
+      "order": 1,
+      "data": [
+        {
+          "lon": 8.1841700,
+          "lat": 50.1155200,
+          "size": 5,
+          "color": "#00dd00",
+          "title": "Record Evolution HQ",
+          "description": "undisclosed"
+        }, {
+          "lon": 8.7841700,
+          "lat": 51.1155200,
+          "size": 14,
+          "color": "#00aa00",
+          "title": "Record Evolution HQ2",
+          "description": "undisclosed"
+        }, {
+          "lon": 9.380,
+          "lat": 48.1155200,
+          "size": 6,
+          "color": "#008800",
+          "title": "No name",
+          "description": "undisclosed"
+        },
+        {
+          "lon": 6.180,
+          "lat": 50.1155200,
+          "size": 30,
+          "color": "#004400",
+          "title": "No name",
+          "description": "undisclosed"
+        }
+      ]
+    }]
   }
