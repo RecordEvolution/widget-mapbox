@@ -110,7 +110,6 @@ export class WidgetMapbox extends LitElement {
     // Add the vector tileset as a source.
 
     this.dataLayers.forEach((ds: GeoJSON.FeatureCollection, label: string) => {
-      console.log('adding data layer', label, ds)
       this.map?.addSource(label, {
         type: 'geojson',
         data: ds || []
@@ -141,11 +140,9 @@ export class WidgetMapbox extends LitElement {
     // pivot data
     this.inputData.dataseries.forEach(ds => {
       const distincts = [...new Set(ds.data.map((d: Point) => d.pivot))]
-      console.log('distincts', distincts)
       if (distincts.length > 1) {
         const darker = 100 / (distincts.length + 0)
         distincts.forEach((piv, i) => {
-          console.log('new pivot layer', piv, i, darker)
           const pds: any = {
             label: `${ds.label} ${piv}`,
             order: ds.order,
@@ -155,7 +152,7 @@ export class WidgetMapbox extends LitElement {
               lon: d.lon,
               lat: d.lat,
               size: d.size, 
-              color: tinycolor(d.color).brighten(darker * i).toString()
+              color: tinycolor(d.color).darken(darker * i).toString()
             }))
           }
           this.dataSets.push(pds)
@@ -170,12 +167,14 @@ export class WidgetMapbox extends LitElement {
       if (ds.latestValues) ds.data.splice(ds.latestValues)
     })
 
-    console.log('datasets', this.dataSets)
+    console.log('mapbox datasets', this.dataSets)
 
     // Transform to geojson
     this.dataSets.sort((a, b) => b.order - a.order).forEach(ds => {
 
-      const features: GeoJSON.Feature[] = ds.data.map(p => {
+      const features: GeoJSON.Feature[] = ds.data
+      .filter(p => p.lon !== undefined && p.lat !== undefined && p.color !== undefined && p.size !== undefined)
+      .map(p => {
         const point: GeoJSON.Feature = {
             type: 'Feature',
             geometry: {
@@ -195,7 +194,7 @@ export class WidgetMapbox extends LitElement {
         features
       })
 
-      console.log('DataLayers', this.dataLayers)
+      console.log('mapbox DataLayers', this.dataLayers)
     })
   }
 
