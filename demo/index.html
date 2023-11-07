@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
   <meta charset="utf-8">
-
+  <title>Mapbox</title>
   <style>
     html, body {
       margin: 0;
@@ -21,19 +21,27 @@
 <body>
   <div id="demo"></div>
 
+  <script src="./ObjectRandomizer.js"></script>
+ 
   <script type="module">
     import { html, render } from 'lit';
     import '../dist/src/widget-mapbox.js';
     import data from '../src/default-data.json' assert { type: 'json' };
+    const keyPathsToRandomize = ['dataseries.0.data.0.size', 'settings.title'];
 
-    render(
-      html`
-        <widget-mapbox .inputData=${data}>
-          some light-dom
-        </widget-mapbox>
-      `,
-      document.querySelector('#demo')
-    );
+    setInterval(() => {
+      const randomizedObj = randomizeObjectValues(data, keyPathsToRandomize);
+
+      // console.log('random', randomizedObj.dataseries[0].data[0]);
+      render(
+        html`
+          <widget-mapbox .inputData=${randomizedObj}>
+            some light-dom
+          </widget-mapbox>
+        `,
+        document.querySelector('#demo')
+      );
+    }, 1000)
   </script>
 </body>
 </html>

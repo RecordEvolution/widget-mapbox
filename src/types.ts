@@ -3,7 +3,7 @@ export interface Settings {
     title: string
     subTitle: string
     style: string
-    latestValues: number
+    showLegend: boolean
 }
 
 export interface Point {
@@ -19,6 +19,7 @@ export interface Dataseries {
     type: string
     order: number
     latestValues: number
+    color: string
     data: Point[]
 }
 

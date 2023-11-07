@@ -19,6 +19,10 @@
                     "title": "Map Style",
                     "description": "The basic style of the map. Can be one of streets-v12, outdoors-v12, light-v11, dark-v11, satellite-v9, satellite-streets-v12, navigation-day-v1, navigation-night-v1.",
                     "type": "string"
+                }, 
+                "showLegend": {
+                    "title": "Show Legend",
+                    "type": "boolean"
                 }
             },
             "required": ["title", "subTitle"]
@@ -43,6 +47,11 @@
                         "title": "Draw Order",
                         "description": "Determines the draw order of the series. Dataseries with lower numbers are drawn on top of ones with higher numbers.",
                         "type": "number"
+                    },
+                    "color": {
+                        "title": "Default Circle color",
+                        "description": "Give the color as a browser standard form. Either with names like 'red', 'green', etc. or as #de432b where two hex digits represent Red Green Blue in this order.",
+                        "type": "string"
                     },
                     "latestValues": {
                         "title": "Latest Values",
@@ -70,7 +79,7 @@
                                 },
                                 "color": {
                                     "title": "Circle color",
-                                    "description": "Give the color as a browser standard form. Either with names like 'red', 'green', etc. or as #de432b34 where two hex digits represent Red Green Blue Opacity in this order.",
+                                    "description": "Overrides the color specified on dataseries level.",
                                     "type": "string"
                                 },
                                 "pivot": {

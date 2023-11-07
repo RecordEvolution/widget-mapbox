@@ -1,5 +1,6 @@
 import { html, css, LitElement } from 'lit';
 import { property, state } from 'lit/decorators.js';
+import { repeat } from 'lit/directives/repeat.js'
 // @ts-ignore
 import mapboxgl from 'https://cdn.skypack.dev/pin/mapbox-gl@v2.15.0-iKfohePv9lgutCMNih0d/mode=imports,min/optimized/mapbox-gl.js'
 // import mapboxgl, { Map } from 'mapbox-gl';
@@ -28,6 +29,9 @@ export class WidgetMapbox extends LitElement {
   @state()
   dataLayers: any = new Map()
 
+  @state()
+  colors: any = new Map()
+
   resizeObserver: ResizeObserver
   constructor() {
     super()
@@ -36,6 +40,15 @@ export class WidgetMapbox extends LitElement {
         this.fitBounds()
     })
     mapboxgl.accessToken = 'pk.eyJ1IjoibWFya29wZSIsImEiOiJjazc1OWlsNjkwN2pyM2VxajV1eGRnYzgwIn0.3lVksk1nej_0KnWjCkBDAA'
+  }
+
+  update(changedProperties: Map<string, any>) {
+    changedProperties.forEach((oldValue, propName: string) => {
+      if (propName === 'inputData') {
+        this.applyInputData()
+      }
+    })
+    super.update(changedProperties)
   }
 
   firstUpdated() {
@@ -64,6 +77,123 @@ export class WidgetMapbox extends LitElement {
     })
 
     this.map.fitBounds(bounds, { maxZoom: 14, padding: 100, duration: 100, });
+  }
+
+
+  applyInputData() {
+    if(!this?.inputData?.settings || !this?.inputData?.dataseries?.length) return
+
+    this.mapTitle = this.inputData?.settings?.title
+    this.mapDescription = this.inputData?.settings?.subTitle
+
+
+    // choose random color if dataseries has none and store it
+    this.inputData.dataseries.forEach(ds => {
+      if (!this.colors.has(ds.label)) {
+        this.colors.set(ds.label, ds.color ?? tinycolor.random().toString())
+      }
+    })
+
+    // Pivot inputData if required
+    this.dataSets = []
+    this.inputData.dataseries.forEach(ds => {
+      const color = this.colors.get(ds.label)
+      const distincts = [...new Set(ds.data.map((d: Point) => d.pivot))]
+      const derivedColors = tinycolor(color).monochromatic(distincts.length).map((c: any) => c.toHexString())
+      if (distincts.length > 1) {
+        const darker = 50 / (distincts.length + 0)
+        distincts.forEach((piv, i) => {
+          const pds: any = {
+            label: `${ds.label} ${piv}`,
+            order: ds.order,
+            type: ds.type,
+            color: derivedColors[i],
+            latestValues: ds.latestValues,
+            data: ds.data.filter(d => d.pivot === piv)
+          }
+          this.dataSets.push(pds)
+        })
+      } else {
+        this.dataSets.push(ds)
+      }
+    })
+
+    // Filter for latest Values
+    this.dataSets.forEach(ds => {
+      if (ds.latestValues > 0) ds.data = ds.data.splice(-ds.latestValues)
+    })
+
+    // console.log('mapbox datasets', this.dataSets)
+
+    // Transform to geojson
+    this.dataSets.sort((a, b) => b.order - a.order).forEach(ds => {
+
+      const features: GeoJSON.Feature[] = ds.data
+      .filter(p => p.lon !== undefined && p.lat !== undefined && p.size !== undefined)
+      .map(p => {
+        const point: GeoJSON.Feature = {
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [p.lon, p.lat]
+            },
+            properties: {
+              size: p.size,
+              color: p.color ?? ds.color
+            }
+          }
+        return point
+      })
+
+      this.dataLayers.set('input:' + ds.label, {
+        type: 'FeatureCollection',
+        features
+      })
+
+      if (this.map) this.syncDataLayers()
+      // console.log('mapbox DataLayers', this.dataLayers)
+    })
+  }
+
+  syncDataLayers() {
+    
+    // remove Layers that are not part of the inputData anymore
+    const layers: any[] = this.map.getStyle().layers
+    const myLayers: any[] = layers.filter((s: any) => s.id.startsWith('input:'))
+
+    myLayers.forEach(l => {
+      if (!this.dataLayers.has(l.id)){
+        this.map.removeLayer(l.id)
+        this.map.removeSource(l.id)
+      }
+    })
+
+    // add new layers or update the data of existing layers 
+    this.dataLayers.forEach((ds: GeoJSON.FeatureCollection, label: string) => {
+      const src = this.map.getSource(label)
+      if (src) {
+        src.setData(ds || [])
+      } else {
+        this.map?.addSource(label, {
+          type: 'geojson',
+          data: ds || []
+        });
+
+        this.map?.addLayer(
+          {
+            'id': label,
+            'type': 'circle',
+            'source': label,
+            'paint': {
+              'circle-radius': ['get', 'size'],
+              "circle-color": ['get', 'color'],
+            }
+          },
+          // Place polygons under labels, roads and buildings.
+          // 'aeroway-polygon'
+        )
+      }
+    })
   }
 
   addBuildingLayer() {
@@ -106,101 +236,9 @@ export class WidgetMapbox extends LitElement {
     }, labelLayerId)
   }
 
-  addDataLayers() {
-    // Add the vector tileset as a source.
-
-    this.dataLayers.forEach((ds: GeoJSON.FeatureCollection, label: string) => {
-      this.map?.addSource(label, {
-        type: 'geojson',
-        data: ds || []
-      });
-      this.map?.addLayer(
-        {
-          'id': label,
-          'type': 'circle',
-          'source': label,
-          'paint': {
-            'circle-radius': ['get', 'size'],
-            "circle-color": ['get', 'color'],
-          }
-        },
-        // Place polygons under labels, roads and buildings.
-        // 'aeroway-polygon'
-      )
-    })
-
-  }
-
-  applyInputData() {
-    if(!this?.inputData?.settings || !this?.inputData?.dataseries?.length) return
-
-    this.mapTitle = this.inputData?.settings?.title
-    this.mapDescription = this.inputData?.settings?.subTitle
-
-    // pivot data
-    this.inputData.dataseries.forEach(ds => {
-      const distincts = [...new Set(ds.data.map((d: Point) => d.pivot))]
-      if (distincts.length > 1) {
-        const darker = 100 / (distincts.length + 0)
-        distincts.forEach((piv, i) => {
-          const pds: any = {
-            label: `${ds.label} ${piv}`,
-            order: ds.order,
-            type: ds.type,
-            latestValues: ds.latestValues,
-            data: ds.data.filter(d => d.pivot === piv).map(d => ({
-              lon: d.lon,
-              lat: d.lat,
-              size: d.size, 
-              color: tinycolor(d.color).darken(darker * i).toString()
-            }))
-          }
-          this.dataSets.push(pds)
-        })
-      } else {
-        this.dataSets.push(ds)
-      }
-    })
-
-    // Filter for latest Values
-    this.dataSets.forEach(ds => {
-      if (ds.latestValues > 0) ds.data = ds.data.splice(-ds.latestValues)
-    })
-
-    console.log('mapbox datasets', this.dataSets)
-
-    // Transform to geojson
-    this.dataSets.sort((a, b) => b.order - a.order).forEach(ds => {
-
-      const features: GeoJSON.Feature[] = ds.data
-      .filter(p => p.lon !== undefined && p.lat !== undefined && p.color !== undefined && p.size !== undefined)
-      .map(p => {
-        const point: GeoJSON.Feature = {
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: [p.lon, p.lat]
-            },
-            properties: {
-              size: p.size,
-              color: p.color
-            }
-          }
-        return point
-      })
-
-      this.dataLayers.set(ds.label, {
-        type: 'FeatureCollection',
-        features
-      })
-
-      console.log('mapbox DataLayers', this.dataLayers)
-    })
-  }
-
   createMap() {
     this.map = new mapboxgl.Map({
-      container: this.shadowRoot?.getElementById('main') as HTMLCanvasElement,
+      container: this.shadowRoot?.getElementById('map') as HTMLCanvasElement,
       style: `mapbox://styles/mapbox/${this.inputData?.settings?.style ?? 'light-v11'}`,
       center: [8.6841700, 50.1155200],
       zoom: 1.8,
@@ -208,7 +246,7 @@ export class WidgetMapbox extends LitElement {
 
     this.map.on('load', () => {
       this.addBuildingLayer()
-      this.addDataLayers()
+      this.syncDataLayers()
     });
   }
 
@@ -222,10 +260,13 @@ export class WidgetMapbox extends LitElement {
       margin: auto;
     }
 
+    .paging:not([active]) { display: none !important; }
+
     header {
       display: flex;
-      flex-direction: column;
       margin: 0 0 16px 0;
+      gap: 24px;
+      justify-content: space-between;
     }
     h3 {
       margin: 0;
@@ -247,8 +288,25 @@ export class WidgetMapbox extends LitElement {
       height: 100%;
       width: 100%;
     }
-    #main {
+    #map {
       flex: 1;
+    }
+
+    .title {
+      white-space: nowrap;
+    }
+    
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .label {
+      display: flex;
+      align-items: end;
+      font-size: 14px;
+      gap: 8px
     }
 
   `;
@@ -258,10 +316,20 @@ export class WidgetMapbox extends LitElement {
       <link href="https://api.mapbox.com/mapbox-gl-js/v${mapboxgl.version}/mapbox-gl.css" rel="stylesheet">
       <div class="wrapper">
         <header>
-            <h3>${this.mapTitle}</h3>
-            <p>${this.mapDescription}</p>
+            <div class="title">
+              <h3>${this.mapTitle}</h3>
+              <p>${this.mapDescription}</p>
+            </div>
+            <div class="legend paging" ?active=${this?.inputData?.settings?.showLegend}>
+              ${repeat(this.dataSets, ds => ds.label, ds => html`
+              <div class="label">
+                <div style="background: ${ds.color}; width: 24px; height: 12px;"></div>
+                <div>${ds.label}</div>
+              </div>
+              `)}
+            </div>
         </header>
-        <div id="main"></div>
+        <div id="map"></div>
       </div>
     `;
   }
