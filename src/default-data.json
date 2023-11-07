@@ -10,6 +10,7 @@
       "type": "circle",
       "order": 3,
       "color": "#49aaff",
+      "latestValues": 10,
       "data": [
         {
           "lon": 8.6841700,

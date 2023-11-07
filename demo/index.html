@@ -27,7 +27,7 @@
     import { html, render } from 'lit';
     import '../dist/src/widget-mapbox.js';
     import data from '../src/default-data.json' assert { type: 'json' };
-    const keyPathsToRandomize = ['dataseries.0.data.0.size', 'settings.title'];
+    const keyPathsToRandomize = ['dataseries.0.data.3.size', 'settings.title'];
 
     setInterval(() => {
       const randomizedObj = randomizeObjectValues(data, keyPathsToRandomize);
