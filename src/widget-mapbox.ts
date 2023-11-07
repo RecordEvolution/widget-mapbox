@@ -164,7 +164,7 @@ export class WidgetMapbox extends LitElement {
 
     // Filter for latest Values
     this.dataSets.forEach(ds => {
-      if (ds.latestValues) ds.data.splice(ds.latestValues)
+      if (ds.latestValues > 0) ds.data = ds.data.splice(-ds.latestValues)
     })
 
     console.log('mapbox datasets', this.dataSets)
