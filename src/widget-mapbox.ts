@@ -75,8 +75,9 @@ export class WidgetMapbox extends LitElement {
         bounds.extend(f.geometry.coordinates)
       })
     })
-
-    this.map.fitBounds(bounds, { maxZoom: 14, padding: 100, duration: 100, });
+    if (!bounds.isEmpty()) {
+      this.map.fitBounds(bounds, { maxZoom: 14, padding: 100, duration: 100, })
+    }
   }
 
 
