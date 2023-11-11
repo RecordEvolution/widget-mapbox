@@ -18,12 +18,6 @@ export class WidgetMapbox extends LitElement {
   private map: any | undefined = undefined;
 
   @state()
-  private mapTitle: string = 'Map-chart';
-
-  @state()
-  private mapDescription: string = 'This is a Map-chart for the RE-Dashboard';
-
-  @state()
   private dataSets: Dataseries[] = []
 
   @state()
@@ -83,10 +77,6 @@ export class WidgetMapbox extends LitElement {
 
   applyInputData() {
     if(!this?.inputData?.settings || !this?.inputData?.dataseries?.length) return
-
-    this.mapTitle = this.inputData?.settings?.title
-    this.mapDescription = this.inputData?.settings?.subTitle
-
 
     // choose random color if dataseries has none and store it
     this.inputData.dataseries.forEach(ds => {
@@ -280,6 +270,9 @@ export class WidgetMapbox extends LitElement {
       margin: 10px 0 0 0;
       max-width: 300px;
       font-size: 14px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
       line-height: 17px;
     }
 
@@ -318,8 +311,8 @@ export class WidgetMapbox extends LitElement {
       <div class="wrapper">
         <header>
             <div class="title">
-              <h3>${this.mapTitle}</h3>
-              <p>${this.mapDescription}</p>
+              <h3 class="paging" ?active=${this.inputData?.settings?.title}>${this.inputData?.settings?.title}</h3>
+              <p class="paging" ?active=${this.inputData?.settings?.subTitle}>${this.inputData?.settings?.subTitle}</p>
             </div>
             <div class="legend paging" ?active=${this?.inputData?.settings?.showLegend}>
               ${repeat(this.dataSets, ds => ds.label, ds => html`
