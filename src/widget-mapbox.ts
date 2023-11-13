@@ -235,6 +235,8 @@ export class WidgetMapbox extends LitElement {
       zoom: 1.8,
     });
 
+    console.log('MAPBOX VERSION', mapboxgl.version)
+
     this.map.on('load', () => {
       this.addBuildingLayer()
       this.syncDataLayers()
@@ -307,7 +309,7 @@ export class WidgetMapbox extends LitElement {
 
   render() {
     return html`
-      <link href="https://api.mapbox.com/mapbox-gl-js/v${mapboxgl.version}/mapbox-gl.css" rel="stylesheet">
+      <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
       <div class="wrapper">
         <header>
             <div class="title">
