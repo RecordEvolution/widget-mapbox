@@ -40,7 +40,7 @@
                     },
                     "type": {
                         "title": "Point type",
-                        "description": "Can be one of 'circle', ...",
+                        "description": "Can be one of ''circle'', ...",
                         "type": "string"
                     },
                     "order": {
@@ -50,7 +50,7 @@
                     },
                     "color": {
                         "title": "Default Circle color",
-                        "description": "Give the color as a browser standard form. Either with names like 'red', 'green', etc. or as #de432b where two hex digits represent Red Green Blue in this order.",
+                        "description": "Give the color as a browser standard form. Either with names like ''red'', ''green'', etc. or as #de432b where two hex digits represent Red Green Blue in this order.",
                         "type": "string"
                     },
                     "latestValues": {
@@ -84,7 +84,7 @@
                                 },
                                 "pivot": {
                                     "title": "Pivot Column",
-                                    "description": "You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, lon, lat, temperature] and specify 'city' as pivot column, then you will get a layer for each city.",
+                                    "description": "You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, lon, lat, temperature] and specify ''city'' as pivot column, then you will get a layer for each city.",
                                     "type": "string"
                                 }
                             }
