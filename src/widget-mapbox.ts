@@ -5,7 +5,6 @@ import { repeat } from 'lit/directives/repeat.js'
 import mapboxgl from 'https://cdn.skypack.dev/pin/mapbox-gl@v2.15.0-iKfohePv9lgutCMNih0d/mode=imports,min/optimized/mapbox-gl.js'
 // import mapboxgl, { Map } from 'mapbox-gl';
 import * as GeoJSON from 'geojson';
-// @ts-ignore
 import tinycolor from "tinycolor2";
 import { InputData, Dataseries, Point } from './types.js'
 
