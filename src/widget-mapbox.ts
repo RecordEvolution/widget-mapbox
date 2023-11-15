@@ -202,6 +202,22 @@ export class WidgetMapbox extends LitElement {
     this.map?.addLayer(layerConfig)
   }
 
+  addHeatmapLayer(dataSet: Dataseries) {
+    if (!dataSet) return
+    const layerConfig = {
+      'id': dataSet.label + ':symbol',
+      'type': 'heatmap',
+      'source': 'input:' + dataSet.label,
+      paint: {
+        ...dataSet.config.heatmap,
+        'heatmap-weight': ['get', 'value']
+      }
+      // Place polygons under labels, roads and buildings.
+      // 'aeroway-polygon'
+    }
+    this.map?.addLayer(layerConfig)
+  }
+
   syncDataLayers() {
     
     // remove sources and all Layers that are not part of the inputData anymore
@@ -238,6 +254,9 @@ export class WidgetMapbox extends LitElement {
           return
         case 'symbol':
           this.addSymbolLayer(ds)
+          return
+        case 'heatmap':
+          this.addHeatmapLayer(ds)
           return
       }
     })

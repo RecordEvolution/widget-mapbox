@@ -49,32 +49,33 @@
     }, 
     {
       "label": "Demo Layer B",
-      "type": "circle",
+      "type": "heatmap",
       "order": 1,
       "config": {
-        "circle": {
-          "circle-blur": 0.2,
-          "circle-color": "#b76aff",
-          "circle-opacity": 0.8
+        "heatmap": {
+          "heatmap-color": ["interpolate",["linear"],["heatmap-density"],0,"rgba(0, 0, 255, 0)",0.1,"royalblue",0.3,"cyan",0.5,"lime",0.7,"yellow",1,"tomato"],
+          "heatmap-intensity": 2000,
+          "heatmap-opacity": 0.3,
+          "heatmap-radius": 150
         }
       },
       "data": [
         {
           "lon": 8.1841700,
           "lat": 50.5155200,
-          "value": 5
+          "value": 50
         }, {
           "lon": 8.7841700,
           "lat": 51.2155200,
-          "value": 14
+          "value": 94
         }, {
           "lon": 9.380,
           "lat": 48.3155200,
-          "value": 6
+          "value": 60
         }, {
           "lon": 6.180,
           "lat": 50.3755200,
-          "value": 30
+          "value": 60
         }
       ]
     }]
