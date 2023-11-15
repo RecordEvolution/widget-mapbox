@@ -11,27 +11,38 @@
       "order": 3,
       "color": "#49aaff",
       "latestValues": 10,
+      "config": {
+        "circle": {
+          "circle-blur": 0.2,
+          "circle-color": "#49aaff",
+          "circle-opacity": 0.8
+        },
+        "symbol": {
+          "text-color": "black",
+          "text-size": 14
+        }
+      },
       "data": [
         {
           "lon": 8.6841700,
           "lat": 50.1155200,
-          "size": 45,
+          "value": 45,
           "pivot": "Coca Cola"
         }, {
           "lon": 8.1841700,
           "lat": 51.1155200,
-          "size": 10,
+          "value": 10,
           "pivot": "Pepsi"
         }, {
           "lon": 9.680,
           "lat": 48.1155200,
-          "size": 16,
+          "value": 16,
           "color": "red",
           "pivot": "Coca Cola"
         }, {
           "lon": 6.680,
           "lat": 50.1155200,
-          "size": 30,
+          "value": 30,
           "pivot": "Pepsi"
         }
       ]
@@ -40,24 +51,30 @@
       "label": "Demo Layer B",
       "type": "circle",
       "order": 1,
-      "color": "#b76aff",
+      "config": {
+        "circle": {
+          "circle-blur": 0.2,
+          "circle-color": "#b76aff",
+          "circle-opacity": 0.8
+        }
+      },
       "data": [
         {
           "lon": 8.1841700,
           "lat": 50.5155200,
-          "size": 5
+          "value": 5
         }, {
           "lon": 8.7841700,
           "lat": 51.2155200,
-          "size": 14
+          "value": 14
         }, {
           "lon": 9.380,
           "lat": 48.3155200,
-          "size": 6
+          "value": 6
         }, {
           "lon": 6.180,
           "lat": 50.3755200,
-          "size": 30
+          "value": 30
         }
       ]
     }]

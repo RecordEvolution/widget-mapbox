@@ -20,7 +20,7 @@ export class WidgetMapbox extends LitElement {
   private dataSets: Dataseries[] = []
 
   @state()
-  dataLayers: any = new Map()
+  dataSources: any = new Map()
 
   @state()
   colors: any = new Map()
@@ -62,7 +62,7 @@ export class WidgetMapbox extends LitElement {
 
   fitBounds() {
     const bounds = new mapboxgl.LngLatBounds()
-    this.dataLayers.forEach((col: GeoJSON.FeatureCollection) => {
+    this.dataSources.forEach((col: GeoJSON.FeatureCollection) => {
       col.features.forEach(f => {
         // @ts-ignore
         bounds.extend(f.geometry.coordinates)
@@ -73,14 +73,13 @@ export class WidgetMapbox extends LitElement {
     }
   }
 
-
   applyInputData() {
     if(!this?.inputData?.settings || !this?.inputData?.dataseries?.length) return
 
-    // choose random color if dataseries has none and store it
+    // choose random color if dataseries has none and store it for furure updates
     this.inputData.dataseries.forEach(ds => {
       if (!this.colors.has(ds.label)) {
-        this.colors.set(ds.label, ds.color ?? tinycolor.random().toString())
+        this.colors.set(ds.label, ds.config[ds.type]['circle-color'] ?? tinycolor.random().toString())
       }
     })
 
@@ -91,22 +90,25 @@ export class WidgetMapbox extends LitElement {
       const distincts = [...new Set(ds.data.map((d: Point) => d.pivot))]
       const derivedColors = tinycolor(color).monochromatic(distincts.length).map((c: any) => c.toHexString())
       if (distincts.length > 1) {
-        const darker = 50 / (distincts.length + 0)
         distincts.forEach((piv, i) => {
           const pds: any = {
             label: `${ds.label} ${piv}`,
             order: ds.order,
             type: ds.type,
-            color: derivedColors[i],
             latestValues: ds.latestValues,
+            derivedColor: derivedColors[i],
+            config: ds.config,
             data: ds.data.filter(d => d.pivot === piv)
           }
           this.dataSets.push(pds)
         })
       } else {
+        ds.derivedColor = ds.config[ds.type]['circle-color']
         this.dataSets.push(ds)
       }
     })
+
+    this.inputData.dataseries = []
 
     // Filter for latest Values
     this.dataSets.forEach(ds => {
@@ -119,69 +121,124 @@ export class WidgetMapbox extends LitElement {
     this.dataSets.sort((a, b) => b.order - a.order).forEach(ds => {
 
       const features: GeoJSON.Feature[] = ds.data
-      .filter(p => p.lon !== undefined && p.lat !== undefined && p.size !== undefined)
-      .map(p => {
-        const point: GeoJSON.Feature = {
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: [p.lon, p.lat]
-            },
-            properties: {
-              size: p.size,
-              color: p.color ?? ds.color
+        .filter(p => p.lon !== undefined && p.lat !== undefined && p.value !== undefined)
+        .map(p => {
+          const point: GeoJSON.Feature = {
+              type: 'Feature',
+              geometry: {
+                type: 'Point',
+                coordinates: [p.lon, p.lat]
+              },
+              properties: {
+                value: Math.round(p.value)
+              }
             }
-          }
-        return point
-      })
+          return point
+        })
 
-      this.dataLayers.set('input:' + ds.label, {
+      this.dataSources.set('input:' + ds.label, {
         type: 'FeatureCollection',
         features
-      })
+      } as GeoJSON.FeatureCollection)
 
       if (this.map) this.syncDataLayers()
-      // console.log('mapbox DataLayers', this.dataLayers)
+      // console.log('mapbox DataLayers', this.dataSources)
     })
+  }
+
+  addCircleLayer(dataSet: Dataseries) {
+      if (!dataSet) return
+      const layerConfig = {
+        'id': dataSet.label + ':circle',
+        'type': 'circle',
+        'source': 'input:' + dataSet.label,
+        'paint': {
+          ...dataSet.config['circle'],
+          "circle-radius": ['get', 'value'],
+          "circle-color": dataSet.derivedColor ?? dataSet.config['circle']['circle-color']
+        },
+        // Place polygons under labels, roads and buildings.
+        // 'aeroway-polygon'
+      }
+
+      this.map?.addLayer(layerConfig)
+      
+      if (!dataSet.config['symbol']) return
+      const layerConfig2 = {
+        'id': dataSet.label + ':symbol',
+        'type': 'symbol',
+        'source': 'input:' + dataSet.label,
+        layout: {
+          'text-field': ['get', 'value'],
+          'text-size': dataSet.config['symbol']['text-size'],
+          'text-anchor': 'center',
+        },
+        paint: {
+          'text-color': dataSet.config['symbol']['text-color'],
+        }
+        // Place polygons under labels, roads and buildings.
+        // 'aeroway-polygon'
+      }
+      this.map?.addLayer(layerConfig2)
+    }
+
+  addSymbolLayer(dataSet: Dataseries) {
+    if (!dataSet) return
+    const layerConfig = {
+      'id': dataSet.label + ':symbol',
+      'type': 'symbol',
+      'source': 'input:' + dataSet.label,
+      layout: {
+        'text-field': ['get', 'value'],
+        'text-size': dataSet.config['symbol']['text-size'],
+        'text-anchor': 'center',
+      },
+      paint: {
+        'text-color': dataSet.config['symbol']['text-color'],
+      }
+      // Place polygons under labels, roads and buildings.
+      // 'aeroway-polygon'
+    }
+    this.map?.addLayer(layerConfig)
   }
 
   syncDataLayers() {
     
-    // remove Layers that are not part of the inputData anymore
-    const layers: any[] = this.map.getStyle().layers
-    const myLayers: any[] = layers.filter((s: any) => s.id.startsWith('input:'))
+    // remove sources and all Layers that are not part of the inputData anymore
+    const sources: any[] = this.map.getStyle().sources ?? []
+    const mySources: [string, any][] = Object.entries(sources).filter(([l]) => l.startsWith('input:'))
 
-    myLayers.forEach(l => {
-      if (!this.dataLayers.has(l.id)){
-        this.map.removeLayer(l.id)
-        this.map.removeSource(l.id)
+    mySources.forEach(([label]) => {
+      if (!this.dataSources.has(label)){
+        // remove all layers using this source
+        this.map.getStyle().layers.filter((la: any) => la.id === label + ':' + la.type).forEach((la: any) => {
+          this.map.removeLayer(la.id)
+        })
+        this.map.removeSource(label)
       }
     })
 
     // add new layers or update the data of existing layers 
-    this.dataLayers.forEach((ds: GeoJSON.FeatureCollection, label: string) => {
-      const src = this.map.getSource(label)
+    this.dataSets.forEach(ds => {
+      const fc = this.dataSources.get('input:' + ds.label)
+      const src = this.map.getSource('input:' + ds.label)
       if (src) {
-        src.setData(ds || [])
-      } else {
-        this.map?.addSource(label, {
-          type: 'geojson',
-          data: ds || []
-        });
+        src.setData(fc || [])
+        return
+      }
+      console.log('adding source', ds.label, ds.type)
+      this.map?.addSource('input:' + ds.label, {
+        type: 'geojson',
+        data: fc || []
+      })
 
-        this.map?.addLayer(
-          {
-            'id': label,
-            'type': 'circle',
-            'source': label,
-            'paint': {
-              'circle-radius': ['get', 'size'],
-              "circle-color": ['get', 'color'],
-            }
-          },
-          // Place polygons under labels, roads and buildings.
-          // 'aeroway-polygon'
-        )
+      switch(ds.type) {
+        case 'circle':
+          this.addCircleLayer(ds)
+          return
+        case 'symbol':
+          this.addSymbolLayer(ds)
+          return
       }
     })
   }
@@ -316,12 +373,13 @@ export class WidgetMapbox extends LitElement {
               <p class="paging" ?active=${this.inputData?.settings?.subTitle}>${this.inputData?.settings?.subTitle}</p>
             </div>
             <div class="legend paging" ?active=${this?.inputData?.settings?.showLegend}>
-              ${repeat(this.dataSets, ds => ds.label, ds => html`
+              ${repeat(this.dataSets, ds => ds.label, ds => {
+                return html`
               <div class="label">
-                <div style="background: ${ds.color}; width: 24px; height: 12px;"></div>
+                <div style="background: ${ds.derivedColor}; width: 24px; height: 12px;"></div>
                 <div>${ds.label}</div>
               </div>
-              `)}
+              `})}
             </div>
         </header>
         <div id="map"></div>
