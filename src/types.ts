@@ -9,6 +9,7 @@ export interface Settings {
 export interface Point {
     lon: number
     lat: number
+    alt: number
     value: number
     pivot: string
 }
@@ -19,6 +20,7 @@ export interface Dataseries {
     order: number
     latestValues: number
     config: any
+    color: string
     data: Point[]
     // non inputs
     derivedColor: string

@@ -38,7 +38,7 @@ export class WidgetMapbox extends LitElement {
   update(changedProperties: Map<string, any>) {
     changedProperties.forEach((oldValue, propName: string) => {
       if (propName === 'inputData') {
-        this.applyInputData()
+        this.transformInputData()
       }
     })
     super.update(changedProperties)
@@ -46,7 +46,7 @@ export class WidgetMapbox extends LitElement {
 
   firstUpdated() {
 
-    this.applyInputData()
+    this.transformInputData()
     this.createMap()
     this.resizeObserver.observe(this.map._container)
     this.fitBounds()
@@ -73,13 +73,13 @@ export class WidgetMapbox extends LitElement {
     }
   }
 
-  applyInputData() {
+  transformInputData() {
     if(!this?.inputData?.settings || !this?.inputData?.dataseries?.length) return
 
     // choose random color if dataseries has none and store it for furure updates
     this.inputData.dataseries.forEach(ds => {
       if (!this.colors.has(ds.label)) {
-        this.colors.set(ds.label, ds.config[ds.type]['circle-color'] ?? tinycolor.random().toString())
+        this.colors.set(ds.label, ds.color ?? tinycolor.random().toString())
       }
     })
 
@@ -96,14 +96,13 @@ export class WidgetMapbox extends LitElement {
             order: ds.order,
             type: ds.type,
             latestValues: ds.latestValues,
-            derivedColor: derivedColors[i],
+            color: derivedColors[i],
             config: ds.config,
             data: ds.data.filter(d => d.pivot === piv)
           }
           this.dataSets.push(pds)
         })
       } else {
-        ds.derivedColor = ds.config[ds.type]['circle-color']
         this.dataSets.push(ds)
       }
     })
@@ -117,10 +116,22 @@ export class WidgetMapbox extends LitElement {
 
     // console.log('mapbox datasets', this.dataSets)
 
-    // Transform to geojson
+    // create geojson sources
     this.dataSets.sort((a, b) => b.order - a.order).forEach(ds => {
 
-      const features: GeoJSON.Feature[] = ds.data
+      this.dataSources.set('input:' + ds.label, {
+        type: 'FeatureCollection',
+        features: this.createGEOJson(ds)
+      } as GeoJSON.FeatureCollection)
+
+      if (this.map) this.syncDataLayers()
+      // console.log('mapbox DataLayers', this.dataSources)
+    })
+  }
+
+  createGEOJson(ds: Dataseries): GeoJSON.Feature[] {
+    if (ds.type !== 'line') {
+    const features: GeoJSON.Feature[] = ds.data
         .filter(p => p.lon !== undefined && p.lat !== undefined && p.value !== undefined)
         .map(p => {
           const point: GeoJSON.Feature = {
@@ -135,15 +146,22 @@ export class WidgetMapbox extends LitElement {
             }
           return point
         })
+        return features
+      }
 
-      this.dataSources.set('input:' + ds.label, {
-        type: 'FeatureCollection',
-        features
-      } as GeoJSON.FeatureCollection)
+      const line: number[][] = ds.data
+        .filter(p => p.lon !== undefined && p.lat !== undefined)
+        .map(p => [p.lon, p.lat, p.alt])
 
-      if (this.map) this.syncDataLayers()
-      // console.log('mapbox DataLayers', this.dataSources)
-    })
+      const feature: GeoJSON.Feature = {
+            type: 'Feature',
+            geometry: {
+              type: 'LineString',
+              coordinates: line
+            },
+            properties: {}
+          }
+      return [feature]
   }
 
   addCircleLayer(dataSet: Dataseries) {
@@ -155,7 +173,11 @@ export class WidgetMapbox extends LitElement {
         'paint': {
           ...dataSet.config['circle'],
           "circle-radius": ['get', 'value'],
-          "circle-color": dataSet.derivedColor ?? dataSet.config['circle']['circle-color']
+          "circle-radius-transition": {
+            duration: 1000,
+            delay: 0
+          },
+          "circle-color": dataSet.color
         },
         // Place polygons under labels, roads and buildings.
         // 'aeroway-polygon'
@@ -204,13 +226,82 @@ export class WidgetMapbox extends LitElement {
 
   addHeatmapLayer(dataSet: Dataseries) {
     if (!dataSet) return
+
+    const min = Math.min(...dataSet.data.map(p => p.value))
+    const max = Math.max(...dataSet.data.map(p => p.value))
     const layerConfig = {
-      'id': dataSet.label + ':symbol',
+      'id': dataSet.label + ':heatmap',
       'type': 'heatmap',
       'source': 'input:' + dataSet.label,
       paint: {
         ...dataSet.config.heatmap,
-        'heatmap-weight': ['get', 'value']
+        'heatmap-color': [
+          "interpolate",
+          ["linear"],
+          ["heatmap-density"],
+          0,"rgba(0, 0, 255, 0)",
+          0.1, "royalblue",
+          0.3, "cyan",
+          0.5, "lime",
+          0.7, "yellow",
+          1, "tomato"
+        ],
+        // Increase the heatmap weight based on frequency and property magnitude
+        'heatmap-weight': [
+          'interpolate',
+          ['linear'],
+          ['get', 'value'],
+          min, 0,
+          max, 3
+          ],
+        // // Increase the heatmap color weight weight by zoom level
+        // // heatmap-intensity is a multiplier on top of heatmap-weight
+        // 'heatmap-intensity': [
+        //   'interpolate',
+        //   ['linear'],
+        //   ['zoom'],
+        //   0, 1,
+        //   9, 3
+        //   ],
+        // Adjust the heatmap radius by zoom level
+        'heatmap-radius': [
+          'interpolate',
+          ['linear'],
+          ['get', 'value'],
+          min, 30,
+          max, 30 + dataSet.config.heatmap['heatmap-radius']
+          ],
+        'heatmap-radius-transition': {
+          duration: 1000,
+          delay: 0
+        }
+        //   // Transition from heatmap to circle layer by zoom level
+        //   'heatmap-opacity': [
+        //   'interpolate',
+        //   ['linear'],
+        //   ['zoom'],
+        //   7, 1,
+        //   9, 0
+        //   ]
+      }
+      // Place polygons under labels, roads and buildings.
+      // 'aeroway-polygon'
+    }
+    this.map?.addLayer(layerConfig)
+  }
+
+  addLineLayer(dataSet: Dataseries) {
+    if (!dataSet) return
+    const layerConfig = {
+      'id': dataSet.label + ':line',
+      'type': 'line',
+      'source': 'input:' + dataSet.label,
+      layout: {
+        'line-cap': 'round',
+      },
+      paint: {
+        ...dataSet.config.line,
+          "line-color": dataSet.color,
       }
       // Place polygons under labels, roads and buildings.
       // 'aeroway-polygon'
@@ -258,6 +349,8 @@ export class WidgetMapbox extends LitElement {
         case 'heatmap':
           this.addHeatmapLayer(ds)
           return
+        case 'line':
+          this.addLineLayer(ds)
       }
     })
   }
@@ -308,7 +401,7 @@ export class WidgetMapbox extends LitElement {
       style: `mapbox://styles/mapbox/${this.inputData?.settings?.style ?? 'light-v11'}`,
       center: [8.6841700, 50.1155200],
       zoom: 1.8,
-    });
+    })
 
     console.log('MAPBOX VERSION', mapboxgl.version)
 
@@ -395,7 +488,7 @@ export class WidgetMapbox extends LitElement {
               ${repeat(this.dataSets, ds => ds.label, ds => {
                 return html`
               <div class="label">
-                <div style="background: ${ds.derivedColor}; width: 24px; height: 12px;"></div>
+                <div style="background: ${ds.color}; width: 24px; height: 12px;"></div>
                 <div>${ds.label}</div>
               </div>
               `})}

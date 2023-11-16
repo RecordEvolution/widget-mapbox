@@ -27,8 +27,25 @@
     import { html, render } from 'lit';
     import '../dist/src/widget-mapbox.js';
     import data from '../src/default-data.json' assert { type: 'json' };
-    const keyPathsToRandomize = ['dataseries.0.data.3.value', 'settings.title'];
+    const keyPathsToRandomize = [
+      'dataseries.0.data.1.value', 
+      'dataseries.0.data.5.value', 
+      'dataseries.0.data.2.value', 
+      'dataseries.0.data.7.value', 
 
+      'dataseries.1.data.0.value',
+      'dataseries.1.data.1.value',
+      'dataseries.1.data.2.value',
+      'dataseries.1.data.3.value',
+      'dataseries.1.data.4.value',
+      'dataseries.1.data.5.value',
+      'dataseries.1.data.6.value',
+      'dataseries.1.data.7.value',
+      'dataseries.1.data.8.value',
+      'dataseries.1.data.9.value',
+      'dataseries.1.data.10.value',
+      'settings.title'];
+    // check out https://geojson.io/ to generate example data
     setInterval(() => {
       const randomizedObj = randomizeObjectValues(data, keyPathsToRandomize);
 

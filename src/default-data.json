@@ -91,8 +91,7 @@
       "order": 1,
       "config": {
         "heatmap": {
-          "heatmap-color": ["interpolate",["linear"],["heatmap-density"],0,"rgba(0, 0, 255, 0)",0.1,"royalblue",0.3,"cyan",0.5,"lime",0.7,"yellow",1,"tomato"],
-          "heatmap-intensity": 1,
+          "heatmap-intensity": 0.8,
           "heatmap-opacity": 0.5,
           "heatmap-radius": 100
         }
@@ -171,12 +170,12 @@
         {
           "lon": 8.703125706488436,
           "lat": 50.10874802563299,
-          "value": 50
+          "value": 80
         },
         {
           "lon": 8.717446082959896,
           "lat": 50.11215181029422,
-          "value": 30
+          "value": 100
         }
       ]
     },
