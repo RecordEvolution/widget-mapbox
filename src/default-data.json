@@ -1,9 +1,8 @@
 {
     "settings": {
-      "title": "Map-chart",
-      "subTitle": "This is a Map-chart",
+
       "style": "light-v11",
-      "showLegend": true
+      "showLegend": false
     },
     "dataseries": [{
       "label": "Circle Layer",
