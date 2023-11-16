@@ -79,7 +79,8 @@ export class WidgetMapbox extends LitElement {
     // choose random color if dataseries has none and store it for furure updates
     this.inputData.dataseries.forEach(ds => {
       if (!this.colors.has(ds.label)) {
-        this.colors.set(ds.label, ds.color ?? tinycolor.random().toString())
+        ds.color = ds.color ?? tinycolor.random().toString()
+        this.colors.set(ds.label, ds.color)
       }
     })
 
