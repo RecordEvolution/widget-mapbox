@@ -187,6 +187,10 @@
       "config": {
         "line": {
           "line-width": 3
+        },
+        "symbol": {
+          "icon-image": "car",
+          "icon-size": 2
         }
       },
       "data": [

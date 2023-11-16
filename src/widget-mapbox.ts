@@ -214,6 +214,8 @@ export class WidgetMapbox extends LitElement {
         'text-field': ['get', 'value'],
         'text-size': dataSet.config['symbol']['text-size'],
         'text-anchor': 'center',
+        'icon-image': dataSet.config.symbol['icon-image'],
+        'icon-size': dataSet.config.symbol['icon-size']
       },
       paint: {
         'text-color': dataSet.config['symbol']['text-color'],
@@ -307,6 +309,24 @@ export class WidgetMapbox extends LitElement {
       // 'aeroway-polygon'
     }
     this.map?.addLayer(layerConfig)
+
+    if (!dataSet.config.symbol['icon-image']) return
+
+    const layerConfig2 = {
+      'id': dataSet.label + ':symbol',
+      'type': 'symbol',
+      'source': 'input:' + dataSet.label,
+      layout: {
+        'icon-image': dataSet.config.symbol['icon-image'],
+        'icon-size': dataSet.config.symbol['icon-size'],
+      },
+      paint: {
+        'icon-color': dataSet.color
+      }
+      // Place polygons under labels, roads and buildings.
+      // 'aeroway-polygon'
+    }
+    this.map?.addLayer(layerConfig2)
   }
 
   syncDataLayers() {

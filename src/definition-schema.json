@@ -86,13 +86,23 @@
                                 "type": "Object",
                                 "properties": {
                                     "text-color": {
-                                        "title": "Color",
+                                        "title": "Text Color",
                                         "type": "string"
                                     },
                                     "text-size": {
                                         "title": "Text Size",
                                         "type": "number",
                                         "min": 1
+                                    },
+                                    "icon-image": {
+                                        "title": "Icon Name",
+                                        "type": "string"
+                                    },
+                                    "icon-size": {
+                                        "title": "Icon size",
+                                        "description": "In multiples of the original icon size",
+                                        "type": "number",
+                                        "min": 0
                                     }
                                 }
                             },
