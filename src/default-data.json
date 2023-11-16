@@ -91,9 +91,9 @@
       "order": 1,
       "config": {
         "heatmap": {
-          "heatmap-intensity": 0.8,
+          "heatmap-intensity": 1,
           "heatmap-opacity": 0.5,
-          "heatmap-radius": 100
+          "heatmap-radius": 150
         }
       },
       "data": [
