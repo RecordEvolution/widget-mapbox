@@ -103,6 +103,7 @@ export class WidgetMapbox extends LitElement {
           this.dataSets.push(pds)
         })
       } else {
+        ds.color = ds.color ?? this.colors[ds.label]
         this.dataSets.push(ds)
       }
     })
