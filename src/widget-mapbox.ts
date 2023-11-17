@@ -490,7 +490,7 @@ export class WidgetMapbox extends LitElement {
 
     .label {
       display: flex;
-      align-items: end;
+      align-items: center;
       font-size: 14px;
       gap: 8px
     }
