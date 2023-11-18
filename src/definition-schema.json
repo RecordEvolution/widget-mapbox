@@ -87,7 +87,7 @@
                                 "properties": {
                                     "text-color": {
                                         "title": "Text Color",
-                                        "type": "string"
+                                        "type": "color"
                                     },
                                     "text-size": {
                                         "title": "Text Size",
