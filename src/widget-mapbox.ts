@@ -423,7 +423,17 @@ export class WidgetMapbox extends LitElement {
       style: `mapbox://styles/mapbox/${this.inputData?.settings?.style ?? 'light-v11'}`,
       center: [8.6841700, 50.1155200],
       zoom: 1.8,
+      attributionControl: false
     })
+
+    this.map.addControl(new mapboxgl.NavigationControl(), 'bottom-right')
+
+    const scale = new mapboxgl.ScaleControl({
+        maxWidth: 80,
+        unit: 'metric'
+    })
+  
+    this.map.addControl(scale, 'bottom-left')
 
     console.log('MAPBOX VERSION', mapboxgl.version)
 
@@ -493,6 +503,10 @@ export class WidgetMapbox extends LitElement {
       align-items: center;
       font-size: 14px;
       gap: 8px
+    }
+
+    a.mapboxgl-ctrl-logo {
+      display: none;
     }
 
   `;
