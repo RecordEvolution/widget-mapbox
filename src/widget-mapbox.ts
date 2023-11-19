@@ -116,7 +116,7 @@ export class WidgetMapbox extends LitElement {
       if (ds.latestValues > 0) ds.data = ds.data.splice(-ds.latestValues)
     })
 
-    // console.log('mapbox datasets', this.dataSets)
+    console.log('mapbox datasets', this.dataSets)
 
     // create geojson sources
     this.dataSets.sort((a, b) => b.order - a.order).forEach(ds => {
