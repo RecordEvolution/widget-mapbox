@@ -83,7 +83,7 @@ export class WidgetMapbox extends LitElement {
         this.colors.set(ds.label, ds.color)
       }
     })
-    console.log('The input data', this.inputData)
+    console.log('The input data', this.inputData.dataseries[0], this.inputData.dataseries[1])
     // Pivot inputData if required
     this.dataSets = []
     this.inputData.dataseries.forEach(ds => {
@@ -151,7 +151,7 @@ export class WidgetMapbox extends LitElement {
         return features
       }
 
-      const line: number[][] = ds.data
+      const line: number[][] = ds.data.reverse()
         .filter(p => p.lon !== undefined && p.lat !== undefined)
         .map(p => [p.lon, p.lat, p.alt])
 
@@ -375,6 +375,7 @@ export class WidgetMapbox extends LitElement {
           this.addLineLayer(ds)
       }
     })
+    if (this.inputData?.settings?.follow) this.fitBounds()
   }
 
   addBuildingLayer() {

@@ -4,6 +4,7 @@ export interface Settings {
     subTitle: string
     style: string
     showLegend: boolean
+    follow: boolean
 }
 
 export interface Point {

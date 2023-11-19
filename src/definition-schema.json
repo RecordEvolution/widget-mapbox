@@ -23,6 +23,11 @@
                 "showLegend": {
                     "title": "Show Legend",
                     "type": "boolean"
+                }, 
+                "follow": {
+                    "title": "Auto Follow",
+                    "description": "If true, the map automatically keeps the drawn locations in focus.",
+                    "type": "boolean"
                 }
             },
             "required": ["style"]
