@@ -83,7 +83,7 @@ export class WidgetMapbox extends LitElement {
         this.colors.set(ds.label, ds.color)
       }
     })
-
+    console.log('The input data', this.inputData)
     // Pivot inputData if required
     this.dataSets = []
     this.inputData.dataseries.forEach(ds => {
