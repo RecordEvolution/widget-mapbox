@@ -83,7 +83,7 @@ export class WidgetMapbox extends LitElement {
         this.colors.set(ds.label, ds.color)
       }
     })
-    console.log('The input data', this.inputData.dataseries[0], this.inputData.dataseries[1])
+    // console.log('The input data', this.inputData.dataseries[0], this.inputData.dataseries[1])
     // Pivot inputData if required
     this.dataSets = []
     this.inputData.dataseries.forEach(ds => {
@@ -116,7 +116,7 @@ export class WidgetMapbox extends LitElement {
       if (ds.latestValues > 0) ds.data = ds.data.splice(-ds.latestValues)
     })
 
-    console.log('mapbox datasets', this.dataSets)
+    // console.log('mapbox datasets', this.dataSets)
 
     // create geojson sources
     this.dataSets.sort((a, b) => b.order - a.order).forEach(ds => {
@@ -355,7 +355,7 @@ export class WidgetMapbox extends LitElement {
         src.setData(fc || [])
         return
       }
-      console.log('adding source', ds.label, ds.type)
+      // console.log('adding source', ds.label, ds.type)
       this.map?.addSource('input:' + ds.label, {
         type: 'geojson',
         data: fc || []
