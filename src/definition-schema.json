@@ -17,8 +17,9 @@
                 }, 
                 "style": {
                     "title": "Map Style",
-                    "description": "The basic style of the map. Can be one of streets-v12, outdoors-v12, light-v11, dark-v11, satellite-v9, satellite-streets-v12, navigation-day-v1, navigation-night-v1.",
-                    "type": "string"
+                    "description": "The basic style of the map.",
+                    "type": "string",
+                    "enum": ["streets-v12", "outdoors-v12", "light-v11", "dark-v11", "satellite-v9", "satellite-streets-v12", "navigation-day-v1", "navigation-night-v1"]
                 }, 
                 "showLegend": {
                     "title": "Show Legend",
