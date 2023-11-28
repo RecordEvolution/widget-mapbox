@@ -45,9 +45,10 @@
                         "type": "string"
                     },
                     "type": {
-                        "title": "Point type",
-                        "description": "Can be one of ''circle'', ...",
-                        "type": "string"
+                        "title": "Layer type",
+                        "description": "Create the specified type of layer on the map.",
+                        "type": "string",
+                        "enum": ["circle", "symbol", "heatmap", "line"]
                     },
                     "order": {
                         "title": "Draw Order",
@@ -171,7 +172,7 @@
                                 },
                                 "pivot": {
                                     "title": "Pivot Column",
-                                    "description": "You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, lon, lat, temperature] and specify ''city'' as pivot column, then you will get a layer for each city.",
+                                    "description": "You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, lon, lat, temperature] and specify 'city' as pivot column, then you will get a layer for each city.",
                                     "type": "string"
                                 }
                             },
