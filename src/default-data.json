@@ -3,7 +3,7 @@
 
       "style": "light-v11",
       "showLegend": false,
-      "follow": true
+      "follow": false
     },
     "dataseries": [{
       "label": "Circle Layer",

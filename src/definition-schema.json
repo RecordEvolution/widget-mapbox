@@ -56,7 +56,6 @@
                     },
                     "color": {
                         "title": "Default color",
-                        "description": "Give the color as a browser standard form. Either with names like ''red'', ''green'', etc. or as #de432b where two hex digits represent Red Green Blue in this order.",
                         "type": "color"
                     },
                     "latestValues": {

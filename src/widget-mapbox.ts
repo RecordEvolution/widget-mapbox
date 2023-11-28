@@ -427,14 +427,14 @@ export class WidgetMapbox extends LitElement {
       attributionControl: false
     })
 
-    this.map.addControl(new mapboxgl.NavigationControl(), 'bottom-right')
+    // this.map.addControl(new mapboxgl.NavigationControl(), 'bottom-right')
 
-    const scale = new mapboxgl.ScaleControl({
-        maxWidth: 80,
-        unit: 'metric'
-    })
+    // const scale = new mapboxgl.ScaleControl({
+    //     maxWidth: 80,
+    //     unit: 'metric'
+    // })
   
-    this.map.addControl(scale, 'bottom-left')
+    // this.map.addControl(scale, 'bottom-left')
 
     console.log('MAPBOX VERSION', mapboxgl.version)
 
