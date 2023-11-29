@@ -26,6 +26,7 @@ export class WidgetMapbox extends LitElement {
   colors: any = new Map()
 
   resizeObserver: ResizeObserver
+  mapStyle?: string
   constructor() {
     super()
     this.resizeObserver = new ResizeObserver(() => {
@@ -75,6 +76,10 @@ export class WidgetMapbox extends LitElement {
 
   transformInputData() {
     if(!this?.inputData?.settings || !this?.inputData?.dataseries?.length) return
+
+    if (this.map && this.inputData.settings.style !== this.mapStyle) {
+      this.createMap()
+    }
 
     // choose random color if dataseries has none and store it for furure updates
     this.inputData.dataseries.forEach(ds => {
@@ -419,9 +424,10 @@ export class WidgetMapbox extends LitElement {
   }
 
   createMap() {
+    this.mapStyle = this.inputData?.settings?.style
     this.map = new mapboxgl.Map({
       container: this.shadowRoot?.getElementById('map') as HTMLCanvasElement,
-      style: `mapbox://styles/mapbox/${this.inputData?.settings?.style ?? 'light-v11'}`,
+      style: `mapbox://styles/mapbox/${this.mapStyle}` ?? 'light-v11',
       center: [8.6841700, 50.1155200],
       zoom: 1.8,
       attributionControl: false
@@ -514,7 +520,7 @@ export class WidgetMapbox extends LitElement {
 
   render() {
     return html`
-      <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
+      <link href="https://api.mapbox.com/mapbox-gl-js/v${mapboxgl.version}/mapbox-gl.css" rel="stylesheet">
       <div class="wrapper">
         <header>
             <div class="title">
