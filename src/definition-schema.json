@@ -71,7 +71,7 @@
                         "properties": {
                             "circle": {
                                 "title": "Circle Layer",
-                                "type": "Object",
+                                "type": "object",
                                 "properties": {
                                     "circle-blur": {
                                         "title": "Blur",
@@ -89,7 +89,7 @@
                             },
                             "symbol": {
                                 "title": "Text Layer",
-                                "type": "Object",
+                                "type": "object",
                                 "properties": {
                                     "text-color": {
                                         "title": "Text Color",
@@ -114,7 +114,7 @@
                             },
                             "heatmap": {
                                 "title": "Heatmap Layer",
-                                "type": "Object",
+                                "type": "object",
                                 "properties": {
                                     "heatmap-intensity": {
                                         "title": "Intensity",
@@ -137,7 +137,7 @@
                             },
                             "line": {
                                 "title": "Track Layer",
-                                "type": "Object",
+                                "type": "object",
                                 "properties": {
                                     "line-width": {
                                         "title": "Line Width",
