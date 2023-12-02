@@ -66,7 +66,7 @@ export class WidgetMapbox extends LitElement {
     this.dataSources.forEach((col: GeoJSON.FeatureCollection) => {
       col.features.forEach(f => {
         // @ts-ignore
-        bounds.extend(f.geometry.coordinates)
+        if (f.geometry.coordinates?.length) bounds.extend(f.geometry.coordinates)
       })
     })
     if (!bounds.isEmpty()) {
