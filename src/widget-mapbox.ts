@@ -70,7 +70,7 @@ export class WidgetMapbox extends LitElement {
       })
     })
     if (!bounds.isEmpty()) {
-      this.map.fitBounds(bounds, { maxZoom: 14, padding: 100, duration: 100, })
+      this.map.fitBounds(bounds, { maxZoom: 14, padding: 16, duration: 100, })
     }
   }
 
@@ -427,7 +427,7 @@ export class WidgetMapbox extends LitElement {
     this.mapStyle = this.inputData?.settings?.style
     this.map = new mapboxgl.Map({
       container: this.shadowRoot?.getElementById('map') as HTMLCanvasElement,
-      style: `mapbox://styles/mapbox/${this.mapStyle}` ?? 'light-v11',
+      style: `mapbox://styles/mapbox/${this.mapStyle ?? 'light-v11'}` ,
       center: [8.6841700, 50.1155200],
       zoom: 1.8,
       attributionControl: false

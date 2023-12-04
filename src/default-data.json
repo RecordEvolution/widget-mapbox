@@ -13,7 +13,7 @@
       "latestValues": 10,
       "config": {
         "circle": {
-          "circle-blur": 0.2,
+          "circle-blur": 0.8,
           "circle-opacity": 0.8
         },
         "symbol": {
@@ -70,18 +70,6 @@
           "lat": 50.130772009080744,
           "pivot": "Rain",
           "value": 42
-        },
-        {
-          "lon": 8.702725136517046,
-          "lat": 50.115555353028526,
-          "pivot": "Rain",
-          "value": 62
-        },
-        {
-          "lon": 8.709534826027891,
-          "lat": 50.101361623143504,
-          "pivot": "Rain",
-          "value": 52
         }
       ]
     }, 
@@ -91,9 +79,9 @@
       "order": 1,
       "config": {
         "heatmap": {
-          "heatmap-intensity": 1,
+          "heatmap-intensity": 0.8,
           "heatmap-opacity": 0.5,
-          "heatmap-radius": 150
+          "heatmap-radius": 40
         }
       },
       "data": [
@@ -191,7 +179,7 @@
         },
         "symbol": {
           "icon-image": "car",
-          "icon-size": 2
+          "icon-size": 1
         }
       },
       "data": [
