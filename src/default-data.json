@@ -8,7 +8,6 @@
     "dataseries": [{
       "label": "Circle Layer",
       "type": "circle",
-      "order": 3,
       "color": "#49aaff",
       "latestValues": 10,
       "config": {
@@ -76,7 +75,6 @@
     {
       "label": "Heatmap Layer",
       "type": "heatmap",
-      "order": 1,
       "config": {
         "heatmap": {
           "heatmap-intensity": 0.8,
@@ -171,7 +169,6 @@
     {
       "label": "Track Layer",
       "type": "line",
-      "order": 1,
       "color": "red",
       "config": {
         "line": {
