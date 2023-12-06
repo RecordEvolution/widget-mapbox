@@ -52,13 +52,6 @@ export class WidgetMapbox extends LitElement {
     this.resizeObserver.observe(this.map._container)
     this.fitBounds()
 
-    this.map.addControl(new mapboxgl.NavigationControl())
-    const scale = new mapboxgl.ScaleControl({
-        maxWidth: 80,
-        unit: 'metric'
-    })
-    this.map.addControl(scale)
-
   }
 
   fitBounds() {
@@ -139,7 +132,13 @@ export class WidgetMapbox extends LitElement {
   createGEOJson(ds: Dataseries): GeoJSON.Feature[] {
     if (ds.type !== 'line') {
     const features: GeoJSON.Feature[] = ds.data
-        .filter(p => p.lon !== undefined && p.lat !== undefined && p.value !== undefined)
+        .filter(p => 
+          p.lon !== undefined 
+          && p.lat !== undefined 
+          && p.value !== undefined 
+          && typeof p.lon === 'number'
+          && typeof p.lat === 'number'
+          && typeof p.value === 'number')
         .map(p => {
           const point: GeoJSON.Feature = {
               type: 'Feature',
@@ -433,14 +432,16 @@ export class WidgetMapbox extends LitElement {
       attributionControl: false
     })
 
-    // this.map.addControl(new mapboxgl.NavigationControl(), 'bottom-right')
+    this.map.scrollZoom.disable();
 
-    // const scale = new mapboxgl.ScaleControl({
-    //     maxWidth: 80,
-    //     unit: 'metric'
-    // })
+    this.map.addControl(new mapboxgl.NavigationControl(), 'top-right')
+
+    const scale = new mapboxgl.ScaleControl({
+        maxWidth: 80,
+        unit: 'metric'
+    })
   
-    // this.map.addControl(scale, 'bottom-left')
+    this.map.addControl(scale, 'bottom-left')
 
     console.log('MAPBOX VERSION', mapboxgl.version)
 

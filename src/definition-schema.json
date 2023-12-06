@@ -9,26 +9,31 @@
             "properties": {
                 "title": {
                     "title": "Title",
-                    "type": "string"
+                    "type": "string",
+                    "order": 1
                 },
                 "subTitle": {
                     "title": "Subtitle",
-                    "type": "string"
+                    "type": "string",
+                    "order": 1
                 }, 
                 "style": {
                     "title": "Map Style",
                     "description": "The basic style of the map.",
                     "type": "string",
-                    "enum": ["streets-v12", "outdoors-v12", "light-v11", "dark-v11", "satellite-v9", "satellite-streets-v12", "navigation-day-v1", "navigation-night-v1"]
+                    "enum": ["streets-v12", "outdoors-v12", "light-v11", "dark-v11", "satellite-v9", "satellite-streets-v12", "navigation-day-v1", "navigation-night-v1"],
+                    "order": 1
                 }, 
                 "showLegend": {
                     "title": "Show Legend",
-                    "type": "boolean"
+                    "type": "boolean",
+                    "order": 1
                 }, 
                 "follow": {
                     "title": "Auto Follow",
                     "description": "If true, the map automatically keeps the drawn locations in focus.",
-                    "type": "boolean"
+                    "type": "boolean",
+                    "order": 1
                 }
             },
             "required": ["style"]
@@ -43,106 +48,123 @@
                     "label": {
                         "title": "Series Label",
                         "description": "The name for this data series",
-                        "type": "string"
+                        "type": "string",
+                        "order": 1
                     },
                     "type": {
                         "title": "Layer type",
                         "description": "Create the specified type of layer on the map.",
                         "type": "string",
-                        "enum": ["circle", "symbol", "heatmap", "line"]
-                    },
-                    "order": {
-                        "title": "Draw Order",
-                        "description": "Determines the draw order of the series. Dataseries with lower numbers are drawn on top of ones with higher numbers.",
-                        "type": "number"
+                        "enum": ["circle", "symbol", "heatmap", "line"],
+                        "order": 2
                     },
                     "color": {
-                        "title": "Default color",
-                        "type": "color"
+                        "title": "Layer Base Color",
+                        "type": "color",
+                        "order": 3
                     },
                     "latestValues": {
                         "title": "Latest Values",
                         "description": "Restrict the number of rows for this dataseries to the given number of newest values. (If pivoted, then per each of the pivot dataseries.)",
-                        "type": "number"
+                        "type": "number",
+                        "order": 4
                     },
                     "config": {
                         "title": "Layer Configuration",
                         "type": "object",
+                        "order": 5,
                         "properties": {
                             "circle": {
                                 "title": "Circle Layer",
                                 "type": "object",
+                                "order": 1,
                                 "properties": {
                                     "circle-blur": {
                                         "title": "Blur",
                                         "min": 0,
                                         "max": 1,
-                                        "type": "number"
+                                        "type": "number",
+                                        "order": 1
                                     },
                                     "circle-opacity": {
                                         "title": "Opacity",
                                         "min": 0,
                                         "max": 1,
-                                        "type": "number"
+                                        "type": "number",
+                                        "order": 2
                                     }
                                 }
                             },
                             "symbol": {
                                 "title": "Text Layer",
                                 "type": "object",
+                                "order": 2,
                                 "properties": {
                                     "text-color": {
                                         "title": "Text Color",
-                                        "type": "color"
+                                        "type": "color",
+                                        "order": 1
                                     },
                                     "text-size": {
                                         "title": "Text Size",
                                         "type": "number",
-                                        "min": 1
+                                        "min": 1,
+                                        "order": 2
                                     },
                                     "icon-image": {
                                         "title": "Icon Name",
-                                        "type": "string"
+                                        "description": "For available icons check the maki icon set here https://labs.mapbox.com/maki-icons/",
+                                        "type": "string",
+                                        "enum": ["marker", "airfield", "airport", "alcohol-shop", "america-football", "amusement-park", "aquarium", "art-gallery", "bakery", "bank", "bar", "baseball", "basketball", "beer", "bicycle", "building", "bus", "cafe", "campsite", "car", "cemetery", "cinema", "circle", "college", "commerical", "cricket", "cross", "dam", "danger", "dog-park", "embassy", "emergency-telephone", "entrance", "farm", "fast-food", "ferry", "fire-station", "fuel", "garden", "golf", "grocery-store", "hairdresser", "harbor", "heart", "heliport", "hospital", "industrial", "information", "laundry", "library", "lighthouse", "lodging", "logging", "london-underground", "marker-stroked", "minefield", "mobile-phone", "monument", "mountain", "museum", "music", "oil-well", "park", "parking", "parking-garage", "pharmacy", "picnic-site", "pitch", "place-of-worship", "playground", "police", "polling-place", "post", "prison", "rail", "rail-above", "rail-light", "rail-metro", "rail-underground", "railway", "religious-christian", "religious-jewish", "religious-muslim", "religious-islam", "restaurant", "roadblock", "rocket", "school", "scooter", "shop", "skiing", "slaughterhouse", "soccer", "square", "stadium", "star", "star-stroked", "suitcase", "swimming", "table-tennis", "teahouse", "tennis", "theatre", "toilet", "town-hall", "trash", "tree-1", "tree-2", "triangle", "triangle-stroked", "veterinary", "volcano", "warehouse", "waste-basket", "water", "wetland", "zoo"],
+                                        "order": 3
                                     },
                                     "icon-size": {
                                         "title": "Icon size",
                                         "description": "In multiples of the original icon size",
                                         "type": "number",
-                                        "min": 0
+                                        "min": 0,
+                                        "order": 4
                                     }
                                 }
                             },
                             "heatmap": {
                                 "title": "Heatmap Layer",
                                 "type": "object",
+                                "order": 3,
                                 "properties": {
                                     "heatmap-intensity": {
                                         "title": "Intensity",
+                                        "description": "The higher the intensity, the more 'hot' the heatmap becomes. The value is a multiple with default value 1. e.g. to double the intensitiy choose 2.",
                                         "type": "number",
-                                        "min": 0
+                                        "min": 0,
+                                        "order": 1
                                     },
                                     "heatmap-opacity": {
                                         "title": "Opacity",
                                         "type": "number",
                                         "min": 0,
-                                        "max": 1
+                                        "max": 1,
+                                        "order": 2
                                     },
                                     "heatmap-radius": {
                                         "title": "Radius Base Size",
-                                        "description": "Is adjusted according to the value field.",
+                                        "description": "The radius will be combined with the data value to to determine the heat radius of a point.",
                                         "type": "number",
-                                        "min": 0
+                                        "min": 0,
+                                        "order": 3
                                     }
                                 }
                             },
                             "line": {
                                 "title": "Track Layer",
                                 "type": "object",
+                                "order": 4,
                                 "properties": {
                                     "line-width": {
                                         "title": "Line Width",
                                         "type": "number",
-                                        "min": 1
+                                        "min": 1,
+                                        "order": 1
                                     }
                                 }
                             }
@@ -152,29 +174,35 @@
                         "title": "Map data",
                         "description": "This is the map data",
                         "type": "array",
+                        "order": 1,
                         "items": {
                             "type": "object",
                             "properties": {
                                 "lon": {
                                     "title": "Longitude",
-                                    "type": "number"
+                                    "type": "number",
+                                    "order": 1
                                 },
                                 "lat": {
                                     "title": "Latitude",
-                                    "type": "number"
+                                    "type": "number",
+                                    "order": 2
                                 },
                                 "alt": {
                                     "title": "Altitude",
-                                    "type": "number"
+                                    "type": "number",
+                                    "order": 3
                                 },
                                 "value": {
                                     "title": "A value for the data point",
-                                    "type": "number"
+                                    "type": "number",
+                                    "order": 4
                                 },
                                 "pivot": {
                                     "title": "Pivot Column",
                                     "description": "You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, lon, lat, temperature] and specify 'city' as pivot column, then you will get a layer for each city.",
-                                    "type": "string"
+                                    "type": "string",
+                                    "order": 5
                                 }
                             },
                             "required": ["lon", "lat"]
