@@ -22,6 +22,7 @@
                     "description": "The basic style of the map.",
                     "type": "string",
                     "enum": ["streets-v12", "outdoors-v12", "light-v11", "dark-v11", "satellite-v9", "satellite-streets-v12", "navigation-day-v1", "navigation-night-v1"],
+                    "required": true,
                     "order": 1
                 }, 
                 "showLegend": {
@@ -35,8 +36,7 @@
                     "type": "boolean",
                     "order": 1
                 }
-            },
-            "required": ["style"]
+            }
         },
         "dataseries": {
             "title": "Dataseries",
@@ -181,11 +181,13 @@
                                 "lon": {
                                     "title": "Longitude",
                                     "type": "number",
+                                    "required": true,
                                     "order": 1
                                 },
                                 "lat": {
                                     "title": "Latitude",
                                     "type": "number",
+                                    "required": true,
                                     "order": 2
                                 },
                                 "alt": {
@@ -204,8 +206,7 @@
                                     "type": "string",
                                     "order": 5
                                 }
-                            },
-                            "required": ["lon", "lat"]
+                            }
                         }
                     }
                 }
