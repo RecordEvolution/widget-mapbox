@@ -6,6 +6,7 @@
         "settings": {
             "description": "Settings",
             "type": "object",
+            "order": 8,
             "properties": {
                 "title": {
                     "title": "Title",
@@ -15,7 +16,7 @@
                 "subTitle": {
                     "title": "Subtitle",
                     "type": "string",
-                    "order": 1
+                    "order": 2
                 }, 
                 "style": {
                     "title": "Map Style",
@@ -23,38 +24,40 @@
                     "type": "string",
                     "enum": ["streets-v12", "outdoors-v12", "light-v11", "dark-v11", "satellite-v9", "satellite-streets-v12", "navigation-day-v1", "navigation-night-v1"],
                     "required": true,
-                    "order": 1
+                    "order": 3
                 }, 
                 "showLegend": {
                     "title": "Show Legend",
                     "type": "boolean",
-                    "order": 1
+                    "order": 4
                 }, 
                 "follow": {
                     "title": "Auto Follow",
                     "description": "If true, the map automatically keeps the drawn locations in focus.",
                     "type": "boolean",
-                    "order": 1
+                    "order": 5
                 }
             }
         },
         "dataseries": {
             "title": "Dataseries",
+            "order": 8,
             "type": "array",
             "items": {
                 "type": "object",
-                "required": ["type"],
                 "properties": {
                     "label": {
                         "title": "Series Label",
                         "description": "The name for this data series",
                         "type": "string",
+                        "required": true,
                         "order": 1
                     },
                     "type": {
                         "title": "Layer type",
                         "description": "Create the specified type of layer on the map.",
                         "type": "string",
+                        "required": true,
                         "enum": ["circle", "symbol", "heatmap", "line"],
                         "order": 2
                     },
@@ -174,7 +177,7 @@
                         "title": "Map data",
                         "description": "This is the map data",
                         "type": "array",
-                        "order": 1,
+                        "order": 6,
                         "items": {
                             "type": "object",
                             "properties": {
