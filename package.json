@@ -1,52 +1,53 @@
 {
-  "name": "widget-mapbox",
-  "description": "REWidget widget-mapbox",
-  "license": "MIT",
-  "author": "widget-mapbox",
-  "version": "1.4.5",
-  "type": "module",
-  "main": "dist/src/index.js",
-  "module": "dist/src/index.js",
-  "exports": {
-    ".": "./dist/src/index.js",
-    "./widget-mapbox.js": "./dist/src/widget-mapbox.js"
-  },
-  "scripts": {
-    "analyze": "cem analyze --litelement",
-    "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds\"",
-    "build": "rollup -c rollup.config.js",
-    "prepublish": "rollup -c rollup.config.js",
-    "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
-    "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore && prettier \"**/*.ts\" --write --ignore-path .gitignore"
-  },
-  "dependencies": {
-    "@types/geojson": "^7946.0.12",
-    "@types/mapbox-gl": "^2.7.18",
-    "lit": "^3.0.2",
-    "mapbox-gl": "^2.15.0",
-    "tinycolor2": "^1.6.0"
-  },
-  "devDependencies": {
-    "@babel/plugin-syntax-import-assertions": "^7.22.5",
-    "@custom-elements-manifest/analyzer": "^0.9.0",
-    "@open-wc/eslint-config": "^12.0.2",
-    "@rollup/plugin-babel": "^6.0.4",
-    "@rollup/plugin-commonjs": "^25.0.7",
-    "@rollup/plugin-json": "^6.0.1",
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-typescript": "^11.1.5",
-    "@types/tinycolor2": "^1.4.6",
-    "@typescript-eslint/eslint-plugin": "^6.9.1",
-    "@typescript-eslint/parser": "^6.9.1",
-    "@web/dev-server": "^0.4.0",
-    "concurrently": "^8.2.2",
-    "eslint": "^8.53.0",
-    "eslint-config-prettier": "^9.0.0",
-    "husky": "^8.0.3",
-    "lint-staged": "^15.0.2",
-    "prettier": "^3.0.3",
-    "rollup": "^3.21.0",
-    "tslib": "^2.6.2",
-    "typescript": "^5.2.2"
-  }
+    "name": "widget-mapbox",
+    "description": "REWidget widget-mapbox",
+    "license": "MIT",
+    "author": "widget-mapbox",
+    "version": "1.4.5",
+    "type": "module",
+    "main": "dist/src/index.js",
+    "module": "dist/src/index.js",
+    "exports": {
+        ".": "./dist/src/index.js",
+        "./widget-mapbox.js": "./dist/src/widget-mapbox.js"
+    },
+    "scripts": {
+        "analyze": "cem analyze --litelement",
+        "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds\"",
+        "build": "rollup -c rollup.config.js",
+        "prepublish": "rollup -c rollup.config.js",
+        "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
+        "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore && prettier \"**/*.ts\" --write --ignore-path .gitignore",
+        "release": "npm version patch --tag-version-prefix='' && git push && git push --tag"
+    },
+    "dependencies": {
+        "@types/geojson": "^7946.0.12",
+        "@types/mapbox-gl": "^2.7.18",
+        "lit": "^3.0.2",
+        "mapbox-gl": "^2.15.0",
+        "tinycolor2": "^1.6.0"
+    },
+    "devDependencies": {
+        "@babel/plugin-syntax-import-assertions": "^7.22.5",
+        "@custom-elements-manifest/analyzer": "^0.9.0",
+        "@open-wc/eslint-config": "^12.0.2",
+        "@rollup/plugin-babel": "^6.0.4",
+        "@rollup/plugin-commonjs": "^25.0.7",
+        "@rollup/plugin-json": "^6.0.1",
+        "@rollup/plugin-node-resolve": "^15.2.3",
+        "@rollup/plugin-typescript": "^11.1.5",
+        "@types/tinycolor2": "^1.4.6",
+        "@typescript-eslint/eslint-plugin": "^6.9.1",
+        "@typescript-eslint/parser": "^6.9.1",
+        "@web/dev-server": "^0.4.0",
+        "concurrently": "^8.2.2",
+        "eslint": "^8.53.0",
+        "eslint-config-prettier": "^9.0.0",
+        "husky": "^8.0.3",
+        "lint-staged": "^15.0.2",
+        "prettier": "^3.0.3",
+        "rollup": "^3.21.0",
+        "tslib": "^2.6.2",
+        "typescript": "^5.2.2"
+    }
 }
