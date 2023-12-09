@@ -423,6 +423,7 @@ export class WidgetMapbox extends LitElement {
   }
 
   createMap() {
+    if (this.map) return
     this.mapStyle = this.inputData?.settings?.style
     this.map = new mapboxgl.Map({
       container: this.shadowRoot?.getElementById('map') as HTMLCanvasElement,
