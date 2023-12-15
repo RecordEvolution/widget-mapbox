@@ -2,8 +2,8 @@ import { html, css, LitElement } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js'
 // @ts-ignore
-import mapboxgl from 'https://cdn.skypack.dev/pin/mapbox-gl@v2.15.0-iKfohePv9lgutCMNih0d/mode=imports,min/optimized/mapbox-gl.js'
-// import mapboxgl, { Map } from 'mapbox-gl';
+// import mapboxgl from 'https://cdn.skypack.dev/-/mapbox-gl@v2.15.0-iKfohePv9lgutCMNih0d/dist=es2020,mode=imports,min/optimized/mapbox-gl.js'
+import mapboxgl from 'https://esm.run/mapbox-gl@3.0.1';
 import * as GeoJSON from 'geojson';
 import tinycolor from "tinycolor2";
 import { InputData, Dataseries, Point } from './types.js'
@@ -37,7 +37,7 @@ export class WidgetMapbox extends LitElement {
   }
 
   update(changedProperties: Map<string, any>) {
-    changedProperties.forEach((oldValue, propName: string) => {
+    changedProperties.forEach((propName: string) => {
       if (propName === 'inputData') {
         this.transformInputData()
       }
