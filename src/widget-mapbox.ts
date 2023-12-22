@@ -25,6 +25,8 @@ export class WidgetMapbox extends LitElement {
   @state()
   colors: any = new Map()
 
+  version: string = 'versionplaceholder'
+
   resizeObserver: ResizeObserver
   mapStyle?: string
   constructor() {
@@ -545,4 +547,4 @@ export class WidgetMapbox extends LitElement {
   }
 }
 
-window.customElements.define('widget-mapbox', WidgetMapbox);
+window.customElements.define('widget-mapbox-versionplaceholder', WidgetMapbox);

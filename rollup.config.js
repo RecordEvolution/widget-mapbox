@@ -1,3 +1,4 @@
+import replace from '@rollup/plugin-replace';
 import nodeResolve from "@rollup/plugin-node-resolve";
 import typescript from '@rollup/plugin-typescript';
 import commonjs from "@rollup/plugin-commonjs";
@@ -12,12 +13,16 @@ export default {
     },
     output: {
         dir: './dist',
+        sourcemap: true,
         name: 'widget-mapbox_bundle',
-        banner: `/* @license Copyright (c) 2020 Record Evolution GmbH. All rights reserved.*/`,
+        banner: `/* @license Copyright (c) 2023 Record Evolution GmbH. All rights reserved.*/`,
         format: 'esm'
     },
     plugins: [
-        typescript(),
+        replace({
+            versionplaceholder: require('./package.json').version,
+        }),
+        typescript({ sourceMap: true }),
         nodeResolve(),
         commonjs({}),
         babel({ babelHelpers: 'bundled' })
