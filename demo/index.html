@@ -11,7 +11,7 @@
       height: 100%;
     }
 
-    widget-mapbox, #demo {
+    * {
       width: 100%;
       height: 100%;
     }
@@ -54,11 +54,11 @@
     setInterval(() => {
       const randomizedObj = randomizeObjectValues(data, keyPathsToRandomize);
 
-      // console.log('random', randomizedObj.dataseries[0].data[0]);
+      // console.log('random', randomizedObj.dataseries[1].data[14]);
       render(
         html`
           <widget-mapbox-versionplaceholder .inputData=${randomizedObj}>
-            some light-dom
+            web component not registered
           </widget-mapbox-versionplaceholder>
         `,
         document.querySelector('#demo')
