@@ -7,7 +7,6 @@
             "description": "Settings",
             "type": "object",
             "order": 8,
-            "required": ["style"],
             "properties": {
                 "title": {
                     "title": "Title",
@@ -55,7 +54,6 @@
             "type": "array",
             "items": {
                 "type": "object",
-                "required": ["label", "type"],
                 "properties": {
                     "label": {
                         "title": "Series Label",
@@ -311,7 +309,6 @@
                         "order": 6,
                         "items": {
                             "type": "object",
-                            "required": ["lon", "lat"],
                             "properties": {
                                 "lon": {
                                     "title": "Longitude",

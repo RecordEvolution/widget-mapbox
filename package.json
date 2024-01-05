@@ -14,8 +14,8 @@
     "scripts": {
         "analyze": "cem analyze --litelement",
         "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds\"",
-        "build": "rollup -c rollup.config.js --bundleConfigAsCjs",
-        "watch": "rollup -w -c rollup.config.js --bundleConfigAsCjs",
+        "build": "rollup -c rollup.config.js",
+        "watch": "rollup -w -c rollup.config.js",
         "types": "cat src/definition-schema.json | json2ts > src/definition-schema.d.ts",
         "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
         "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore && prettier \"**/*.ts\" --write --ignore-path .gitignore",
