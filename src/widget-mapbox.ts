@@ -93,7 +93,7 @@ export class WidgetMapbox extends LitElement {
             if (distincts.length > 1) {
                 distincts.forEach((piv, i) => {
                     const pds: any = {
-                        label: `${ds.label} ${piv}`,
+                        label: `${piv}-${ds.label ?? ''}`,
                         order: ds.order,
                         type: ds.type,
                         latestValues: ds.latestValues,
