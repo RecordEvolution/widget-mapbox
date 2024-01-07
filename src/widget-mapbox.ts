@@ -86,7 +86,7 @@ export class WidgetMapbox extends LitElement {
         this.dataSets = []
         this.inputData.dataseries.forEach((ds) => {
             const color = this.colors.get(ds.label)
-            const distincts = [...new Set(ds.data?.map((d: Point) => d.pivot))]
+            const distincts = [...new Set(ds.data?.map((d: Point) => d.pivot))].sort()
             const derivedColors = tinycolor(color)
                 .monochromatic(distincts.length)
                 .map((c: any) => c.toHexString())
