@@ -1,69 +1,70 @@
 <!doctype html>
 <html lang="en-GB">
-<head>
-  <meta charset="utf-8">
-  <title>Mapbox</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-    }
+    <head>
+        <meta charset="utf-8" />
+        <title>Mapbox</title>
+        <style>
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+            }
 
-    * {
-      width: 100%;
-      height: 100%;
-    }
+            * {
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="demo"></div>
 
-  </style>
-</head>
-<body>
-  <div id="demo"></div>
+        <script src="./ObjectRandomizer.js"></script>
 
-  <script src="./ObjectRandomizer.js"></script>
- 
-  <script type="module">
-    import { html, render } from 'lit';
-    import '../dist/src/widget-mapbox.js';
-    import data from '../src/default-data.json' assert { type: 'json' };
-    const keyPathsToRandomize = [
-      'dataseries.0.data.1.value', 
-      'dataseries.0.data.5.value', 
-      'dataseries.0.data.2.value', 
-      'dataseries.0.data.7.value', 
+        <script type="module">
+            import { html, render } from 'lit'
+            import '../dist/src/widget-mapbox.js'
+            import data from '../src/default-data.json' assert { type: 'json' }
+            const keyPathsToRandomize = [
+                'dataseries.0.data.1.value',
+                'dataseries.0.data.5.value',
+                'dataseries.0.data.2.value',
+                'dataseries.0.data.7.value',
 
-      'dataseries.1.data.0.value',
-      'dataseries.1.data.1.value',
-      'dataseries.1.data.2.value',
-      'dataseries.1.data.3.value',
-      'dataseries.1.data.4.value',
-      'dataseries.1.data.5.value',
-      'dataseries.1.data.6.value',
-      'dataseries.1.data.7.value',
-      'dataseries.1.data.8.value',
-      'dataseries.1.data.9.value',
-      'dataseries.1.data.10.value',
-      'dataseries.1.data.11.value',
-      'dataseries.1.data.12.value',
-      'dataseries.1.data.13.value',
-      'dataseries.1.data.14.value',
-      'dataseries.1.data.15.value',
-      'settings.title'];
-    // check out https://geojson.io/ to generate example data
-    setInterval(() => {
-      const randomizedObj = randomizeObjectValues(data, keyPathsToRandomize);
+                'dataseries.1.data.0.value',
+                'dataseries.1.data.1.value',
+                'dataseries.1.data.2.value',
+                'dataseries.1.data.3.value',
+                'dataseries.1.data.4.value',
+                'dataseries.1.data.5.value',
+                'dataseries.1.data.6.value',
+                'dataseries.1.data.7.value',
+                'dataseries.1.data.8.value',
+                'dataseries.1.data.9.value',
+                'dataseries.1.data.10.value',
+                'dataseries.1.data.11.value',
+                'dataseries.1.data.12.value',
+                'dataseries.1.data.13.value',
+                'dataseries.1.data.14.value',
+                'dataseries.1.data.15.value',
+                'settings.title'
+            ]
+            // check out https://geojson.io/ to generate example data
+            setInterval(() => {
+                const randomizedObj = randomizeObjectValues(data, keyPathsToRandomize)
 
-      // console.log('random', randomizedObj.dataseries[1].data[14]);
-      render(
-        html`
-          <widget-mapbox-versionplaceholder .inputData=${randomizedObj}>
-            web component not registered
-          </widget-mapbox-versionplaceholder>
-        `,
-        document.querySelector('#demo')
-      );
-    }, 1000)
-  </script>
-</body>
+                // console.log('random', randomizedObj.dataseries[1].data[14]);
+                render(
+                    html`
+                        <widget-mapbox-versionplaceholder .inputData=${randomizedObj}>
+                            web component not registered
+                        </widget-mapbox-versionplaceholder>
+                    `,
+                    document.querySelector('#demo')
+                )
+            }, 1000)
+        </script>
+    </body>
 </html>

@@ -62,9 +62,10 @@ export class WidgetMapbox extends LitElement {
                 if (f.geometry.coordinates?.length) bounds.extend(f.geometry.coordinates)
             })
         })
-        if (!bounds.isEmpty()) {
-            this.map.fitBounds(bounds, { maxZoom: 14, padding: 16, duration: 100 })
+        if (bounds.isEmpty()) {
+            bounds.extend([8.6820917, 50.1106444])
         }
+        this.map.fitBounds(bounds, { maxZoom: 14, padding: 16, duration: 100 })
     }
 
     transformInputData() {
