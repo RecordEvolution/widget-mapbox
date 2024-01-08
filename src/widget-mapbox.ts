@@ -26,10 +26,10 @@ export class WidgetMapbox extends LitElement {
     @state()
     colors: any = new Map()
 
-    version: string = 'versionplaceholder'
-
-    resizeObserver: ResizeObserver
-    mapStyle?: string
+    public version: string = 'versionplaceholder'
+    private mapLoaded: boolean = false
+    private resizeObserver: ResizeObserver
+    private mapStyle?: string
     constructor() {
         super()
         this.resizeObserver = new ResizeObserver(() => {
@@ -353,6 +353,10 @@ export class WidgetMapbox extends LitElement {
     }
 
     syncDataLayers() {
+        if (!this.mapLoaded) {
+            console.log('Map not yet finished loading. Skipping syncDataLayers')
+            return
+        }
         // remove sources and all Layers that are not part of the inputData anymore
         const sources: any[] = this.map.getStyle().sources ?? []
         const mySources: [string, any][] = Object.entries(sources).filter(([l]) => l.startsWith('input:'))
@@ -475,6 +479,7 @@ export class WidgetMapbox extends LitElement {
         console.log('MAPBOX VERSION', mapboxgl.version)
 
         this.map.on('load', () => {
+            this.mapLoaded = true
             this.addBuildingLayer()
             this.syncDataLayers()
         })
@@ -556,7 +561,10 @@ export class WidgetMapbox extends LitElement {
                 rel="stylesheet"
             />
             <div class="wrapper">
-                <header>
+                <header
+                    class="paging"
+                    ?active=${this.inputData?.settings?.title || this.inputData?.settings?.subTitle}
+                >
                     <div class="title">
                         <h3 class="paging" ?active=${this.inputData?.settings?.title}>
                             ${this.inputData?.settings?.title}
