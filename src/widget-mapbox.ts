@@ -63,7 +63,7 @@ export class WidgetMapbox extends LitElement {
             })
         })
         if (bounds.isEmpty()) {
-            bounds.extend([8.6820917, 50.1106444])
+            bounds.extend([8.6820917, 50.1106444]) // Frankfurt
         }
         this.map.fitBounds(bounds, { maxZoom: 14, padding: 16, duration: 100 })
     }
