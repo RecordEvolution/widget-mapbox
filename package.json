@@ -3,7 +3,7 @@
     "description": "REWidget widget-mapbox",
     "license": "MIT",
     "author": "widget-mapbox",
-    "version": "1.4.16",
+    "version": "1.4.17",
     "type": "module",
     "main": "dist/widget-mapbox.js",
     "types": "dist/src/widget-mapbox.d.ts",
