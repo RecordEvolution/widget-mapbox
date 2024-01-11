@@ -94,6 +94,7 @@
                                 "properties": {
                                     "circle-blur": {
                                         "title": "Blur",
+                                        "description": "Blur of 1 means the whole circle is blurred starting from the center point. Blur 0 means no blur effect.",
                                         "min": 0,
                                         "max": 1,
                                         "type": "number",
@@ -101,6 +102,7 @@
                                     },
                                     "circle-opacity": {
                                         "title": "Opacity",
+                                        "description": "Opactity 1 means fully opaque, 0 means fully transparent.",
                                         "min": 0,
                                         "max": 1,
                                         "type": "number",
@@ -109,7 +111,7 @@
                                 }
                             },
                             "symbol": {
-                                "title": "Text Layer",
+                                "title": "Symbol Layer",
                                 "type": "object",
                                 "order": 2,
                                 "properties": {

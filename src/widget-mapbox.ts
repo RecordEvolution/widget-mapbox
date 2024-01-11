@@ -83,7 +83,7 @@ export class WidgetMapbox extends LitElement {
             }
         })
         // console.log('The input data', this.inputData.dataseries[0], this.inputData.dataseries[1])
-        // Pivot inputData if required
+        // Pivot data if required
         this.dataSets = []
         this.inputData.dataseries.forEach((ds) => {
             const color = this.colors.get(ds.label)
@@ -91,23 +91,20 @@ export class WidgetMapbox extends LitElement {
             const derivedColors = tinycolor(color)
                 .monochromatic(distincts.length)
                 .map((c: any) => c.toHexString())
-            if (distincts.length > 1) {
-                distincts.forEach((piv, i) => {
-                    const pds: any = {
-                        label: `${piv}-${ds.label ?? ''}`,
-                        order: ds.order,
-                        type: ds.type,
-                        latestValues: ds.latestValues,
-                        color: derivedColors[i],
-                        config: ds.config,
-                        data: ds.data?.filter((d) => d.pivot === piv)
-                    }
-                    this.dataSets.push(pds)
-                })
-            } else {
-                ds.color = ds.color ?? this.colors[ds.label]
-                this.dataSets.push(ds)
-            }
+
+            distincts.forEach((piv, i) => {
+                const prefix = piv ? `${piv} - ` : ''
+                const pds: any = {
+                    label: prefix + ds.label ?? '',
+                    order: ds.order,
+                    type: ds.type,
+                    latestValues: ds.latestValues,
+                    color: derivedColors[i],
+                    config: ds.config,
+                    data: distincts.length === 1 ? ds.data : ds.data?.filter((d) => d.pivot === piv)
+                }
+                this.dataSets.push(pds)
+            })
         })
 
         this.inputData.dataseries = []
@@ -193,7 +190,8 @@ export class WidgetMapbox extends LitElement {
             type: 'circle',
             source: 'input:' + dataSet.label,
             paint: {
-                ...dataSet.config?.['circle'],
+                'circle-blur': dataSet.config?.['circle']?.['circle-blur'] ?? 0,
+                'circle-opacity': dataSet.config?.['circle']?.['circle-opacity'] ?? 1,
                 'circle-radius': ['get', 'value'],
                 'circle-radius-transition': {
                     duration: 1000,
@@ -214,11 +212,11 @@ export class WidgetMapbox extends LitElement {
             source: 'input:' + dataSet.label,
             layout: {
                 'text-field': ['get', 'value'],
-                'text-size': dataSet.config['symbol']['text-size'],
+                'text-size': dataSet.config['symbol']?.['text-size'] ?? 14,
                 'text-anchor': 'center'
             },
             paint: {
-                'text-color': dataSet.config['symbol']['text-color']
+                'text-color': dataSet.config['symbol']?.['text-color'] ?? '#000'
             }
             // Place polygons under labels, roads and buildings.
             // 'aeroway-polygon'
@@ -234,7 +232,7 @@ export class WidgetMapbox extends LitElement {
             source: 'input:' + dataSet.label,
             layout: {
                 'text-field': ['get', 'value'],
-                'text-size': dataSet.config?.['symbol']?.['text-size'],
+                'text-size': dataSet.config?.['symbol']?.['text-size'] ?? 14,
                 'text-anchor': 'center',
                 'icon-image': dataSet.config?.symbol?.['icon-image'],
                 'icon-size': dataSet.config?.symbol?.['icon-size']
@@ -341,8 +339,8 @@ export class WidgetMapbox extends LitElement {
             type: 'symbol',
             source: 'input:' + dataSet.label,
             layout: {
-                'icon-image': dataSet.config.symbol['icon-image'],
-                'icon-size': dataSet.config.symbol['icon-size']
+                'icon-image': dataSet.config.symbol?.['icon-image'],
+                'icon-size': dataSet.config.symbol?.['icon-size']
             },
             paint: {
                 'icon-color': dataSet.color
