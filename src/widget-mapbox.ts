@@ -30,6 +30,7 @@ export class WidgetMapbox extends LitElement {
     private mapLoaded: boolean = false
     private resizeObserver: ResizeObserver
     private mapStyle?: string
+    private imageList: string[] = []
     constructor() {
         super()
         this.resizeObserver = new ResizeObserver(() => {
@@ -125,9 +126,9 @@ export class WidgetMapbox extends LitElement {
                     features: this.createGEOJson(ds)
                 } as GeoJSON.FeatureCollection)
 
-                if (this.map) this.syncDataLayers()
                 // console.log('mapbox DataLayers', this.dataSources)
             })
+        if (this.map) this.syncDataLayers()
     }
 
     createGEOJson(ds: Dataseries): GeoJSON.Feature[] | undefined {
@@ -144,9 +145,9 @@ export class WidgetMapbox extends LitElement {
             const features: GeoJSON.Feature[] | undefined = ds.data
                 ?.filter(
                     (p) =>
-                        p.lon !== undefined &&
-                        p.lat !== undefined &&
-                        p.value !== undefined &&
+                        p.lon != null &&
+                        p.lat != null &&
+                        p.value != null &&
                         typeof p.lon === 'number' &&
                         typeof p.lat === 'number' &&
                         typeof p.value === 'number'
@@ -156,6 +157,7 @@ export class WidgetMapbox extends LitElement {
                         type: 'Feature',
                         geometry: {
                             type: 'Point',
+                            // @ts-ignore
                             coordinates: [p.lon, p.lat]
                         },
                         properties: {
@@ -234,8 +236,10 @@ export class WidgetMapbox extends LitElement {
                 'text-field': ['get', 'value'],
                 'text-size': dataSet.config?.['symbol']?.['text-size'] ?? 14,
                 'text-anchor': 'center',
-                'icon-image': dataSet.config?.symbol?.['icon-image'],
-                'icon-size': dataSet.config?.symbol?.['icon-size']
+                'icon-image':
+                    (dataSet.config?.symbol?.['icon-image'] ?? '') +
+                    (dataSet.config?.symbol?.['icon-size'] ?? 1),
+                'icon-size': 1
             },
             paint: {
                 'text-color': dataSet.config?.['symbol']?.['text-color']
@@ -339,8 +343,10 @@ export class WidgetMapbox extends LitElement {
             type: 'symbol',
             source: 'input:' + dataSet.label,
             layout: {
-                'icon-image': dataSet.config.symbol?.['icon-image'],
-                'icon-size': dataSet.config.symbol?.['icon-size']
+                'icon-image':
+                    (dataSet.config?.symbol?.['icon-image'] ?? '') +
+                    (dataSet.config?.symbol?.['icon-size'] ?? 1),
+                'icon-size': 1
             },
             paint: {
                 'icon-color': dataSet.color
@@ -374,7 +380,16 @@ export class WidgetMapbox extends LitElement {
         })
 
         // add new layers or update the data of existing layers
-        this.dataSets.forEach((ds) => {
+        this.dataSets.forEach((ds: Dataseries) => {
+            const sz = ds.config?.symbol?.['icon-size'] ?? 1
+            const _imageName = ds.config?.symbol?.['icon-image'] ?? ''
+            const imageName = _imageName + sz
+            if (['line', 'symbol'].includes(ds.type ?? '') && !this.imageList.includes(imageName)) {
+                const img = new Image(24 * sz, 24 * sz) as HTMLImageElement
+                img.onload = () => this.map.addImage(imageName, img, { sdf: true })
+                img.src = `/icons/${_imageName}.svg`
+                this.imageList.push(imageName)
+            }
             const fc = this.dataSources.get('input:' + ds.label)
             const src = this.map.getSource('input:' + ds.label)
             if (src) {

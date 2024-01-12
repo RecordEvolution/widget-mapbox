@@ -5,6 +5,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import babel from '@rollup/plugin-babel'
 import { readFileSync } from 'fs'
 const npmPackage = JSON.parse(readFileSync('./package.json'))
+import copy from 'rollup-plugin-copy'
 
 export default {
     // if you use createSpaConfig, you can use your index.html as entrypoint,
@@ -28,7 +29,12 @@ export default {
         typescript({ sourceMap: true }),
         nodeResolve(),
         commonjs({}),
-        babel({ babelHelpers: 'bundled' })
+        babel({ babelHelpers: 'bundled' }),
+        copy({
+            targets: [
+                { src: 'icons', dest: 'dist' } // Adjust paths as needed
+            ]
+        })
     ]
 
     // alternatively, you can use your JS as entrypoint for rollup and

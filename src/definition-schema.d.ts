@@ -37,131 +37,20 @@ export type LayerBaseColor = string;
  * Restrict the number of rows for this dataseries to the given number of newest values. (If pivoted, then per each of the pivot dataseries.)
  */
 export type LatestValues = number;
+/**
+ * Blur of 1 means the whole circle is blurred starting from the center point. Blur 0 means no blur effect.
+ */
 export type Blur = number;
+/**
+ * Opactity 1 means fully opaque, 0 means fully transparent.
+ */
 export type Opacity = number;
 export type TextColor = string;
 export type TextSize = number;
 /**
  * For available icons check the maki icon set here https://labs.mapbox.com/maki-icons/
  */
-export type IconName =
-  | "marker"
-  | "airfield"
-  | "airport"
-  | "alcohol-shop"
-  | "america-football"
-  | "amusement-park"
-  | "aquarium"
-  | "art-gallery"
-  | "bakery"
-  | "bank"
-  | "bar"
-  | "baseball"
-  | "basketball"
-  | "beer"
-  | "bicycle"
-  | "building"
-  | "bus"
-  | "cafe"
-  | "campsite"
-  | "car"
-  | "cemetery"
-  | "cinema"
-  | "circle"
-  | "college"
-  | "commerical"
-  | "cricket"
-  | "cross"
-  | "dam"
-  | "danger"
-  | "dog-park"
-  | "embassy"
-  | "emergency-telephone"
-  | "entrance"
-  | "farm"
-  | "fast-food"
-  | "ferry"
-  | "fire-station"
-  | "fuel"
-  | "garden"
-  | "golf"
-  | "grocery-store"
-  | "hairdresser"
-  | "harbor"
-  | "heart"
-  | "heliport"
-  | "hospital"
-  | "industrial"
-  | "information"
-  | "laundry"
-  | "library"
-  | "lighthouse"
-  | "lodging"
-  | "logging"
-  | "london-underground"
-  | "marker-stroked"
-  | "minefield"
-  | "mobile-phone"
-  | "monument"
-  | "mountain"
-  | "museum"
-  | "music"
-  | "oil-well"
-  | "park"
-  | "parking"
-  | "parking-garage"
-  | "pharmacy"
-  | "picnic-site"
-  | "pitch"
-  | "place-of-worship"
-  | "playground"
-  | "police"
-  | "polling-place"
-  | "post"
-  | "prison"
-  | "rail"
-  | "rail-above"
-  | "rail-light"
-  | "rail-metro"
-  | "rail-underground"
-  | "railway"
-  | "religious-christian"
-  | "religious-jewish"
-  | "religious-muslim"
-  | "religious-islam"
-  | "restaurant"
-  | "roadblock"
-  | "rocket"
-  | "school"
-  | "scooter"
-  | "shop"
-  | "skiing"
-  | "slaughterhouse"
-  | "soccer"
-  | "square"
-  | "stadium"
-  | "star"
-  | "star-stroked"
-  | "suitcase"
-  | "swimming"
-  | "table-tennis"
-  | "teahouse"
-  | "tennis"
-  | "theatre"
-  | "toilet"
-  | "town-hall"
-  | "trash"
-  | "tree-1"
-  | "tree-2"
-  | "triangle"
-  | "triangle-stroked"
-  | "veterinary"
-  | "volcano"
-  | "warehouse"
-  | "waste-basket"
-  | "water"
-  | "wetland"
-  | "zoo";
+export type IconName = "marker" | "car-front" | "car-top";
 /**
  * In multiples of the original icon size
  */
@@ -188,16 +77,16 @@ export type PivotColumn = string;
  * This is the map data
  */
 export type MapData = {
-  lon: Longitude;
-  lat: Latitude;
+  lon?: Longitude;
+  lat?: Latitude;
   alt?: Altitude;
   value?: AValueForTheDataPoint;
   pivot?: PivotColumn;
   [k: string]: unknown;
 }[];
 export type Dataseries = {
-  label: SeriesLabel;
-  type: LayerType;
+  label?: SeriesLabel;
+  type?: LayerType;
   color?: LayerBaseColor;
   latestValues?: LatestValues;
   config?: LayerConfiguration;
@@ -215,7 +104,7 @@ export interface MapConfiguration {
   settings?: {
     title?: Title;
     subTitle?: Subtitle;
-    style: MapStyle;
+    style?: MapStyle;
     showLegend?: ShowLegend;
     follow?: AutoFollow;
     [k: string]: unknown;
@@ -225,7 +114,7 @@ export interface MapConfiguration {
 }
 export interface LayerConfiguration {
   circle?: CircleLayer;
-  symbol?: TextLayer;
+  symbol?: SymbolLayer;
   heatmap?: HeatmapLayer;
   line?: TrackLayer;
   [k: string]: unknown;
@@ -235,7 +124,7 @@ export interface CircleLayer {
   "circle-opacity"?: Opacity;
   [k: string]: unknown;
 }
-export interface TextLayer {
+export interface SymbolLayer {
   "text-color"?: TextColor;
   "text-size"?: TextSize;
   "icon-image"?: IconName;
