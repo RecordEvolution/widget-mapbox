@@ -387,7 +387,9 @@ export class WidgetMapbox extends LitElement {
             if (['line', 'symbol'].includes(ds.type ?? '') && !this.imageList.includes(imageName)) {
                 const img = new Image(24 * sz, 24 * sz) as HTMLImageElement
                 img.onload = () => this.map.addImage(imageName, img, { sdf: true })
-                img.src = `/icons/${_imageName}.svg`
+                img.crossOrigin = 'anonymous'
+                img.referrerPolicy = 'no-referrer'
+                img.src = `https://storage.googleapis.com/reswarm-images/${_imageName}.svg`
                 this.imageList.push(imageName)
             }
             const fc = this.dataSources.get('input:' + ds.label)

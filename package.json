@@ -1,69 +1,70 @@
 {
-  "name": "@record-evolution/widget-mapbox",
-  "description": "REWidget widget-mapbox",
-  "license": "MIT",
-  "author": "widget-mapbox",
-  "version": "1.4.18",
-  "type": "module",
-  "main": "dist/widget-mapbox.js",
-  "types": "dist/src/widget-mapbox.d.ts",
-  "files": [
-    "dist",
-    "src"
-  ],
-  "scripts": {
-    "analyze": "cem analyze --litelement",
-    "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds\"",
-    "build": "rollup -c rollup.config.js",
-    "watch": "rollup -w -c rollup.config.js",
-    "types": "cat src/definition-schema.json | json2ts > src/definition-schema.d.ts",
-    "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
-    "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore && prettier \"**/*.ts\" --write --ignore-path .gitignore",
-    "release": "npm version patch --tag-version-prefix='' && git push && git push --tag"
-  },
-  "dependencies": {
-    "@types/geojson": "^7946.0.12",
-    "@types/mapbox-gl": "^2.7.18",
-    "lit": "^3.0.2",
-    "mapbox-gl": "^2.15.0",
-    "tinycolor2": "^1.6.0"
-  },
-  "devDependencies": {
-    "@babel/plugin-syntax-import-assertions": "^7.22.5",
-    "@custom-elements-manifest/analyzer": "^0.9.0",
-    "@open-wc/eslint-config": "^12.0.2",
-    "@rollup/plugin-babel": "^6.0.4",
-    "@rollup/plugin-commonjs": "^25.0.7",
-    "@rollup/plugin-json": "^6.0.1",
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-replace": "^5.0.5",
-    "@rollup/plugin-typescript": "^11.1.5",
-    "@types/tinycolor2": "^1.4.6",
-    "@typescript-eslint/eslint-plugin": "^6.9.1",
-    "@typescript-eslint/parser": "^6.9.1",
-    "@web/dev-server": "^0.4.0",
-    "concurrently": "^8.2.2",
-    "eslint": "^8.53.0",
-    "eslint-config-prettier": "^9.0.0",
-    "husky": "^8.0.3",
-    "json-schema-to-typescript": "^13.1.1",
-    "lint-staged": "^15.0.2",
-    "prettier": "^3.0.3",
-    "rollup": "^3.21.0",
-    "rollup-plugin-copy": "^3.5.0",
-    "tslib": "^2.6.2",
-    "typescript": "^5.2.2"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/RecordEvolution/widget-mapbox.git"
-  },
-  "keywords": [
-    "widget",
-    "mapbox"
-  ],
-  "bugs": {
-    "url": "https://github.com/RecordEvolution/widget-mapbox/issues"
-  },
-  "homepage": "https://github.com/RecordEvolution/widget-mapbox#readme"
+    "name": "@record-evolution/widget-mapbox",
+    "description": "REWidget widget-mapbox",
+    "license": "MIT",
+    "author": "widget-mapbox",
+    "version": "1.4.18",
+    "type": "module",
+    "main": "dist/widget-mapbox.js",
+    "types": "dist/src/widget-mapbox.d.ts",
+    "files": [
+        "dist",
+        "src"
+    ],
+    "scripts": {
+        "analyze": "cem analyze --litelement",
+        "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds\"",
+        "build": "rollup -c rollup.config.js",
+        "watch": "rollup -w -c rollup.config.js",
+        "types": "cat src/definition-schema.json | json2ts > src/definition-schema.d.ts",
+        "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
+        "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore && prettier \"**/*.ts\" --write --ignore-path .gitignore",
+        "release": "npm version patch --tag-version-prefix='' && git push && git push --tag",
+        "cors": "gcloud storage buckets update gs://reswarm-images --cors-file=src/cors-config.json"
+    },
+    "dependencies": {
+        "@types/geojson": "^7946.0.12",
+        "@types/mapbox-gl": "^2.7.18",
+        "lit": "^3.0.2",
+        "mapbox-gl": "^2.15.0",
+        "tinycolor2": "^1.6.0"
+    },
+    "devDependencies": {
+        "@babel/plugin-syntax-import-assertions": "^7.22.5",
+        "@custom-elements-manifest/analyzer": "^0.9.0",
+        "@open-wc/eslint-config": "^12.0.2",
+        "@rollup/plugin-babel": "^6.0.4",
+        "@rollup/plugin-commonjs": "^25.0.7",
+        "@rollup/plugin-json": "^6.0.1",
+        "@rollup/plugin-node-resolve": "^15.2.3",
+        "@rollup/plugin-replace": "^5.0.5",
+        "@rollup/plugin-typescript": "^11.1.5",
+        "@types/tinycolor2": "^1.4.6",
+        "@typescript-eslint/eslint-plugin": "^6.9.1",
+        "@typescript-eslint/parser": "^6.9.1",
+        "@web/dev-server": "^0.4.0",
+        "concurrently": "^8.2.2",
+        "eslint": "^8.53.0",
+        "eslint-config-prettier": "^9.0.0",
+        "husky": "^8.0.3",
+        "json-schema-to-typescript": "^13.1.1",
+        "lint-staged": "^15.0.2",
+        "prettier": "^3.0.3",
+        "rollup": "^3.21.0",
+        "rollup-plugin-copy": "^3.5.0",
+        "tslib": "^2.6.2",
+        "typescript": "^5.2.2"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/RecordEvolution/widget-mapbox.git"
+    },
+    "keywords": [
+        "widget",
+        "mapbox"
+    ],
+    "bugs": {
+        "url": "https://github.com/RecordEvolution/widget-mapbox/issues"
+    },
+    "homepage": "https://github.com/RecordEvolution/widget-mapbox#readme"
 }
