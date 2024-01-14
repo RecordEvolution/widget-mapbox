@@ -2,7 +2,7 @@
 
 // Helper function to deep clone an object
 function deepClone(obj) {
-    return JSON.parse(JSON.stringify(obj))
+    return structuredClone(obj)
 }
 
 // Function to randomize object values based on key paths
