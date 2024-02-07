@@ -30,7 +30,7 @@ export class WidgetMapbox extends LitElement {
     private mapLoaded: boolean = false
     private resizeObserver: ResizeObserver
     private mapStyle?: string
-    private customDebounce: any
+    private customDebounce?: any
     private imageList: string[] = []
     constructor() {
         super()
