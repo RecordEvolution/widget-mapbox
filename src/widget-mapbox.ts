@@ -30,12 +30,12 @@ export class WidgetMapbox extends LitElement {
     private mapLoaded: boolean = false
     private resizeObserver: ResizeObserver
     private mapStyle?: string
+    private customDebounce: any
     private imageList: string[] = []
     constructor() {
         super()
         this.resizeObserver = new ResizeObserver(() => {
-            this.map?.resize()
-            this.fitBounds()
+            this.updateMap()
         })
         mapboxgl.accessToken =
             'pk.eyJ1IjoibWFya29wZSIsImEiOiJjazc1OWlsNjkwN2pyM2VxajV1eGRnYzgwIn0.3lVksk1nej_0KnWjCkBDAA'
@@ -53,6 +53,15 @@ export class WidgetMapbox extends LitElement {
         this.createMap()
         this.resizeObserver.observe(this.map._container)
         this.fitBounds()
+    }
+
+    updateMap() {
+        if (this.customDebounce) clearTimeout(this.customDebounce)
+
+        this.customDebounce = setTimeout(() => {
+            this.map?.resize()
+            this.fitBounds() 
+        }, 300)
     }
 
     fitBounds() {
