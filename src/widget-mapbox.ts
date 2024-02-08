@@ -41,6 +41,13 @@ export class WidgetMapbox extends LitElement {
             'pk.eyJ1IjoibWFya29wZSIsImEiOiJjazc1OWlsNjkwN2pyM2VxajV1eGRnYzgwIn0.3lVksk1nej_0KnWjCkBDAA'
     }
 
+    disconnectedCallback() {
+        super.disconnectedCallback()
+        if(this.resizeObserver) {
+            this.resizeObserver.disconnect()
+        }
+    }
+
     update(changedProperties: Map<string, any>) {
         if (changedProperties.has('inputData')) {
             this.transformInputData()
