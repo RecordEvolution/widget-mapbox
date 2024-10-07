@@ -26,7 +26,8 @@
         <script type="module">
             import { html, render } from 'lit'
             import '../dist/src/widget-mapbox.js'
-            import data from '../src/default-data.json' assert { type: 'json' }
+            const response = await fetch('../src/default-data.json')
+            const data = await response.json()
             const keyPathsToRandomize = [
                 'dataseries.0.data.1.value',
                 'dataseries.0.data.5.value',

@@ -6,14 +6,14 @@ import { repeat } from 'lit/directives/repeat.js'
 import mapboxgl from 'https://esm.run/mapbox-gl@3.0.1'
 import * as GeoJSON from 'geojson'
 import tinycolor from 'tinycolor2'
-import { MapConfiguration } from './definition-schema.js'
+import { LayerBaseColor, InputData } from './definition-schema.js'
 
-type Dataseries = Exclude<MapConfiguration['dataseries'], undefined>[number]
+type Dataseries = Exclude<InputData['dataseries'], undefined>[number]
 type Point = Exclude<Dataseries['data'], undefined>[number]
 
 export class WidgetMapbox extends LitElement {
     @property({ type: Object })
-    inputData?: MapConfiguration
+    inputData?: InputData
     @state()
     private map: any | undefined = undefined
 
@@ -70,16 +70,16 @@ export class WidgetMapbox extends LitElement {
     }
 
     transformInputData() {
-        if (!this?.inputData?.settings || !this?.inputData?.dataseries?.length) return
+        if (!this?.inputData || !this?.inputData?.dataseries?.length) return
 
-        if (this.map && this.inputData.settings.style !== this.mapStyle) {
+        if (this.map && this.inputData?.style !== this.mapStyle) {
             this.createMap()
         }
 
         // choose random color if dataseries has none and store it for furure updates
         this.inputData.dataseries.forEach((ds) => {
             if (!this.colors.has(ds.label)) {
-                ds.color = ds.color ?? tinycolor.random().toString()
+                ds.color = ds.color ?? (tinycolor.random().toString() as LayerBaseColor)
                 this.colors.set(ds.label, ds.color)
             }
         })
@@ -96,7 +96,7 @@ export class WidgetMapbox extends LitElement {
             distincts.forEach((piv, i) => {
                 const prefix = piv ? `${piv} - ` : ''
                 const pds: any = {
-                    label: prefix + ds.label ?? '',
+                    label: prefix + ds.label,
                     order: ds.order,
                     type: ds.type,
                     latestValues: ds.latestValues,
@@ -420,7 +420,7 @@ export class WidgetMapbox extends LitElement {
                     this.addLineLayer(ds)
             }
         })
-        if (this.inputData?.settings?.follow) this.fitBounds()
+        if (this.inputData?.follow) this.fitBounds()
     }
 
     addBuildingLayer() {
@@ -474,7 +474,7 @@ export class WidgetMapbox extends LitElement {
 
     createMap() {
         if (this.map) return
-        this.mapStyle = this.inputData?.settings?.style
+        this.mapStyle = this.inputData?.style
         this.map = new mapboxgl.Map({
             container: this.shadowRoot?.getElementById('map') as HTMLCanvasElement,
             style: `mapbox://styles/mapbox/${this.mapStyle ?? 'light-v11'}`,
@@ -581,17 +581,17 @@ export class WidgetMapbox extends LitElement {
             <div class="wrapper">
                 <header
                     class="paging"
-                    ?active=${this.inputData?.settings?.title || this.inputData?.settings?.subTitle}
+                    ?active=${this.inputData?.title || this.inputData?.subTitle}
                 >
                     <div class="title">
-                        <h3 class="paging" ?active=${this.inputData?.settings?.title}>
-                            ${this.inputData?.settings?.title}
+                        <h3 class="paging" ?active=${this.inputData?.title}>
+                            ${this.inputData?.title}
                         </h3>
-                        <p class="paging" ?active=${this.inputData?.settings?.subTitle}>
-                            ${this.inputData?.settings?.subTitle}
+                        <p class="paging" ?active=${this.inputData?.subTitle}>
+                            ${this.inputData?.subTitle}
                         </p>
                     </div>
-                    <div class="legend paging" ?active=${this?.inputData?.settings?.showLegend}>
+                    <div class="legend paging" ?active=${this?.inputData?.showLegend}>
                         ${repeat(
                             this.dataSets,
                             (ds) => ds.label,

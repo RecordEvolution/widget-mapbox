@@ -1,9 +1,7 @@
 {
-    "settings": {
-        "style": "light-v11",
-        "showLegend": false,
-        "follow": false
-    },
+    "style": "light-v11",
+    "showLegend": false,
+    "follow": false,
     "dataseries": [
         {
             "label": "Circle Layer",

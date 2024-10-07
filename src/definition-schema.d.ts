@@ -32,7 +32,6 @@ export type SeriesLabel = string;
  * Create the specified type of layer on the map.
  */
 export type LayerType = "circle" | "symbol" | "heatmap" | "line";
-export type LayerBaseColor = string;
 /**
  * Restrict the number of rows for this dataseries to the given number of newest values. (If pivoted, then per each of the pivot dataseries.)
  */
@@ -45,7 +44,6 @@ export type Blur = number;
  * Opactity 1 means fully opaque, 0 means fully transparent.
  */
 export type Opacity = number;
-export type TextColor = string;
 export type TextSize = number;
 /**
  * For available icons check the maki icon set here https://labs.mapbox.com/maki-icons/
@@ -97,21 +95,16 @@ export type Dataseries = {
 /**
  * A map-chart
  */
-export interface MapConfiguration {
-  /**
-   * Settings
-   */
-  settings?: {
-    title?: Title;
-    subTitle?: Subtitle;
-    style?: MapStyle;
-    showLegend?: ShowLegend;
-    follow?: AutoFollow;
-    [k: string]: unknown;
-  };
+export interface InputData {
+  title?: Title;
+  subTitle?: Subtitle;
+  style?: MapStyle;
+  showLegend?: ShowLegend;
+  follow?: AutoFollow;
   dataseries?: Dataseries;
   [k: string]: unknown;
 }
+export type LayerBaseColor = string;
 export interface LayerConfiguration {
   circle?: CircleLayer;
   symbol?: SymbolLayer;
@@ -129,6 +122,9 @@ export interface SymbolLayer {
   "text-size"?: TextSize;
   "icon-image"?: IconName;
   "icon-size"?: IconSize;
+  [k: string]: unknown;
+}
+export interface TextColor {
   [k: string]: unknown;
 }
 export interface HeatmapLayer {

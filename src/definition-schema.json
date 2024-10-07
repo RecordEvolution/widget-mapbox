@@ -1,52 +1,45 @@
 {
-    "title": "Map Configuration",
+    "title": "InputData",
     "description": "A map-chart",
     "type": "object",
     "properties": {
-        "settings": {
-            "description": "Settings",
-            "type": "object",
-            "order": 8,
-            "properties": {
-                "title": {
-                    "title": "Title",
-                    "type": "string",
-                    "order": 1
-                },
-                "subTitle": {
-                    "title": "Subtitle",
-                    "type": "string",
-                    "order": 2
-                },
-                "style": {
-                    "title": "Map Style",
-                    "description": "The basic style of the map.",
-                    "type": "string",
-                    "enum": [
-                        "streets-v12",
-                        "outdoors-v12",
-                        "light-v11",
-                        "dark-v11",
-                        "satellite-v9",
-                        "satellite-streets-v12",
-                        "navigation-day-v1",
-                        "navigation-night-v1"
-                    ],
-                    "required": true,
-                    "order": 3
-                },
-                "showLegend": {
-                    "title": "Show Legend",
-                    "type": "boolean",
-                    "order": 4
-                },
-                "follow": {
-                    "title": "Auto Follow",
-                    "description": "If true, the map automatically keeps the drawn locations in focus.",
-                    "type": "boolean",
-                    "order": 5
-                }
-            }
+        "title": {
+            "title": "Title",
+            "type": "string",
+            "order": 1
+        },
+        "subTitle": {
+            "title": "Subtitle",
+            "type": "string",
+            "order": 2
+        },
+        "style": {
+            "title": "Map Style",
+            "description": "The basic style of the map.",
+            "type": "string",
+            "enum": [
+                "streets-v12",
+                "outdoors-v12",
+                "light-v11",
+                "dark-v11",
+                "satellite-v9",
+                "satellite-streets-v12",
+                "navigation-day-v1",
+                "navigation-night-v1"
+            ],
+            "required": true,
+            "order": 3
+        },
+        "showLegend": {
+            "title": "Show Legend",
+            "type": "boolean",
+            "order": 4
+        },
+        "follow": {
+            "title": "Auto Follow",
+            "description": "If true, the map automatically keeps the drawn locations in focus.",
+            "type": "boolean",
+            "order": 5
         },
         "dataseries": {
             "title": "Dataseries",
@@ -78,7 +71,7 @@
                     },
                     "latestValues": {
                         "title": "Latest Values",
-                        "description": "Restrict the number of rows for this dataseries to the given number of newest values. (If pivoted, then per each of the pivot dataseries.)",
+                        "description": "Restrict the number of rows for this dataseries to the given number of newest values. (If you use split data, then per each of the split dataseries.)",
                         "type": "number",
                         "order": 4
                     },
@@ -212,13 +205,13 @@
                                     "order": 3
                                 },
                                 "value": {
-                                    "title": "A value for the data point",
+                                    "title": "Data point value",
                                     "type": "number",
                                     "order": 4
                                 },
                                 "pivot": {
-                                    "title": "Pivot Column",
-                                    "description": "You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, lon, lat, temperature] and specify 'city' as pivot column, then you will get a layer for each city.",
+                                    "title": "Split Data by",
+                                    "description": "You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, lon, lat, temperature] and specify 'city' as split column, then you will get a layer for each city.",
                                     "type": "string",
                                     "order": 5
                                 }
