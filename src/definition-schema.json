@@ -17,6 +17,7 @@
             "title": "Map Style",
             "description": "The basic style of the map.",
             "type": "string",
+            "dataDrivenDisabled": true,
             "enum": [
                 "streets-v12",
                 "outdoors-v12",
@@ -33,18 +34,21 @@
         "showLegend": {
             "title": "Show Legend",
             "type": "boolean",
+            "dataDrivenDisabled": true,
             "order": 4
         },
         "follow": {
             "title": "Auto Follow",
             "description": "If true, the map automatically keeps the drawn locations in focus.",
             "type": "boolean",
+            "dataDrivenDisabled": true,
             "order": 5
         },
         "dataseries": {
             "title": "Dataseries",
             "order": 8,
             "type": "array",
+            "dataDrivenDisabled": true,
             "items": {
                 "type": "object",
                 "properties": {
@@ -60,6 +64,7 @@
                         "description": "Create the specified type of layer on the map.",
                         "type": "string",
                         "required": true,
+                        "dataDrivenDisabled": true,
                         "enum": ["circle", "symbol", "heatmap", "line"],
                         "order": 2
                     },
@@ -73,6 +78,7 @@
                         "title": "Latest Values",
                         "description": "Restrict the number of rows for this dataseries to the given number of newest values. (If you use split data, then per each of the split dataseries.)",
                         "type": "number",
+                        "dataDrivenDisabled": true,
                         "order": 4
                     },
                     "config": {
@@ -88,6 +94,7 @@
                                     "circle-blur": {
                                         "title": "Blur",
                                         "description": "Blur of 1 means the whole circle is blurred starting from the center point. Blur 0 means no blur effect.",
+                                        "dataDrivenDisabled": true,
                                         "min": 0,
                                         "max": 1,
                                         "type": "number",
@@ -96,6 +103,7 @@
                                     "circle-opacity": {
                                         "title": "Opacity",
                                         "description": "Opactity 1 means fully opaque, 0 means fully transparent.",
+                                        "dataDrivenDisabled": true,
                                         "min": 0,
                                         "max": 1,
                                         "type": "number",
