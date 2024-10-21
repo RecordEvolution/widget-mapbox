@@ -43,7 +43,7 @@ export class WidgetMapbox extends LitElement {
 
     disconnectedCallback() {
         super.disconnectedCallback()
-        if(this.resizeObserver) {
+        if (this.resizeObserver) {
             this.resizeObserver.disconnect()
         }
     }
@@ -67,8 +67,17 @@ export class WidgetMapbox extends LitElement {
 
         this.customDebounce = setTimeout(() => {
             this.map?.resize()
-            this.fitBounds() 
+            this.fitBounds()
         }, 300)
+    }
+
+    isArrayOfTwoNumbers(v: any) {
+        return (
+            Array.isArray(v) && // Check if it's an array
+            v.length <= 3 && // Check if the array has exactly two elements
+            typeof v[0] === 'number' && // Check if the first element is a number
+            typeof v[1] === 'number' // Check if the second element is a number
+        )
     }
 
     fitBounds() {
@@ -76,7 +85,15 @@ export class WidgetMapbox extends LitElement {
         this.dataSources.forEach((col: GeoJSON.FeatureCollection) => {
             col.features.forEach((f) => {
                 // @ts-ignore
-                if (f.geometry.coordinates?.length) bounds.extend(f.geometry.coordinates)
+                if (this.isArrayOfTwoNumbers(f.geometry?.coordinates)) {
+                    // @ts-ignore
+                    bounds.extend(f.geometry.coordinates)
+                } else {
+                    // @ts-ignore
+                    for (const lnglat of f.geometry.coordinates) {
+                        if (this.isArrayOfTwoNumbers(lnglat)) bounds.extend(lnglat)
+                    }
+                }
             })
         })
         if (bounds.isEmpty()) {
@@ -129,7 +146,7 @@ export class WidgetMapbox extends LitElement {
         // Filter for latest Values
         this.dataSets.forEach((ds) => {
             if (ds?.latestValues && ds?.latestValues > 0) {
-                ds.data = ds?.data?.slice(0, ds.latestValues ?? 1) ?? []
+                ds.data = ds?.data?.slice(-ds.latestValues || -1) ?? []
             }
         })
 
@@ -586,6 +603,17 @@ export class WidgetMapbox extends LitElement {
         a.mapboxgl-ctrl-logo {
             display: none;
         }
+
+        .no-data {
+            font-size: 20px;
+            color: var(--re-text-color, #000);
+            display: flex;
+            height: 100%;
+            width: 100%;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+        }
     `
 
     render() {
@@ -595,17 +623,10 @@ export class WidgetMapbox extends LitElement {
                 rel="stylesheet"
             />
             <div class="wrapper">
-                <header
-                    class="paging"
-                    ?active=${this.inputData?.title || this.inputData?.subTitle}
-                >
+                <header class="paging" ?active=${this.inputData?.title || this.inputData?.subTitle}>
                     <div class="title">
-                        <h3 class="paging" ?active=${this.inputData?.title}>
-                            ${this.inputData?.title}
-                        </h3>
-                        <p class="paging" ?active=${this.inputData?.subTitle}>
-                            ${this.inputData?.subTitle}
-                        </p>
+                        <h3 class="paging" ?active=${this.inputData?.title}>${this.inputData?.title}</h3>
+                        <p class="paging" ?active=${this.inputData?.subTitle}>${this.inputData?.subTitle}</p>
                     </div>
                     <div class="legend paging" ?active=${this?.inputData?.showLegend}>
                         ${repeat(
@@ -624,7 +645,8 @@ export class WidgetMapbox extends LitElement {
                         )}
                     </div>
                 </header>
-                <div id="map"></div>
+                <div class="paging no-data" ?active=${!this.dataSets.length}>No Data</div>
+                <div id="map" class="paging" ?active=${this.dataSets.length}></div>
             </div>
         `
     }
