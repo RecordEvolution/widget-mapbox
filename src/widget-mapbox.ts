@@ -65,22 +65,27 @@ export class WidgetMapbox extends LitElement {
         }
 
         if (changedProperties.has('theme')) {
-            const cssTextColor = getComputedStyle(this).getPropertyValue('--re-text-color').trim()
-            const cssBgColor = getComputedStyle(this).getPropertyValue('--re-background-color').trim()
-            this.themeBgColor = cssBgColor || this.theme?.theme_object?.backgroundColor
-            this.themeTitleColor = cssTextColor || this.theme?.theme_object?.title?.textStyle?.color
-            this.themeSubtitleColor =
-                cssTextColor || this.theme?.theme_object?.title?.subtextStyle?.color || this.themeTitleColor
+            this.registerTheme(this.theme)
         }
 
         super.update(changedProperties)
     }
 
     firstUpdated() {
+        this.registerTheme(this.theme)
         this.transformInputData()
         this.createMap()
         this.resizeObserver.observe(this.map._container)
         this.fitBounds()
+    }
+
+    registerTheme(theme?: Theme) {
+        const cssTextColor = getComputedStyle(this).getPropertyValue('--re-text-color').trim()
+        const cssBgColor = getComputedStyle(this).getPropertyValue('--re-background-color').trim()
+        this.themeBgColor = cssBgColor || this.theme?.theme_object?.backgroundColor
+        this.themeTitleColor = cssTextColor || this.theme?.theme_object?.title?.textStyle?.color
+        this.themeSubtitleColor =
+            cssTextColor || this.theme?.theme_object?.title?.subtextStyle?.color || this.themeTitleColor
     }
 
     updateMap() {
