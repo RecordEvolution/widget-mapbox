@@ -10,10 +10,17 @@ import { LayerBaseColor, InputData } from './definition-schema.js'
 
 type Dataseries = Exclude<InputData['dataseries'], undefined>[number]
 type Point = Exclude<Dataseries['data'], undefined>[number]
-
+type Theme = {
+    theme_name: string
+    theme_object: any
+}
 export class WidgetMapbox extends LitElement {
     @property({ type: Object })
     inputData?: InputData
+
+    @property({ type: Object })
+    theme?: Theme
+
     @state()
     private map: any | undefined = undefined
 
@@ -25,6 +32,10 @@ export class WidgetMapbox extends LitElement {
 
     @state()
     colors: any = new Map()
+
+    @state() private themeBgColor?: string
+    @state() private themeTitleColor?: string
+    @state() private themeSubtitleColor?: string
 
     public version: string = 'versionplaceholder'
     private mapLoaded: boolean = false
@@ -52,6 +63,16 @@ export class WidgetMapbox extends LitElement {
         if (changedProperties.has('inputData')) {
             this.transformInputData()
         }
+
+        if (changedProperties.has('theme')) {
+            const cssTextColor = getComputedStyle(this).getPropertyValue('--re-text-color').trim()
+            const cssBgColor = getComputedStyle(this).getPropertyValue('--re-background-color').trim()
+            this.themeBgColor = cssBgColor || this.theme?.theme_object?.backgroundColor
+            this.themeTitleColor = cssTextColor || this.theme?.theme_object?.title?.textStyle?.color
+            this.themeSubtitleColor =
+                cssTextColor || this.theme?.theme_object?.title?.subtextStyle?.color || this.themeTitleColor
+        }
+
         super.update(changedProperties)
     }
 
@@ -539,9 +560,7 @@ export class WidgetMapbox extends LitElement {
     static styles = css`
         :host {
             display: block;
-            color: var(--re-bar-text-color, #000);
             font-family: sans-serif;
-            padding: 16px;
             box-sizing: border-box;
             margin: auto;
         }
@@ -576,6 +595,8 @@ export class WidgetMapbox extends LitElement {
         .wrapper {
             display: flex;
             flex-direction: column;
+            box-sizing: border-box;
+            padding: 16px;
             height: 100%;
             width: 100%;
         }
@@ -606,7 +627,6 @@ export class WidgetMapbox extends LitElement {
 
         .no-data {
             font-size: 20px;
-            color: var(--re-text-color, #000);
             display: flex;
             height: 100%;
             width: 100%;
@@ -622,11 +642,20 @@ export class WidgetMapbox extends LitElement {
                 href="https://api.mapbox.com/mapbox-gl-js/v${mapboxgl.version}/mapbox-gl.css"
                 rel="stylesheet"
             />
-            <div class="wrapper">
+            <div
+                class="wrapper"
+                style="background-color: ${this.themeBgColor}; color: ${this.themeTitleColor}"
+            >
                 <header class="paging" ?active=${this.inputData?.title || this.inputData?.subTitle}>
                     <div class="title">
                         <h3 class="paging" ?active=${this.inputData?.title}>${this.inputData?.title}</h3>
-                        <p class="paging" ?active=${this.inputData?.subTitle}>${this.inputData?.subTitle}</p>
+                        <p
+                            class="paging"
+                            ?active=${this.inputData?.subTitle}
+                            style="color: ${this.themeSubtitleColor}"
+                        >
+                            ${this.inputData?.subTitle}
+                        </p>
                     </div>
                     <div class="legend paging" ?active=${this?.inputData?.showLegend}>
                         ${repeat(

@@ -10,6 +10,7 @@
                 padding: 0;
                 width: 100%;
                 height: 100%;
+                background-color: aliceblue;
             }
 
             * {
@@ -18,16 +19,27 @@
             }
         </style>
     </head>
+
     <body>
         <div id="demo"></div>
-
-        <script src="./ObjectRandomizer.js"></script>
+        <script src="https://storage.googleapis.com/reswarm-images/ObjectRandomizer.js"></script>
 
         <script type="module">
             import { html, render } from 'lit'
-            import '../dist/src/widget-mapbox.js'
-            const response = await fetch('../src/default-data.json')
-            const data = await response.json()
+            import '../dist/widget-mapbox.js'
+            const data = await fetch('../src/default-data.json').then((res) => res.json())
+            const themeObject = await fetch('themes/vintage.json').then((res) => res.json())
+            const theme = { theme_name: 'vintage', theme_object: themeObject }
+            render(
+                html`
+                    <widget-mapbox-1.5.3 .theme="${theme}" .inputData=${data}>
+                        web component is not registered. Make sure to use the tag with the correct version
+                        string from the package.json
+                    </widget-mapbox-1.5.3>
+                `,
+                document.getElementById('demo')
+            )
+            const widget = document.getElementById('demo').children[0]
             const keyPathsToRandomize = [
                 'dataseries.0.data.1.value',
                 'dataseries.0.data.5.value',
@@ -52,19 +64,12 @@
                 'dataseries.1.data.15.value',
                 'settings.title'
             ]
-            // check out https://geojson.io/ to generate example data
-            setInterval(() => {
+            const inter = setInterval(() => {
                 const randomizedObj = randomizeObjectValues(data, keyPathsToRandomize)
 
-                // console.log('random', randomizedObj.dataseries[1].data[14]);
-                render(
-                    html`
-                        <widget-mapbox-versionplaceholder .inputData=${randomizedObj}>
-                            web component not registered
-                        </widget-mapbox-versionplaceholder>
-                    `,
-                    document.querySelector('#demo')
-                )
+                // console.log('random', randomizedObj.dataseries[0].data[0])
+                widget.inputData = randomizedObj
+                // clearInterval(inter)
             }, 1000)
         </script>
     </body>
