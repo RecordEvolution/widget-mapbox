@@ -81,7 +81,7 @@ export class WidgetMapbox extends LitElement {
 
     registerTheme(theme?: Theme) {
         const cssTextColor = getComputedStyle(this).getPropertyValue('--re-text-color').trim()
-        const cssBgColor = getComputedStyle(this).getPropertyValue('--re-background-color').trim()
+        const cssBgColor = getComputedStyle(this).getPropertyValue('--re-tile-background-color').trim()
         this.themeBgColor = cssBgColor || this.theme?.theme_object?.backgroundColor
         this.themeTitleColor = cssTextColor || this.theme?.theme_object?.title?.textStyle?.color
         this.themeSubtitleColor =
