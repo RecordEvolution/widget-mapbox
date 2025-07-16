@@ -33,7 +33,7 @@ export type SeriesLabel = string;
  */
 export type LayerType = "circle" | "symbol" | "heatmap" | "line";
 /**
- * Restrict the number of rows for this dataseries to the given number of newest values. (If pivoted, then per each of the pivot dataseries.)
+ * Restrict the number of rows for this dataseries to the given number of newest values. (If you use split data, then per each of the split dataseries.)
  */
 export type LatestValues = number;
 /**
@@ -66,11 +66,11 @@ export type LineWidth = number;
 export type Longitude = number;
 export type Latitude = number;
 export type Altitude = number;
-export type AValueForTheDataPoint = number;
+export type DataPointValue = number;
 /**
- * You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, lon, lat, temperature] and specify 'city' as pivot column, then you will get a layer for each city.
+ * You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, lon, lat, temperature] and specify 'city' as split column, then you will get a layer for each city.
  */
-export type PivotColumn = string;
+export type SplitDataBy = string;
 /**
  * This is the map data
  */
@@ -78,8 +78,8 @@ export type MapData = {
   lon?: Longitude;
   lat?: Latitude;
   alt?: Altitude;
-  value?: AValueForTheDataPoint;
-  pivot?: PivotColumn;
+  value?: DataPointValue;
+  pivot?: SplitDataBy;
   [k: string]: unknown;
 }[];
 export type Dataseries = {
@@ -87,7 +87,10 @@ export type Dataseries = {
   type?: LayerType;
   color?: LayerBaseColor;
   latestValues?: LatestValues;
-  config?: LayerConfiguration;
+  circle?: CircleLayer;
+  symbol?: SymbolLayer;
+  heatmap?: HeatmapLayer;
+  line?: TrackLayer;
   data?: MapData;
   [k: string]: unknown;
 }[];
@@ -104,12 +107,7 @@ export interface InputData {
   dataseries?: Dataseries;
   [k: string]: unknown;
 }
-export type LayerBaseColor = string;
-export interface LayerConfiguration {
-  circle?: CircleLayer;
-  symbol?: SymbolLayer;
-  heatmap?: HeatmapLayer;
-  line?: TrackLayer;
+export interface LayerBaseColor {
   [k: string]: unknown;
 }
 export interface CircleLayer {

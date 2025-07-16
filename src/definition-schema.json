@@ -81,109 +81,118 @@
                         "dataDrivenDisabled": true,
                         "order": 4
                     },
-                    "config": {
-                        "title": "Layer Configuration",
+                    "circle": {
+                        "title": "Circle Layer Configuration",
                         "type": "object",
                         "order": 5,
+                        "condition": {
+                            "relativePath": "../type",
+                            "showIfValueIn": ["circle"]
+                        },
                         "properties": {
-                            "circle": {
-                                "title": "Circle Layer",
-                                "type": "object",
-                                "order": 1,
-                                "properties": {
-                                    "circle-blur": {
-                                        "title": "Blur",
-                                        "description": "Blur of 1 means the whole circle is blurred starting from the center point. Blur 0 means no blur effect.",
-                                        "dataDrivenDisabled": true,
-                                        "min": 0,
-                                        "max": 1,
-                                        "type": "number",
-                                        "order": 1
-                                    },
-                                    "circle-opacity": {
-                                        "title": "Opacity",
-                                        "description": "Opactity 1 means fully opaque, 0 means fully transparent.",
-                                        "dataDrivenDisabled": true,
-                                        "min": 0,
-                                        "max": 1,
-                                        "type": "number",
-                                        "order": 2
-                                    }
-                                }
+                            "circle-blur": {
+                                "title": "Blur",
+                                "description": "Blur of 1 means the whole circle is blurred starting from the center point. Blur 0 means no blur effect.",
+                                "dataDrivenDisabled": true,
+                                "min": 0,
+                                "max": 1,
+                                "type": "number",
+                                "order": 1
                             },
-                            "symbol": {
-                                "title": "Symbol Layer",
-                                "type": "object",
-                                "order": 2,
-                                "properties": {
-                                    "text-color": {
-                                        "title": "Text Color",
-                                        "type": "color",
-                                        "color": true,
-                                        "order": 1
-                                    },
-                                    "text-size": {
-                                        "title": "Text Size",
-                                        "type": "number",
-                                        "min": 1,
-                                        "order": 2
-                                    },
-                                    "icon-image": {
-                                        "title": "Icon Name",
-                                        "description": "For available icons check the maki icon set here https://labs.mapbox.com/maki-icons/",
-                                        "type": "string",
-                                        "enum": ["marker", "car-front", "car-top"],
-                                        "order": 3
-                                    },
-                                    "icon-size": {
-                                        "title": "Icon size",
-                                        "description": "In multiples of the original icon size",
-                                        "type": "number",
-                                        "min": 0,
-                                        "order": 4
-                                    }
-                                }
+                            "circle-opacity": {
+                                "title": "Opacity",
+                                "description": "Opactity 1 means fully opaque, 0 means fully transparent.",
+                                "dataDrivenDisabled": true,
+                                "min": 0,
+                                "max": 1,
+                                "type": "number",
+                                "order": 2
+                            }
+                        }
+                    },
+                    "symbol": {
+                        "title": "Symbol Layer Configuration",
+                        "type": "object",
+                        "order": 5,
+                        "condition": {
+                            "relativePath": "../type",
+                            "showIfValueIn": ["symbol"]
+                        },
+                        "properties": {
+                            "text-color": {
+                                "title": "Text Color",
+                                "type": "color",
+                                "color": true,
+                                "order": 1
                             },
-                            "heatmap": {
-                                "title": "Heatmap Layer",
-                                "type": "object",
-                                "order": 3,
-                                "properties": {
-                                    "heatmap-intensity": {
-                                        "title": "Intensity",
-                                        "description": "The higher the intensity, the more 'hot' the heatmap becomes. The value is a multiple with default value 1. e.g. to double the intensitiy choose 2.",
-                                        "type": "number",
-                                        "min": 0,
-                                        "order": 1
-                                    },
-                                    "heatmap-opacity": {
-                                        "title": "Opacity",
-                                        "type": "number",
-                                        "min": 0,
-                                        "max": 1,
-                                        "order": 2
-                                    },
-                                    "heatmap-radius": {
-                                        "title": "Radius Base Size",
-                                        "description": "The radius will be combined with the data value to to determine the heat radius of a point.",
-                                        "type": "number",
-                                        "min": 0,
-                                        "order": 3
-                                    }
-                                }
+                            "text-size": {
+                                "title": "Text Size",
+                                "type": "number",
+                                "min": 1,
+                                "order": 2
                             },
-                            "line": {
-                                "title": "Track Layer",
-                                "type": "object",
-                                "order": 4,
-                                "properties": {
-                                    "line-width": {
-                                        "title": "Line Width",
-                                        "type": "number",
-                                        "min": 1,
-                                        "order": 1
-                                    }
-                                }
+                            "icon-image": {
+                                "title": "Icon Name",
+                                "description": "For available icons check the maki icon set here https://labs.mapbox.com/maki-icons/",
+                                "type": "string",
+                                "enum": ["marker", "car-front", "car-top"],
+                                "order": 3
+                            },
+                            "icon-size": {
+                                "title": "Icon size",
+                                "description": "In multiples of the original icon size",
+                                "type": "number",
+                                "min": 0,
+                                "order": 4
+                            }
+                        }
+                    },
+                    "heatmap": {
+                        "title": "Heatmap Layer Configuration",
+                        "type": "object",
+                        "order": 5,
+                        "condition": {
+                            "relativePath": "../type",
+                            "showIfValueIn": ["heatmap"]
+                        },
+                        "properties": {
+                            "heatmap-intensity": {
+                                "title": "Intensity",
+                                "description": "The higher the intensity, the more 'hot' the heatmap becomes. The value is a multiple with default value 1. e.g. to double the intensitiy choose 2.",
+                                "type": "number",
+                                "min": 0,
+                                "order": 1
+                            },
+                            "heatmap-opacity": {
+                                "title": "Opacity",
+                                "type": "number",
+                                "min": 0,
+                                "max": 1,
+                                "order": 2
+                            },
+                            "heatmap-radius": {
+                                "title": "Radius Base Size",
+                                "description": "The radius will be combined with the data value to to determine the heat radius of a point.",
+                                "type": "number",
+                                "min": 0,
+                                "order": 3
+                            }
+                        }
+                    },
+                    "line": {
+                        "title": "Track Layer Configuration",
+                        "type": "object",
+                        "order": 5,
+                        "condition": {
+                            "relativePath": "../type",
+                            "showIfValueIn": ["line"]
+                        },
+                        "properties": {
+                            "line-width": {
+                                "title": "Line Width",
+                                "type": "number",
+                                "min": 1,
+                                "order": 1
                             }
                         }
                     },

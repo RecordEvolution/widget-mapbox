@@ -138,7 +138,7 @@ export class WidgetMapbox extends LitElement {
         // choose random color if dataseries has none and store it for furure updates
         this.inputData.dataseries.forEach((ds) => {
             if (!this.colors.has(ds.label)) {
-                ds.color = ds.color ?? (tinycolor.random().toString() as LayerBaseColor)
+                ds.color = ds.color ?? (tinycolor.random().toString() as any)
                 this.colors.set(ds.label, ds.color)
             }
         })
@@ -253,8 +253,8 @@ export class WidgetMapbox extends LitElement {
             type: 'circle',
             source: 'input:' + dataSet.label,
             paint: {
-                'circle-blur': dataSet.config?.['circle']?.['circle-blur'] ?? 0,
-                'circle-opacity': dataSet.config?.['circle']?.['circle-opacity'] ?? 1,
+                'circle-blur': dataSet?.circle?.['circle-blur'] ?? 0,
+                'circle-opacity': dataSet?.circle?.['circle-opacity'] ?? 1,
                 'circle-radius': ['get', 'value'],
                 'circle-radius-transition': {
                     duration: 1000,
@@ -268,18 +268,18 @@ export class WidgetMapbox extends LitElement {
 
         this.map?.addLayer(layerConfig)
 
-        if (!dataSet.config?.['symbol']) return
+        if (!dataSet?.symbol) return
         const layerConfig2 = {
             id: dataSet.label + ':symbol',
             type: 'symbol',
             source: 'input:' + dataSet.label,
             layout: {
                 'text-field': ['get', 'value'],
-                'text-size': dataSet.config['symbol']?.['text-size'] ?? 14,
+                'text-size': dataSet?.symbol?.['text-size'] ?? 14,
                 'text-anchor': 'center'
             },
             paint: {
-                'text-color': dataSet.config['symbol']?.['text-color'] ?? '#000'
+                'text-color': dataSet?.symbol?.['text-color'] ?? '#000'
             }
             // Place polygons under labels, roads and buildings.
             // 'aeroway-polygon'
@@ -295,15 +295,13 @@ export class WidgetMapbox extends LitElement {
             source: 'input:' + dataSet.label,
             layout: {
                 'text-field': ['get', 'value'],
-                'text-size': dataSet.config?.['symbol']?.['text-size'] ?? 14,
+                'text-size': dataSet?.symbol?.['text-size'] ?? 14,
                 'text-anchor': 'center',
-                'icon-image':
-                    (dataSet.config?.symbol?.['icon-image'] ?? '') +
-                    (dataSet.config?.symbol?.['icon-size'] ?? 1),
+                'icon-image': (dataSet?.symbol?.['icon-image'] ?? '') + (dataSet?.symbol?.['icon-size'] ?? 1),
                 'icon-size': 1
             },
             paint: {
-                'text-color': dataSet.config?.['symbol']?.['text-color']
+                'text-color': dataSet?.symbol?.['text-color']
             }
             // Place polygons under labels, roads and buildings.
             // 'aeroway-polygon'
@@ -321,7 +319,7 @@ export class WidgetMapbox extends LitElement {
             type: 'heatmap',
             source: 'input:' + dataSet.label,
             paint: {
-                ...dataSet.config?.heatmap,
+                ...dataSet?.heatmap,
                 'heatmap-color': [
                     'interpolate',
                     ['linear'],
@@ -358,7 +356,7 @@ export class WidgetMapbox extends LitElement {
                     min,
                     30,
                     max,
-                    30 + (dataSet.config?.heatmap?.['heatmap-radius'] ?? 0)
+                    30 + (dataSet?.heatmap?.['heatmap-radius'] ?? 0)
                 ],
                 'heatmap-radius-transition': {
                     duration: 1000,
@@ -389,7 +387,7 @@ export class WidgetMapbox extends LitElement {
                 'line-cap': 'round'
             },
             paint: {
-                ...dataSet.config?.line,
+                ...dataSet?.line,
                 'line-color': dataSet.color
             }
             // Place polygons under labels, roads and buildings.
@@ -397,16 +395,14 @@ export class WidgetMapbox extends LitElement {
         }
         this.map?.addLayer(layerConfig)
 
-        if (!dataSet.config?.symbol?.['icon-image']) return
+        if (!dataSet?.symbol?.['icon-image']) return
 
         const layerConfig2 = {
             id: dataSet.label + ':symbol',
             type: 'symbol',
             source: 'input:' + dataSet.label,
             layout: {
-                'icon-image':
-                    (dataSet.config?.symbol?.['icon-image'] ?? '') +
-                    (dataSet.config?.symbol?.['icon-size'] ?? 1),
+                'icon-image': (dataSet?.symbol?.['icon-image'] ?? '') + (dataSet?.symbol?.['icon-size'] ?? 1),
                 'icon-size': 1
             },
             paint: {
@@ -442,8 +438,8 @@ export class WidgetMapbox extends LitElement {
 
         // add new layers or update the data of existing layers
         this.dataSets.forEach((ds: Dataseries) => {
-            const sz = ds.config?.symbol?.['icon-size'] ?? 1
-            const _imageName = ds.config?.symbol?.['icon-image'] ?? ''
+            const sz = ds?.symbol?.['icon-size'] ?? 1
+            const _imageName = ds?.symbol?.['icon-image'] ?? ''
             const imageName = _imageName + sz
             if (['line', 'symbol'].includes(ds.type ?? '') && !this.imageList.includes(imageName)) {
                 const img = new Image(24 * sz, 24 * sz) as HTMLImageElement
