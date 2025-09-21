@@ -9,7 +9,8 @@
     "types": "dist/src/widget-mapbox.d.ts",
     "files": [
         "dist",
-        "src"
+        "src",
+        "thumbnail.png"
     ],
     "scripts": {
         "analyze": "cem analyze --litelement",
