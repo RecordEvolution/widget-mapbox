@@ -19,7 +19,7 @@
         "link": "npm link && cd ../RESWARM/frontend && npm link @record-evolution/widget-mapbox",
         "unlink": "npm unlink --global && cd ../RESWARM/frontend && npm unlink @record-evolution/widget-mapbox && npm i @record-evolution/widget-mapbox",
         "types": "cat src/definition-schema.json | json2ts > src/definition-schema.d.ts",
-        "release": "npm version patch --tag-version-prefix='' && git push && git push --tag",
+        "release": "npm version patch --tag-version-prefix='' && git push && git push --tag && npm run build",
         "cors": "gcloud storage buckets update gs://reswarm-images --cors-file=src/cors-config.json"
     },
     "dependencies": {

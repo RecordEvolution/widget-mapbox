@@ -10,7 +10,7 @@
                 padding: 0;
                 width: 100%;
                 height: 100%;
-                background-color: aliceblue;
+                background-color: #f5f5f5;
                 font-family:
                     Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
                 --font-family-serif: Helvetica;
@@ -34,17 +34,20 @@
         <script src="https://storage.googleapis.com/reswarm-images/ObjectRandomizer.js"></script>
 
         <script type="module">
-            import { html, render } from 'lit'
+            import { render } from 'lit'
+            import { html, unsafeStatic } from 'lit/static-html.js'
+            const packageJson = await fetch('../package.json').then((res) => res.json())
+            const tag = unsafeStatic(`widget-mapbox-${packageJson.version}`)
             import '../dist/widget-mapbox.js'
             const data = await fetch('../src/default-data.json').then((res) => res.json())
-            const themeObject = await fetch('themes/vintage.json').then((res) => res.json())
-            const theme = { theme_name: 'vintage', theme_object: themeObject }
+            const themeObject = await fetch('themes/light.json').then((res) => res.json())
+            const theme = { theme_name: 'light', theme_object: themeObject }
             render(
                 html`
-                    <widget-mapbox-1.5.4 .theme="${theme}" .inputData=${data}>
+                    <${tag} .theme="${theme}" .inputData=${data}>
                         web component is not registered. Make sure to use the tag with the correct version
                         string from the package.json
-                    </widget-mapbox-1.5.4>
+                    </${tag}>
                 `,
                 document.getElementById('demo')
             )
