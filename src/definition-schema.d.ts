@@ -45,6 +45,7 @@ export type Blur = number;
  */
 export type Opacity = number;
 export type TextSize = number;
+export type TextSize1 = number;
 /**
  * For available icons check the maki icon set here https://labs.mapbox.com/maki-icons/
  */
@@ -63,6 +64,14 @@ export type Opacity1 = number;
  */
 export type RadiusBaseSize = number;
 export type LineWidth = number;
+/**
+ * For available icons check the maki icon set here https://labs.mapbox.com/maki-icons/
+ */
+export type IconName1 = "marker" | "car-front" | "car-top";
+/**
+ * In multiples of the original icon size
+ */
+export type IconSize1 = number;
 export type Longitude = number;
 export type Latitude = number;
 export type Altitude = number;
@@ -87,10 +96,10 @@ export type Dataseries = {
   type?: LayerType;
   color?: LayerBaseColor;
   latestValues?: LatestValues;
-  circle?: CircleLayer;
-  symbol?: SymbolLayer;
-  heatmap?: HeatmapLayer;
-  line?: TrackLayer;
+  circleConfig?: CircleLayerConfiguration;
+  symbolConfig?: SymbolLayerConfiguration;
+  heatmapConfig?: HeatmapLayerConfiguration;
+  lineConfig?: TrackLayerConfiguration;
   data?: MapData;
   [k: string]: unknown;
 }[];
@@ -110,28 +119,35 @@ export interface InputData {
 export interface LayerBaseColor {
   [k: string]: unknown;
 }
-export interface CircleLayer {
+export interface CircleLayerConfiguration {
   "circle-blur"?: Blur;
   "circle-opacity"?: Opacity;
-  [k: string]: unknown;
-}
-export interface SymbolLayer {
   "text-color"?: TextColor;
   "text-size"?: TextSize;
-  "icon-image"?: IconName;
-  "icon-size"?: IconSize;
   [k: string]: unknown;
 }
 export interface TextColor {
   [k: string]: unknown;
 }
-export interface HeatmapLayer {
+export interface SymbolLayerConfiguration {
+  "text-color"?: TextColor1;
+  "text-size"?: TextSize1;
+  "icon-image"?: IconName;
+  "icon-size"?: IconSize;
+  [k: string]: unknown;
+}
+export interface TextColor1 {
+  [k: string]: unknown;
+}
+export interface HeatmapLayerConfiguration {
   "heatmap-intensity"?: Intensity;
   "heatmap-opacity"?: Opacity1;
   "heatmap-radius"?: RadiusBaseSize;
   [k: string]: unknown;
 }
-export interface TrackLayer {
+export interface TrackLayerConfiguration {
   "line-width"?: LineWidth;
+  "icon-image"?: IconName1;
+  "icon-size"?: IconSize1;
   [k: string]: unknown;
 }

@@ -8,15 +8,11 @@
             "type": "circle",
             "color": "#49aaff",
             "latestValues": 10,
-            "config": {
-                "circle": {
-                    "circle-blur": 0.8,
-                    "circle-opacity": 0.8
-                },
-                "symbol": {
-                    "text-color": "black",
-                    "text-size": 14
-                }
+            "circleConfig": {
+                "circle-blur": 0.8,
+                "circle-opacity": 0.8,
+                "text-color": "black",
+                "text-size": 14
             },
             "data": [
                 {
@@ -73,12 +69,10 @@
         {
             "label": "Heatmap Layer",
             "type": "heatmap",
-            "config": {
-                "heatmap": {
-                    "heatmap-intensity": 0.8,
-                    "heatmap-opacity": 0.5,
-                    "heatmap-radius": 40
-                }
+            "heatmapConfig": {
+                "heatmap-intensity": 0.8,
+                "heatmap-opacity": 0.5,
+                "heatmap-radius": 40
             },
             "data": [
                 {
@@ -168,14 +162,10 @@
             "label": "Track Layer",
             "type": "line",
             "color": "red",
-            "config": {
-                "line": {
-                    "line-width": 3
-                },
-                "symbol": {
-                    "icon-image": "car-front",
-                    "icon-size": 1
-                }
+            "lineConfig": {
+                "line-width": 3,
+                "icon-image": "car-front",
+                "icon-size": 1
             },
             "data": [
                 {

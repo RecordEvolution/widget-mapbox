@@ -81,7 +81,7 @@
                         "dataDrivenDisabled": true,
                         "order": 4
                     },
-                    "circle": {
+                    "circleConfig": {
                         "title": "Circle Layer Configuration",
                         "type": "object",
                         "order": 5,
@@ -107,10 +107,22 @@
                                 "max": 1,
                                 "type": "number",
                                 "order": 2
+                            },
+                            "text-color": {
+                                "title": "Text Color",
+                                "type": "color",
+                                "color": true,
+                                "order": 3
+                            },
+                            "text-size": {
+                                "title": "Text Size",
+                                "type": "number",
+                                "min": 1,
+                                "order": 4
                             }
                         }
                     },
-                    "symbol": {
+                    "symbolConfig": {
                         "title": "Symbol Layer Configuration",
                         "type": "object",
                         "order": 5,
@@ -147,7 +159,7 @@
                             }
                         }
                     },
-                    "heatmap": {
+                    "heatmapConfig": {
                         "title": "Heatmap Layer Configuration",
                         "type": "object",
                         "order": 5,
@@ -179,7 +191,7 @@
                             }
                         }
                     },
-                    "line": {
+                    "lineConfig": {
                         "title": "Track Layer Configuration",
                         "type": "object",
                         "order": 5,
@@ -193,6 +205,20 @@
                                 "type": "number",
                                 "min": 1,
                                 "order": 1
+                            },
+                            "icon-image": {
+                                "title": "Icon Name",
+                                "description": "For available icons check the maki icon set here https://labs.mapbox.com/maki-icons/",
+                                "type": "string",
+                                "enum": ["marker", "car-front", "car-top"],
+                                "order": 3
+                            },
+                            "icon-size": {
+                                "title": "Icon size",
+                                "description": "In multiples of the original icon size",
+                                "type": "number",
+                                "min": 0,
+                                "order": 4
                             }
                         }
                     },

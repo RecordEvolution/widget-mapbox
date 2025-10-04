@@ -1,12 +1,19 @@
-import { html, css, LitElement } from 'lit'
-import { property, state } from 'lit/decorators.js'
+import { html, css, LitElement, unsafeCSS } from 'lit'
+import { customElement, property, state } from 'lit/decorators.js'
 import { repeat } from 'lit/directives/repeat.js'
-// @ts-ignore
-// import mapboxgl from 'https://cdn.skypack.dev/-/mapbox-gl@v2.15.0-iKfohePv9lgutCMNih0d/dist=es2020,mode=imports,min/optimized/mapbox-gl.js'
-import mapboxgl from 'https://esm.run/mapbox-gl@3.0.1'
+import mapboxgl from 'mapbox-gl'
+// @ts-ignore - virtual import returns a string at build time
+import mapboxCSS from 'mapbox-gl/dist/mapbox-gl.css'
 import * as GeoJSON from 'geojson'
 import tinycolor from 'tinycolor2'
-import { LayerBaseColor, InputData } from './definition-schema.js'
+import {
+    CircleLayerConfiguration,
+    HeatmapLayerConfiguration,
+    InputData,
+    MapData,
+    SymbolLayerConfiguration,
+    TrackLayerConfiguration
+} from './definition-schema.js'
 
 type Dataseries = Exclude<InputData['dataseries'], undefined>[number]
 type Point = Exclude<Dataseries['data'], undefined>[number]
@@ -14,6 +21,21 @@ type Theme = {
     theme_name: string
     theme_object: any
 }
+
+type DataSet = {
+    label?: string
+    type?: string
+    latestValues?: number
+    color?: string
+    config?:
+        | SymbolLayerConfiguration
+        | CircleLayerConfiguration
+        | HeatmapLayerConfiguration
+        | TrackLayerConfiguration
+    data?: MapData
+}
+
+@customElement('widget-mapbox-versionplaceholder')
 export class WidgetMapbox extends LitElement {
     @property({ type: Object })
     inputData?: InputData
@@ -25,7 +47,7 @@ export class WidgetMapbox extends LitElement {
     private map: any | undefined = undefined
 
     @state()
-    private dataSets: Dataseries[] = []
+    private dataSets: DataSet[] = []
 
     @state()
     dataSources: any = new Map()
@@ -154,13 +176,12 @@ export class WidgetMapbox extends LitElement {
 
             distincts.forEach((piv, i) => {
                 const prefix = piv ? `${piv} - ` : ''
-                const pds: any = {
+                const pds: DataSet = {
                     label: prefix + ds.label,
-                    order: ds.order,
                     type: ds.type,
                     latestValues: ds.latestValues,
                     color: derivedColors[i],
-                    config: ds.config,
+                    config: ds.symbolConfig ?? ds.circleConfig ?? ds.heatmapConfig ?? ds.lineConfig,
                     data: distincts.length === 1 ? ds.data : ds.data?.filter((d) => d.pivot === piv)
                 }
                 this.dataSets.push(pds)
@@ -192,7 +213,7 @@ export class WidgetMapbox extends LitElement {
         if (this.map) this.syncDataLayers()
     }
 
-    createGEOJson(ds: Dataseries): GeoJSON.Feature[] | undefined {
+    createGEOJson(ds: DataSet): GeoJSON.Feature[] | undefined {
         ds.data?.forEach((p) => {
             p = {
                 lon: Number(p.lon),
@@ -246,15 +267,15 @@ export class WidgetMapbox extends LitElement {
         return [feature]
     }
 
-    addCircleLayer(dataSet: Dataseries) {
+    addCircleLayer(dataSet: DataSet) {
         if (!dataSet) return
         const layerConfig = {
             id: dataSet.label + ':circle',
             type: 'circle',
             source: 'input:' + dataSet.label,
             paint: {
-                'circle-blur': dataSet?.circle?.['circle-blur'] ?? 0,
-                'circle-opacity': dataSet?.circle?.['circle-opacity'] ?? 1,
+                'circle-blur': dataSet?.config?.['circle-blur'] ?? 0,
+                'circle-opacity': dataSet?.config?.['circle-opacity'] ?? 1,
                 'circle-radius': ['get', 'value'],
                 'circle-radius-transition': {
                     duration: 1000,
@@ -268,18 +289,18 @@ export class WidgetMapbox extends LitElement {
 
         this.map?.addLayer(layerConfig)
 
-        if (!dataSet?.symbol) return
+        if (!dataSet?.config?.['text-size']) return
         const layerConfig2 = {
             id: dataSet.label + ':symbol',
             type: 'symbol',
             source: 'input:' + dataSet.label,
             layout: {
                 'text-field': ['get', 'value'],
-                'text-size': dataSet?.symbol?.['text-size'] ?? 14,
+                'text-size': dataSet?.config?.['text-size'] ?? 14,
                 'text-anchor': 'center'
             },
             paint: {
-                'text-color': dataSet?.symbol?.['text-color'] ?? '#000'
+                'text-color': dataSet?.config?.['text-color'] ?? '#000'
             }
             // Place polygons under labels, roads and buildings.
             // 'aeroway-polygon'
@@ -287,7 +308,7 @@ export class WidgetMapbox extends LitElement {
         this.map?.addLayer(layerConfig2)
     }
 
-    addSymbolLayer(dataSet: Dataseries) {
+    addSymbolLayer(dataSet: DataSet) {
         if (!dataSet) return
         const layerConfig = {
             id: dataSet.label + ':symbol',
@@ -295,13 +316,15 @@ export class WidgetMapbox extends LitElement {
             source: 'input:' + dataSet.label,
             layout: {
                 'text-field': ['get', 'value'],
-                'text-size': dataSet?.symbol?.['text-size'] ?? 14,
+                'text-size': dataSet?.config?.['text-size'] ?? 14,
                 'text-anchor': 'center',
-                'icon-image': (dataSet?.symbol?.['icon-image'] ?? '') + (dataSet?.symbol?.['icon-size'] ?? 1),
+                'icon-image':
+                    ((dataSet?.config?.['icon-image'] as string) ?? '') +
+                    ((dataSet?.config?.['icon-size'] as number) ?? 1),
                 'icon-size': 1
             },
             paint: {
-                'text-color': dataSet?.symbol?.['text-color']
+                'text-color': dataSet?.config?.['text-color']
             }
             // Place polygons under labels, roads and buildings.
             // 'aeroway-polygon'
@@ -309,7 +332,7 @@ export class WidgetMapbox extends LitElement {
         this.map?.addLayer(layerConfig)
     }
 
-    addHeatmapLayer(dataSet: Dataseries) {
+    addHeatmapLayer(dataSet: DataSet) {
         if (!dataSet) return
         const values = (dataSet.data?.map((p) => p?.value).filter((v) => v !== undefined) as number[]) ?? []
         const min = Math.min(...values)
@@ -319,7 +342,7 @@ export class WidgetMapbox extends LitElement {
             type: 'heatmap',
             source: 'input:' + dataSet.label,
             paint: {
-                ...dataSet?.heatmap,
+                ...dataSet?.config,
                 'heatmap-color': [
                     'interpolate',
                     ['linear'],
@@ -356,7 +379,7 @@ export class WidgetMapbox extends LitElement {
                     min,
                     30,
                     max,
-                    30 + (dataSet?.heatmap?.['heatmap-radius'] ?? 0)
+                    30 + ((dataSet?.config?.['heatmap-radius'] as number) ?? 0)
                 ],
                 'heatmap-radius-transition': {
                     duration: 1000,
@@ -377,7 +400,7 @@ export class WidgetMapbox extends LitElement {
         this.map?.addLayer(layerConfig)
     }
 
-    addLineLayer(dataSet: Dataseries) {
+    addLineLayer(dataSet: DataSet) {
         if (!dataSet) return
         const layerConfig = {
             id: dataSet.label + ':line',
@@ -387,7 +410,7 @@ export class WidgetMapbox extends LitElement {
                 'line-cap': 'round'
             },
             paint: {
-                ...dataSet?.line,
+                ...dataSet?.config,
                 'line-color': dataSet.color
             }
             // Place polygons under labels, roads and buildings.
@@ -395,14 +418,16 @@ export class WidgetMapbox extends LitElement {
         }
         this.map?.addLayer(layerConfig)
 
-        if (!dataSet?.symbol?.['icon-image']) return
+        if (!dataSet?.config?.['icon-image']) return
 
         const layerConfig2 = {
             id: dataSet.label + ':symbol',
             type: 'symbol',
             source: 'input:' + dataSet.label,
             layout: {
-                'icon-image': (dataSet?.symbol?.['icon-image'] ?? '') + (dataSet?.symbol?.['icon-size'] ?? 1),
+                'icon-image':
+                    ((dataSet?.config?.['icon-image'] as string) ?? '') +
+                    ((dataSet?.config?.['icon-size'] as number) ?? 1),
                 'icon-size': 1
             },
             paint: {
@@ -437,9 +462,11 @@ export class WidgetMapbox extends LitElement {
         })
 
         // add new layers or update the data of existing layers
-        this.dataSets.forEach((ds: Dataseries) => {
-            const sz = ds?.symbol?.['icon-size'] ?? 1
-            const _imageName = ds?.symbol?.['icon-image'] ?? ''
+        this.dataSets.forEach((ds: DataSet) => {
+            const config = ds.config as SymbolLayerConfiguration
+            if (!config) return
+            const sz = config['icon-size'] ?? 1
+            const _imageName = config['icon-image'] ?? 'car'
             const imageName = _imageName + sz
             if (['line', 'symbol'].includes(ds.type ?? '') && !this.imageList.includes(imageName)) {
                 const img = new Image(24 * sz, 24 * sz) as HTMLImageElement
@@ -558,91 +585,90 @@ export class WidgetMapbox extends LitElement {
         })
     }
 
-    static styles = css`
-        :host {
-            display: block;
-            font-family: sans-serif;
-            box-sizing: border-box;
-            margin: auto;
-        }
+    static styles = [
+        unsafeCSS(mapboxCSS),
+        css`
+            :host {
+                display: block;
+                font-family: sans-serif;
+                box-sizing: border-box;
+                margin: auto;
+            }
 
-        .paging:not([active]) {
-            display: none !important;
-        }
+            .paging:not([active]) {
+                display: none !important;
+            }
 
-        header {
-            display: flex;
-            margin: 0 0 16px 0;
-            gap: 24px;
-            justify-content: space-between;
-        }
-        h3 {
-            margin: 0;
-            max-width: 300px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        p {
-            margin: 10px 0 0 0;
-            max-width: 300px;
-            font-size: 14px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            line-height: 17px;
-        }
+            header {
+                display: flex;
+                margin: 0 0 16px 0;
+                gap: 24px;
+                justify-content: space-between;
+            }
+            h3 {
+                margin: 0;
+                max-width: 300px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            p {
+                margin: 10px 0 0 0;
+                max-width: 300px;
+                font-size: 14px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                line-height: 17px;
+            }
 
-        .wrapper {
-            display: flex;
-            flex-direction: column;
-            box-sizing: border-box;
-            padding: 16px;
-            height: 100%;
-            width: 100%;
-        }
-        #map {
-            flex: 1;
-        }
+            .wrapper {
+                display: flex;
+                flex-direction: column;
+                box-sizing: border-box;
+                padding: 16px;
+                height: 100%;
+                width: 100%;
+            }
+            #map {
+                flex: 1;
+            }
 
-        .title {
-            white-space: nowrap;
-        }
+            .title {
+                white-space: nowrap;
+            }
 
-        .legend {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
+            .legend {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
 
-        .label {
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-            gap: 8px;
-        }
+            .label {
+                display: flex;
+                align-items: center;
+                font-size: 14px;
+                gap: 8px;
+            }
 
-        a.mapboxgl-ctrl-logo {
-            display: none;
-        }
+            a.mapboxgl-ctrl-logo {
+                display: none;
+            }
 
-        .no-data {
-            font-size: 20px;
-            display: flex;
-            height: 100%;
-            width: 100%;
-            text-align: center;
-            align-items: center;
-            justify-content: center;
-        }
-    `
+            .no-data {
+                font-size: 20px;
+                display: flex;
+                height: 100%;
+                width: 100%;
+                text-align: center;
+                align-items: center;
+                justify-content: center;
+            }
+        `
+    ]
 
     render() {
         return html`
-            <link
-                href="https://api.mapbox.com/mapbox-gl-js/v${mapboxgl.version}/mapbox-gl.css"
-                rel="stylesheet"
-            />
             <div
                 class="wrapper"
                 style="background-color: ${this.themeBgColor}; color: ${this.themeTitleColor}"
@@ -681,5 +707,3 @@ export class WidgetMapbox extends LitElement {
         `
     }
 }
-
-window.customElements.define('widget-mapbox-versionplaceholder', WidgetMapbox)
