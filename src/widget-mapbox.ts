@@ -458,7 +458,7 @@ export class WidgetMapbox extends LitElement {
             const config = ds.config as SymbolLayerConfiguration
             if (!config) return
             const sz = config['icon-size'] ?? 1
-            const _imageName = config['icon-image'] ?? 'car'
+            const _imageName = config['icon-image'] ?? 'car-front'
             const imageName = _imageName + sz
             if (['line', 'symbol'].includes(ds.type ?? '') && !this.imageList.includes(imageName)) {
                 const img = new Image(24 * sz, 24 * sz) as HTMLImageElement
