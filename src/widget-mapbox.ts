@@ -1,5 +1,5 @@
 import { html, css, LitElement, unsafeCSS } from 'lit'
-import { customElement, property, state } from 'lit/decorators.js'
+import { customElement, property, query, state } from 'lit/decorators.js'
 import { repeat } from 'lit/directives/repeat.js'
 import mapboxgl from 'mapbox-gl'
 // @ts-ignore - virtual import returns a string at build time
@@ -37,27 +37,18 @@ type DataSet = {
 
 @customElement('widget-mapbox-versionplaceholder')
 export class WidgetMapbox extends LitElement {
-    @property({ type: Object })
-    inputData?: InputData
+    @property({ type: Object }) inputData?: InputData
+    @property({ type: Object }) theme?: Theme
 
-    @property({ type: Object })
-    theme?: Theme
-
-    @state()
-    private map: any | undefined = undefined
-
-    @state()
-    private dataSets: DataSet[] = []
-
-    @state()
-    dataSources: any = new Map()
-
-    @state()
-    colors: any = new Map()
-
+    @state() private map: any | undefined = undefined
+    @state() private dataSets: DataSet[] = []
+    @state() dataSources: any = new Map()
+    @state() colors: any = new Map()
     @state() private themeBgColor?: string
     @state() private themeTitleColor?: string
     @state() private themeSubtitleColor?: string
+
+    @query('#map') private mapElement?: HTMLDivElement
 
     public version: string = 'versionplaceholder'
     private mapLoaded: boolean = false
@@ -83,7 +74,12 @@ export class WidgetMapbox extends LitElement {
 
     update(changedProperties: Map<string, any>) {
         if (changedProperties.has('inputData')) {
+            if (this.map && this.inputData?.style !== this.mapStyle) {
+                this.createMap()
+                this.fitBounds()
+            }
             this.transformInputData()
+            this.syncDataLayers()
         }
 
         if (changedProperties.has('theme')) {
@@ -95,8 +91,9 @@ export class WidgetMapbox extends LitElement {
 
     firstUpdated() {
         this.registerTheme(this.theme)
-        this.transformInputData()
         this.createMap()
+        this.transformInputData()
+        this.syncDataLayers()
         this.resizeObserver.observe(this.map._container)
         this.fitBounds()
     }
@@ -153,10 +150,6 @@ export class WidgetMapbox extends LitElement {
     transformInputData() {
         if (!this?.inputData || !this?.inputData?.dataseries?.length) return
 
-        if (this.map && this.inputData?.style !== this.mapStyle) {
-            this.createMap()
-        }
-
         // choose random color if dataseries has none and store it for furure updates
         this.inputData.dataseries.forEach((ds) => {
             if (!this.colors.has(ds.label)) {
@@ -210,7 +203,6 @@ export class WidgetMapbox extends LitElement {
 
                 // console.log('mapbox DataLayers', this.dataSources)
             })
-        if (this.map) this.syncDataLayers()
     }
 
     createGEOJson(ds: DataSet): GeoJSON.Feature[] | undefined {
@@ -410,7 +402,7 @@ export class WidgetMapbox extends LitElement {
                 'line-cap': 'round'
             },
             paint: {
-                ...dataSet?.config,
+                'line-width': dataSet?.config?.['line-width'] ?? 2,
                 'line-color': dataSet.color
             }
             // Place polygons under labels, roads and buildings.
@@ -555,16 +547,21 @@ export class WidgetMapbox extends LitElement {
     }
 
     createMap() {
-        if (this.map) return
+        if (!this.mapElement) return
+        if (this.map) {
+            this.map.remove()
+            this.map = undefined
+            this.mapLoaded = false
+            this.imageList = []
+        }
         this.mapStyle = this.inputData?.style
         this.map = new mapboxgl.Map({
-            container: this.shadowRoot?.getElementById('map') as HTMLCanvasElement,
+            container: this.mapElement,
             style: `mapbox://styles/mapbox/${this.mapStyle ?? 'light-v11'}`,
             center: [8.68417, 50.11552],
             zoom: 1.8,
             attributionControl: false
         })
-
         this.map.scrollZoom.disable()
 
         this.map.addControl(new mapboxgl.NavigationControl(), 'top-right')
@@ -576,7 +573,8 @@ export class WidgetMapbox extends LitElement {
 
         this.map.addControl(scale, 'bottom-left')
 
-        console.log('MAPBOX VERSION', mapboxgl.version)
+        this.map.on('error', (event: ErrorEvent) => console.error('Mapbox error event', event.error))
+        this.map.once('styledata', () => console.log('MapBox Style data ready'))
 
         this.map.on('load', () => {
             this.mapLoaded = true
