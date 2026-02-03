@@ -1,21 +1,23 @@
 {
     "title": "InputData",
-    "description": "A map-chart",
+    "description": "A Mapbox-powered geospatial visualization widget for displaying location-based data on interactive maps. Use this widget for GPS tracking, asset locations, geographic heatmaps, route visualization, or any data with latitude/longitude coordinates. Supports multiple layer types including circles (points), symbols (icons), heatmaps (density), and lines (tracks/routes). Features auto-follow mode to keep markers in view, multiple map styles, and pivot-based auto-generation of layers from data columns. Ideal for fleet management, IoT device monitoring, field service tracking, and geographic data analysis.",
     "type": "object",
     "properties": {
         "title": {
             "title": "Title",
+            "description": "The main heading displayed above the map. Use to describe what geographic data is being shown (e.g., 'Fleet Locations', 'Sensor Network').",
             "type": "string",
             "order": 1
         },
         "subTitle": {
             "title": "Subtitle",
+            "description": "Secondary text displayed below the title. Use for additional context like region, time period, or data source.",
             "type": "string",
             "order": 2
         },
         "style": {
             "title": "Map Style",
-            "description": "The basic style of the map.",
+            "description": "The visual appearance of the base map: 'streets' for road-focused, 'outdoors' for terrain, 'light/dark' for minimal designs, 'satellite' for aerial imagery, 'navigation' for routing focus.",
             "type": "string",
             "dataDrivenDisabled": true,
             "enum": [
@@ -33,19 +35,21 @@
         },
         "showLegend": {
             "title": "Show Legend",
+            "description": "When enabled, displays a legend identifying each data layer by color and label. Useful for multi-layer maps.",
             "type": "boolean",
             "dataDrivenDisabled": true,
             "order": 4
         },
         "follow": {
             "title": "Auto Follow",
-            "description": "If true, the map automatically keeps the drawn locations in focus.",
+            "description": "When enabled, the map automatically pans and zooms to keep all data points in view as they update. Disable for fixed-view maps where users control the viewport.",
             "type": "boolean",
             "dataDrivenDisabled": true,
             "order": 5
         },
         "dataseries": {
             "title": "Dataseries",
+            "description": "Array of map layers. Each layer displays geographic data points with its own visualization style (circles, symbols, heatmap, or lines).",
             "order": 8,
             "type": "array",
             "dataDrivenDisabled": true,
@@ -54,14 +58,14 @@
                 "properties": {
                     "label": {
                         "title": "Series Label",
-                        "description": "The name for this data series",
+                        "description": "Display name for this map layer shown in legends and tooltips. Should identify what entities or data this layer represents.",
                         "type": "string",
                         "required": true,
                         "order": 1
                     },
                     "type": {
                         "title": "Layer type",
-                        "description": "Create the specified type of layer on the map.",
+                        "description": "Visualization style: 'circle' for point markers, 'symbol' for icon markers with labels, 'heatmap' for density visualization, 'line' for connected paths/routes.",
                         "type": "string",
                         "required": true,
                         "dataDrivenDisabled": true,
@@ -70,19 +74,21 @@
                     },
                     "color": {
                         "title": "Layer Base Color",
+                        "description": "Primary color for this layer's markers or fill. Used as default when data-driven coloring isn't configured.",
                         "type": "color",
                         "color": true,
                         "order": 3
                     },
                     "latestValues": {
                         "title": "Latest Values",
-                        "description": "Restrict the number of rows for this dataseries to the given number of newest values. (If you use split data, then per each of the split dataseries.)",
+                        "description": "Limit displayed data to the N most recent points per pivot group. Useful for showing only current positions without historical trail. Leave empty to show all data.",
                         "type": "number",
                         "dataDrivenDisabled": true,
                         "order": 4
                     },
                     "circleConfig": {
                         "title": "Circle Layer Configuration",
+                        "description": "Styling options specific to circle (point) layers.",
                         "type": "object",
                         "order": 5,
                         "condition": {
@@ -92,7 +98,7 @@
                         "properties": {
                             "circle-blur": {
                                 "title": "Blur",
-                                "description": "Blur of 1 means the whole circle is blurred starting from the center point. Blur 0 means no blur effect.",
+                                "description": "Edge blur effect from 0 (sharp edges) to 1 (fully blurred from center). Use slight blur (0.1-0.3) for softer appearance.",
                                 "dataDrivenDisabled": true,
                                 "min": 0,
                                 "max": 1,
@@ -101,7 +107,7 @@
                             },
                             "circle-opacity": {
                                 "title": "Opacity",
-                                "description": "Opactity 1 means fully opaque, 0 means fully transparent.",
+                                "description": "Circle transparency from 0 (invisible) to 1 (fully opaque). Use lower values when circles overlap to see density.",
                                 "dataDrivenDisabled": true,
                                 "min": 0,
                                 "max": 1,
@@ -110,12 +116,14 @@
                             },
                             "text-color": {
                                 "title": "Text Color",
+                                "description": "Color of label text displayed on or near the circle markers.",
                                 "type": "color",
                                 "color": true,
                                 "order": 3
                             },
                             "text-size": {
                                 "title": "Text Size",
+                                "description": "Font size in pixels for label text on circle markers.",
                                 "type": "number",
                                 "min": 1,
                                 "order": 4
@@ -124,6 +132,7 @@
                     },
                     "symbolConfig": {
                         "title": "Symbol Layer Configuration",
+                        "description": "Styling options specific to symbol (icon) layers.",
                         "type": "object",
                         "order": 5,
                         "condition": {
@@ -133,26 +142,28 @@
                         "properties": {
                             "text-color": {
                                 "title": "Text Color",
+                                "description": "Color of label text displayed near the symbol icons.",
                                 "type": "color",
                                 "color": true,
                                 "order": 1
                             },
                             "text-size": {
                                 "title": "Text Size",
+                                "description": "Font size in pixels for label text on symbol markers.",
                                 "type": "number",
                                 "min": 1,
                                 "order": 2
                             },
                             "icon-image": {
                                 "title": "Icon Name",
-                                "description": "For available icons check the maki icon set here https://labs.mapbox.com/maki-icons/",
+                                "description": "Icon identifier from available icons: 'marker' for location pin, 'car-front'/'car-top' for vehicle tracking. See Maki icon set at https://labs.mapbox.com/maki-icons/ for more options.",
                                 "type": "string",
                                 "enum": ["marker", "car-front", "car-top"],
                                 "order": 3
                             },
                             "icon-size": {
                                 "title": "Icon size",
-                                "description": "In multiples of the original icon size",
+                                "description": "Scale multiplier for the icon (1 = original size, 2 = double size, 0.5 = half size).",
                                 "type": "number",
                                 "min": 0,
                                 "order": 4
@@ -161,6 +172,7 @@
                     },
                     "heatmapConfig": {
                         "title": "Heatmap Layer Configuration",
+                        "description": "Styling options specific to heatmap (density) layers.",
                         "type": "object",
                         "order": 5,
                         "condition": {
@@ -170,13 +182,14 @@
                         "properties": {
                             "heatmap-intensity": {
                                 "title": "Intensity",
-                                "description": "The higher the intensity, the more 'hot' the heatmap becomes. The value is a multiple with default value 1. e.g. to double the intensitiy choose 2.",
+                                "description": "Heat intensity multiplier. Higher values make the heatmap appear 'hotter' with colors reaching maximum faster. Default is 1.",
                                 "type": "number",
                                 "min": 0,
                                 "order": 1
                             },
                             "heatmap-opacity": {
                                 "title": "Opacity",
+                                "description": "Heatmap layer transparency from 0 (invisible) to 1 (fully opaque). Lower values let the base map show through.",
                                 "type": "number",
                                 "min": 0,
                                 "max": 1,
@@ -184,7 +197,7 @@
                             },
                             "heatmap-radius": {
                                 "title": "Radius Base Size",
-                                "description": "The radius will be combined with the data value to to determine the heat radius of a point.",
+                                "description": "Base radius in pixels for each point's heat contribution. Combined with data value to determine actual heat spread. Larger radius = more blending.",
                                 "type": "number",
                                 "min": 0,
                                 "order": 3
@@ -193,6 +206,7 @@
                     },
                     "lineConfig": {
                         "title": "Track Layer Configuration",
+                        "description": "Styling options specific to line (track/route) layers.",
                         "type": "object",
                         "order": 5,
                         "condition": {
@@ -202,20 +216,21 @@
                         "properties": {
                             "line-width": {
                                 "title": "Line Width",
+                                "description": "Thickness of the route line in pixels. Use thicker lines for emphasis or when zoomed out.",
                                 "type": "number",
                                 "min": 1,
                                 "order": 1
                             },
                             "icon-image": {
                                 "title": "Icon Name",
-                                "description": "For available icons check the maki icon set here https://labs.mapbox.com/maki-icons/",
+                                "description": "Icon displayed at the current position (end of line): 'marker' for generic location, 'car-front'/'car-top' for vehicles.",
                                 "type": "string",
                                 "enum": ["marker", "car-front", "car-top"],
                                 "order": 3
                             },
                             "icon-size": {
                                 "title": "Icon size",
-                                "description": "In multiples of the original icon size",
+                                "description": "Scale multiplier for the position icon (1 = original size).",
                                 "type": "number",
                                 "min": 0,
                                 "order": 4
@@ -224,7 +239,7 @@
                     },
                     "data": {
                         "title": "Map data",
-                        "description": "This is the map data",
+                        "description": "Array of geographic data points. Each point must have latitude and longitude coordinates, with optional altitude, value, and pivot for grouping.",
                         "type": "array",
                         "order": 6,
                         "items": {
@@ -232,29 +247,33 @@
                             "properties": {
                                 "lon": {
                                     "title": "Longitude",
+                                    "description": "The east-west coordinate in decimal degrees (-180 to 180). Example: -122.4194 for San Francisco.",
                                     "type": "number",
                                     "required": true,
                                     "order": 1
                                 },
                                 "lat": {
                                     "title": "Latitude",
+                                    "description": "The north-south coordinate in decimal degrees (-90 to 90). Example: 37.7749 for San Francisco.",
                                     "type": "number",
                                     "required": true,
                                     "order": 2
                                 },
                                 "alt": {
                                     "title": "Altitude",
+                                    "description": "Optional elevation/altitude value in meters. Can be used for 3D visualization or displayed in tooltips.",
                                     "type": "number",
                                     "order": 3
                                 },
                                 "value": {
                                     "title": "Data point value",
+                                    "description": "Numeric value associated with this location. Used for heatmap intensity, marker sizing, or tooltip display.",
                                     "type": "number",
                                     "order": 4
                                 },
                                 "pivot": {
                                     "title": "Split Data by",
-                                    "description": "You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, lon, lat, temperature] and specify 'city' as split column, then you will get a layer for each city.",
+                                    "description": "Column value used to split data into multiple layers automatically. Each unique pivot value creates a separate map layer (e.g., pivot by 'vehicle_id' for fleet tracking).",
                                     "type": "string",
                                     "order": 5
                                 }

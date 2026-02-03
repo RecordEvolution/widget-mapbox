@@ -4,6 +4,10 @@
     "license": "MIT",
     "author": "widget-mapbox",
     "version": "1.5.13",
+    "engines": {
+        "node": ">=24.9.0",
+        "npm": ">=10.0.2"
+    },
     "type": "module",
     "main": "dist/widget-mapbox.js",
     "types": "dist/src/widget-mapbox.d.ts",
