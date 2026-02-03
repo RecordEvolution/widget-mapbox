@@ -5,10 +5,16 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
+/**
+ * The main heading displayed above the map. Use to describe what geographic data is being shown (e.g., 'Fleet Locations', 'Sensor Network').
+ */
 export type Title = string;
+/**
+ * Secondary text displayed below the title. Use for additional context like region, time period, or data source.
+ */
 export type Subtitle = string;
 /**
- * The basic style of the map.
+ * The visual appearance of the base map: 'streets' for road-focused, 'outdoors' for terrain, 'light/dark' for minimal designs, 'satellite' for aerial imagery, 'navigation' for routing focus.
  */
 export type MapStyle =
   | "streets-v12"
@@ -19,69 +25,96 @@ export type MapStyle =
   | "satellite-streets-v12"
   | "navigation-day-v1"
   | "navigation-night-v1";
+/**
+ * When enabled, displays a legend identifying each data layer by color and label. Useful for multi-layer maps.
+ */
 export type ShowLegend = boolean;
 /**
- * If true, the map automatically keeps the drawn locations in focus.
+ * When enabled, the map automatically pans and zooms to keep all data points in view as they update. Disable for fixed-view maps where users control the viewport.
  */
 export type AutoFollow = boolean;
 /**
- * The name for this data series
+ * Display name for this map layer shown in legends and tooltips. Should identify what entities or data this layer represents.
  */
 export type SeriesLabel = string;
 /**
- * Create the specified type of layer on the map.
+ * Visualization style: 'circle' for point markers, 'symbol' for icon markers with labels, 'heatmap' for density visualization, 'line' for connected paths/routes.
  */
 export type LayerType = "circle" | "symbol" | "heatmap" | "line";
 /**
- * Restrict the number of rows for this dataseries to the given number of newest values. (If you use split data, then per each of the split dataseries.)
+ * Limit displayed data to the N most recent points per pivot group. Useful for showing only current positions without historical trail. Leave empty to show all data.
  */
 export type LatestValues = number;
 /**
- * Blur of 1 means the whole circle is blurred starting from the center point. Blur 0 means no blur effect.
+ * Edge blur effect from 0 (sharp edges) to 1 (fully blurred from center). Use slight blur (0.1-0.3) for softer appearance.
  */
 export type Blur = number;
 /**
- * Opactity 1 means fully opaque, 0 means fully transparent.
+ * Circle transparency from 0 (invisible) to 1 (fully opaque). Use lower values when circles overlap to see density.
  */
 export type Opacity = number;
+/**
+ * Font size in pixels for label text on circle markers.
+ */
 export type TextSize = number;
+/**
+ * Font size in pixels for label text on symbol markers.
+ */
 export type TextSize1 = number;
 /**
- * For available icons check the maki icon set here https://labs.mapbox.com/maki-icons/
+ * Icon identifier from available icons: 'marker' for location pin, 'car-front'/'car-top' for vehicle tracking. See Maki icon set at https://labs.mapbox.com/maki-icons/ for more options.
  */
 export type IconName = "marker" | "car-front" | "car-top";
 /**
- * In multiples of the original icon size
+ * Scale multiplier for the icon (1 = original size, 2 = double size, 0.5 = half size).
  */
 export type IconSize = number;
 /**
- * The higher the intensity, the more 'hot' the heatmap becomes. The value is a multiple with default value 1. e.g. to double the intensitiy choose 2.
+ * Heat intensity multiplier. Higher values make the heatmap appear 'hotter' with colors reaching maximum faster. Default is 1.
  */
 export type Intensity = number;
+/**
+ * Heatmap layer transparency from 0 (invisible) to 1 (fully opaque). Lower values let the base map show through.
+ */
 export type Opacity1 = number;
 /**
- * The radius will be combined with the data value to to determine the heat radius of a point.
+ * Base radius in pixels for each point's heat contribution. Combined with data value to determine actual heat spread. Larger radius = more blending.
  */
 export type RadiusBaseSize = number;
+/**
+ * Thickness of the route line in pixels. Use thicker lines for emphasis or when zoomed out.
+ */
 export type LineWidth = number;
 /**
- * For available icons check the maki icon set here https://labs.mapbox.com/maki-icons/
+ * Icon displayed at the current position (end of line): 'marker' for generic location, 'car-front'/'car-top' for vehicles.
  */
 export type IconName1 = "marker" | "car-front" | "car-top";
 /**
- * In multiples of the original icon size
+ * Scale multiplier for the position icon (1 = original size).
  */
 export type IconSize1 = number;
+/**
+ * The east-west coordinate in decimal degrees (-180 to 180). Example: -122.4194 for San Francisco.
+ */
 export type Longitude = number;
+/**
+ * The north-south coordinate in decimal degrees (-90 to 90). Example: 37.7749 for San Francisco.
+ */
 export type Latitude = number;
+/**
+ * Optional elevation/altitude value in meters. Can be used for 3D visualization or displayed in tooltips.
+ */
 export type Altitude = number;
+/**
+ * Numeric value associated with this location. Used for heatmap intensity, marker sizing, or tooltip display.
+ */
 export type DataPointValue = number;
 /**
- * You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, lon, lat, temperature] and specify 'city' as split column, then you will get a layer for each city.
+ * Column value used to split data into multiple layers automatically. Each unique pivot value creates a separate map layer (e.g., pivot by 'vehicle_id' for fleet tracking).
  */
 export type SplitDataBy = string;
 /**
- * This is the map data
+ * Array of geographic data points. Each point must have latitude and longitude coordinates, with optional altitude, value, and pivot for grouping.
  */
 export type MapData = {
   lon?: Longitude;
@@ -91,6 +124,9 @@ export type MapData = {
   pivot?: SplitDataBy;
   [k: string]: unknown;
 }[];
+/**
+ * Array of map layers. Each layer displays geographic data points with its own visualization style (circles, symbols, heatmap, or lines).
+ */
 export type Dataseries = {
   label?: SeriesLabel;
   type?: LayerType;
@@ -105,7 +141,7 @@ export type Dataseries = {
 }[];
 
 /**
- * A map-chart
+ * A Mapbox-powered geospatial visualization widget for displaying location-based data on interactive maps. Use this widget for GPS tracking, asset locations, geographic heatmaps, route visualization, or any data with latitude/longitude coordinates. Supports multiple layer types including circles (points), symbols (icons), heatmaps (density), and lines (tracks/routes). Features auto-follow mode to keep markers in view, multiple map styles, and pivot-based auto-generation of layers from data columns. Ideal for fleet management, IoT device monitoring, field service tracking, and geographic data analysis.
  */
 export interface InputData {
   title?: Title;
@@ -116,9 +152,15 @@ export interface InputData {
   dataseries?: Dataseries;
   [k: string]: unknown;
 }
+/**
+ * Primary color for this layer's markers or fill. Used as default when data-driven coloring isn't configured.
+ */
 export interface LayerBaseColor {
   [k: string]: unknown;
 }
+/**
+ * Styling options specific to circle (point) layers.
+ */
 export interface CircleLayerConfiguration {
   "circle-blur"?: Blur;
   "circle-opacity"?: Opacity;
@@ -126,9 +168,15 @@ export interface CircleLayerConfiguration {
   "text-size"?: TextSize;
   [k: string]: unknown;
 }
+/**
+ * Color of label text displayed on or near the circle markers.
+ */
 export interface TextColor {
   [k: string]: unknown;
 }
+/**
+ * Styling options specific to symbol (icon) layers.
+ */
 export interface SymbolLayerConfiguration {
   "text-color"?: TextColor1;
   "text-size"?: TextSize1;
@@ -136,15 +184,24 @@ export interface SymbolLayerConfiguration {
   "icon-size"?: IconSize;
   [k: string]: unknown;
 }
+/**
+ * Color of label text displayed near the symbol icons.
+ */
 export interface TextColor1 {
   [k: string]: unknown;
 }
+/**
+ * Styling options specific to heatmap (density) layers.
+ */
 export interface HeatmapLayerConfiguration {
   "heatmap-intensity"?: Intensity;
   "heatmap-opacity"?: Opacity1;
   "heatmap-radius"?: RadiusBaseSize;
   [k: string]: unknown;
 }
+/**
+ * Styling options specific to line (track/route) layers.
+ */
 export interface TrackLayerConfiguration {
   "line-width"?: LineWidth;
   "icon-image"?: IconName1;
