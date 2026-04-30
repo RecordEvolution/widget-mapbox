@@ -14,7 +14,8 @@
     "files": [
         "dist",
         "src",
-        "thumbnail.png"
+        "thumbnail.png",
+        "thumbnail.webp"
     ],
     "scripts": {
         "analyze": "cem analyze --litelement",
