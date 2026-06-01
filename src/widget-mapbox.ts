@@ -62,7 +62,7 @@ export class WidgetMapbox extends LitElement {
             this.updateMap()
         })
         mapboxgl.accessToken =
-            'pk.eyJ1IjoibWFya29wZSIsImEiOiJjazc1OWlsNjkwN2pyM2VxajV1eGRnYzgwIn0.3lVksk1nej_0KnWjCkBDAA'
+            'pk.eyJ1IjoibWFya29wZSIsImEiOiJjbXB2Yjh2ankwMWUxMnNyM243aGFlNGxiIn0.BXax9rCajgo3Sn5MvAu7dQ'
     }
 
     disconnectedCallback() {
