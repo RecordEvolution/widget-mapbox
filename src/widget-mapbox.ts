@@ -9,13 +9,13 @@ import tinycolor from 'tinycolor2'
 import {
     CircleLayerConfiguration,
     HeatmapLayerConfiguration,
-    InputData,
+    MapConfiguration,
     MapData,
     SymbolLayerConfiguration,
     TrackLayerConfiguration
 } from './definition-schema.js'
 
-type Dataseries = Exclude<InputData['dataseries'], undefined>[number]
+type Dataseries = Exclude<MapConfiguration['dataseries'], undefined>[number]
 type Point = Exclude<Dataseries['data'], undefined>[number]
 type Theme = {
     theme_name: string
@@ -37,7 +37,7 @@ type DataSet = {
 
 @customElement('widget-mapbox-versionplaceholder')
 export class WidgetMapbox extends LitElement {
-    @property({ type: Object }) inputData?: InputData
+    @property({ type: Object }) inputData?: MapConfiguration
     @property({ type: Object }) theme?: Theme
 
     @state() private map: any | undefined = undefined

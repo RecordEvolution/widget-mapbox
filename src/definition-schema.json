@@ -1,6 +1,21 @@
 {
-    "title": "InputData",
+    "title": "Map Configuration",
     "description": "A Mapbox-powered geospatial visualization widget for displaying location-based data on interactive maps. Use this widget for GPS tracking, asset locations, geographic heatmaps, route visualization, or any data with latitude/longitude coordinates. Supports multiple layer types including circles (points), symbols (icons), heatmaps (density), and lines (tracks/routes). Features auto-follow mode to keep markers in view, multiple map styles, and pivot-based auto-generation of layers from data columns. Ideal for fleet management, IoT device monitoring, field service tracking, and geographic data analysis.",
+    "aiSelection": {
+        "dataShape": "Points carrying coordinates: dataseries[].data[] entries with lon and lat, optionally alt and a numeric value, rendered as circles, icons, a density heatmap or connected lines. A pivot column produces one layer per distinct value.",
+        "useWhen": [
+            "Position on the earth is the point — vehicle and asset locations, site maps, field service, GPS traces.",
+            "A route or track should be drawn by connecting points in order (dataseries[].type: 'line').",
+            "Density across an area should be shaded (dataseries[].type: 'heatmap').",
+            "The view should keep following the latest position (follow: true)."
+        ],
+        "notFor": [
+            "Coordinates that are only incidental, where the real question is a measured value over time — use widget-linechart.",
+            "Positions on a floor plan, schematic or photo rather than on the earth — use widget-overlay.",
+            "Distance, speed or dwell time presented as numbers — use widget-value or widget-table.",
+            "How long an asset stayed in each place or state — use widget-statehistory."
+        ]
+    },
     "type": "object",
     "properties": {
         "title": {

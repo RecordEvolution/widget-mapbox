@@ -143,7 +143,7 @@ export type Dataseries = {
 /**
  * A Mapbox-powered geospatial visualization widget for displaying location-based data on interactive maps. Use this widget for GPS tracking, asset locations, geographic heatmaps, route visualization, or any data with latitude/longitude coordinates. Supports multiple layer types including circles (points), symbols (icons), heatmaps (density), and lines (tracks/routes). Features auto-follow mode to keep markers in view, multiple map styles, and pivot-based auto-generation of layers from data columns. Ideal for fleet management, IoT device monitoring, field service tracking, and geographic data analysis.
  */
-export interface InputData {
+export interface MapConfiguration {
   title?: Title;
   subTitle?: Subtitle;
   style?: MapStyle;
