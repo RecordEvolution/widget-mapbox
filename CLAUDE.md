@@ -49,7 +49,7 @@ Single Rollup config (`rollup.config.js`): `replace` (version) -> `string` (CSS 
 
 ### Release flow
 
-`npm run release` bumps the patch version with no tag prefix (`--tag-version-prefix=''`) and pushes the tag. `.github/workflows/build-publish.yml` triggers on any tag push, runs `npm install --omit-dev --frozen-lockfile`, `npm run build`, then `npm publish --access public` and creates a GitHub Release. The bare numeric tag is what the workflow expects.
+`npm run release` bumps the patch version with no tag prefix (`--tag-version-prefix=''`) and pushes the tag. `.github/workflows/build-publish.yml` triggers on any tag push, runs `npm ci`, `npm run build`, then `npm publish --access public` via npm trusted publishing (OIDC — no `NPM_TOKEN`) and creates a GitHub Release. The bare numeric tag is what the workflow expects.
 
 ## `aiSelection` in `src/definition-schema.json`
 
