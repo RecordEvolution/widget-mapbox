@@ -9,7 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm start` - Runs `watch` and `@web/dev-server` concurrently; opens `demo/index.html` (served from repo root, see `web-dev-server.config.mjs`).
 - `npm run types` - Regenerate `src/definition-schema.d.ts` from `src/definition-schema.json` (`json2ts`). Run after editing the schema.
 - `npm run analyze` - Custom Elements Manifest analyze (LitElement preset).
-- `npm run release` - `npm version patch` (no `v` prefix), pushes commits + tag, then builds. Tag push triggers the GitHub Action that publishes to npm.
+- `npm run release` — `npm version patch`: preflight guards (on `main`, clean tree, not behind `origin/main`, generated files current, build passes), then commit, bare-semver tag, `git push --follow-tags`, then waits on the CI run and fails if the npm publish fails. `npm run release:minor` / `release:major` for other bumps.
 - `npm run link` / `npm run unlink` - Link/unlink against a sibling `../RESWARM/frontend` checkout for in-app testing.
 - `npm run cors` - Updates GCS CORS for `gs://reswarm-images` (used to host the demo's `ObjectRandomizer.js`).
 
@@ -49,7 +49,7 @@ Single Rollup config (`rollup.config.js`): `replace` (version) -> `string` (CSS 
 
 ### Release flow
 
-`npm run release` bumps the patch version with no tag prefix (`--tag-version-prefix=''`) and pushes the tag. `.github/workflows/build-publish.yml` triggers on any tag push, runs `npm ci`, `npm run build`, then `npm publish --access public` via npm trusted publishing (OIDC — no `NPM_TOKEN`) and creates a GitHub Release. The bare numeric tag is what the workflow expects.
+`npm run release` bumps the patch version and pushes the tag; the empty tag prefix comes from `tag-version-prefix=""` in `.npmrc`. `.github/workflows/build-publish.yml` triggers on any tag push, runs `npm ci`, `npm run build`, then `npm publish --access public` via npm trusted publishing (OIDC — no `NPM_TOKEN`) and creates a GitHub Release. The bare numeric tag is what the workflow expects.
 
 ## `aiSelection` in `src/definition-schema.json`
 
