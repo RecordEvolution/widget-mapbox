@@ -99,12 +99,9 @@ export class WidgetMapbox extends LitElement {
     }
 
     registerTheme(theme?: Theme) {
-        const cssTextColor = getComputedStyle(this).getPropertyValue('--re-text-color').trim()
-        const cssBgColor = getComputedStyle(this).getPropertyValue('--re-tile-background-color').trim()
-        this.themeBgColor = cssBgColor || this.theme?.theme_object?.backgroundColor
-        this.themeTitleColor = cssTextColor || this.theme?.theme_object?.title?.textStyle?.color
-        this.themeSubtitleColor =
-            cssTextColor || this.theme?.theme_object?.title?.subtextStyle?.color || this.themeTitleColor
+        this.themeBgColor = `var(--re-tile-background-color, ${this.theme?.theme_object?.backgroundColor || 'transparent'})`
+        this.themeTitleColor = `var(--re-text-color, ${this.theme?.theme_object?.title?.textStyle?.color || 'inherit'})`
+        this.themeSubtitleColor = `var(--re-text-color, ${this.theme?.theme_object?.title?.subtextStyle?.color || this.theme?.theme_object?.title?.textStyle?.color || 'inherit'})`
     }
 
     updateMap() {

@@ -28,7 +28,7 @@ The component is registered as `widget-mapbox-versionplaceholder` in `src/widget
 The widget exposes two reactive `@property({ type: Object })` inputs:
 
 - `inputData` - shape defined by `src/definition-schema.json` (the source of truth); `src/definition-schema.d.ts` is generated from it. The schema is rich (titles, descriptions, `order`, `dataDrivenDisabled`, `enum`, color flags) because the IronFlock dashboard renders configuration UIs directly from it. Update the JSON, then run `npm run types`.
-- `theme` - `{ theme_name, theme_object }`. CSS custom properties `--re-text-color` and `--re-tile-background-color` take precedence over `theme_object` values (see `registerTheme`).
+- `theme` - `{ theme_name, theme_object }`. CSS custom properties `--re-text-color` and `--re-tile-background-color` take precedence over `theme_object` values (see `registerTheme`). These are not snapshotted: `registerTheme()` stores a `var(--re-…, <theme value>)` chain, so a change to the host property repaints the tile live without the widget being told.
 
 `update(changedProperties)` re-runs `transformInputData()` and `syncDataLayers()` on every `inputData` change, and re-creates the map only when `inputData.style` changes.
 
