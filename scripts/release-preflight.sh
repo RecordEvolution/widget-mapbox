@@ -33,4 +33,7 @@ git diff --quiet ||
     fail "generated files are stale: $(git diff --name-only | tr '\n' ' ')-- rerun the generator, commit, then release"
 
 # Build gate. CI builds again from the tag, but failing here costs no version.
+# This runs BEFORE the bump, so the dist it leaves registers the OLD version
+# tag; the `version` hook in package.json rebuilds after the bump so local
+# consumers (IronFlock-UI dev aliases this dist) get the new tag.
 npm run build
